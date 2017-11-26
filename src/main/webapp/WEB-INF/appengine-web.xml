@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<appengine-web-app xmlns="http://appengine.google.com/ns/1.0">
+    <application>doctrina-98765</application>
+    <version>1</version>
+    <threadsafe>true</threadsafe>
+	<use-google-connector-j>true</use-google-connector-j>
+	<service>cloudsql</service>
+    <system-properties>
+        <property name="java.util.logging.config.file" value="WEB-INF/logging.properties"/>
+        <property name="cloudsql" value="jdbc:google:mysql://doctrina-98765:mymysql/database?user=root1&amp;password=root" />
+    	<property name="cloudsql-local" value="jdbc:mysql://google/database?useSSL=false&amp;cloudSqlInstance=$doctrina-98765:mymysql&amp;socketFactory=com.google.cloud.sql.mysql.SocketFactory&amp;user=root1&amp;password=root" />
+    </system-properties>
+</appengine-web-app>
