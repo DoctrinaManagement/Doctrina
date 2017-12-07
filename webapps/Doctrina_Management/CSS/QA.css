@@ -1,0 +1,105 @@
+/* ----- For All ----- */
+
+* {
+    box-sizing: border-box;
+    font-family: 'Lato' , Sans-Serif;
+}
+body , html {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+}
+.flex {
+    display: flex;
+}
+ul {
+    padding: 0;
+    margin: 0;
+}
+ul li {
+    list-style-type: none;
+}
+.board {
+    width: 77%;
+    height: calc(100% - 80px);
+    margin-top: 80px;
+    float: right;
+    border: 1px solid #ddd;
+    padding: 10px;
+    overflow: auto;
+}
+.posts{
+    width: 850px;
+    margin: auto;
+}
+
+/* ----- Post - Input ----- */
+
+.post-input {
+    height: 90px;
+    width: 95%;
+    display: block;
+    margin: 20px auto;
+    font-size: 16px;
+    border: 1px solid #333;
+    resize: none;
+    border-radius: 5px;
+    outline: none;
+    padding: 10px;
+}
+.post-btn {
+    padding: 0.5em 2em;
+    background: #4eb8c3;
+    color: white;
+    border: none;
+    outline: none;
+    font: bold 16px 'lato',sans-serif;
+    float: right;
+    margin-right: 22px;
+    cursor: pointer;
+    border-radius: 3px;
+}
+.post-btn:hover {
+    background: #16929e;
+}
+.post-btn:active {
+    transform: scale(0.8);
+    -ms-transform: scale(0.8);
+}
+
+/* ----- posts ----- */
+
+aside {
+    height: calc(100% - 165px);
+    padding: 0 2.5%;
+    margin-top: 75px
+}
+.post-whole {
+    padding:20px 0;
+    display: flex;
+    flex-wrap: wrap;
+}
+img[alt=user] {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+}
+.post {
+    border: 1px solid #333;
+    border-radius: 5px;
+    padding: 15px;
+    width: 667px;
+    margin: 0 20px;
+}
+.like-cmnt {
+    width: 50px;
+    padding:20px 10px;
+}
+.like-cmnt>i {
+    font-size: 35px;
+}
+
+
+
+
+

@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<web-app xmlns="http://java.sun.com/xml/ns/j2ee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"
+    version="2.4">
+
+
+<!--1st landing page when app open is execute  -->
+  <servlet>
+        <servlet-name>docs</servlet-name>
+        <jsp-file>/HTML/landing-page.html</jsp-file>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>docs</servlet-name>
+        <url-pattern>/landingpage</url-pattern>
+    </servlet-mapping>
+<!--/1st landing page when app open is execute  -->
+  
+  
+  <servlet>
+        <servlet-name>resultSignup</servlet-name>
+        <servlet-class>zu.b5.doctrina.controller.account.Signup</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>resultSignup</servlet-name>
+        <url-pattern>/doctrina.signup</url-pattern>
+    </servlet-mapping>
+    
+    <filter>  
+      <filter-name>signup</filter-name>  
+      <filter-class>zu.b5.doctrina.controller.authorization.SignupAuth</filter-class>  
+  </filter>  
+  
+  <filter-mapping>  
+      <filter-name>signup</filter-name>  
+      <url-pattern>/doctrina.signup</url-pattern>  
+  </filter-mapping>
+  
+  
+  
+  <!--signin page  -->
+
+    <servlet>
+        <servlet-name>resultSignin</servlet-name>
+        <servlet-class>zu.b5.doctrina.controller.account.Signin</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>resultSignin</servlet-name>
+        <url-pattern>/doctrina.signin</url-pattern>
+    </servlet-mapping>
+    
+    <filter>  
+      <filter-name>signin</filter-name>  
+      <filter-class>zu.b5.doctrina.controller.authorization.SigninAuth</filter-class>  
+    </filter>  
+  
+    <filter-mapping>  
+      <filter-name>signin</filter-name>  
+      <url-pattern>/doctrina.signin</url-pattern>  
+    </filter-mapping>
+    
+ <!--/signin page  -->
+
+
+<!--home page  -->
+    <servlet>
+        <servlet-name>home</servlet-name>
+        <jsp-file>/JSP/homepage.jsp</jsp-file>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>home</servlet-name>
+        <url-pattern>/doctrina.index.do</url-pattern>
+    </servlet-mapping>
+<!--/home page  -->
+
+<!--click notification  -->
+
+    <servlet>
+        <servlet-name>resultNotification</servlet-name>
+        <servlet-class>zu.b5.doctrina.controller.notification.NotificationClick</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>resultNotification</servlet-name>
+        <url-pattern>/notification_click</url-pattern>
+    </servlet-mapping>
+    
+    <filter>  
+      <filter-name>notification</filter-name>  
+      <filter-class>zu.b5.doctrina.controller.authorization.NotificationClickAuth</filter-class>  
+    </filter>  
+  
+    <filter-mapping>  
+      <filter-name>notification</filter-name>  
+      <url-pattern>/notification_click</url-pattern>  
+    </filter-mapping>
+    
+ <!--/click notification  -->
+ 
+ <!--getClassroom  -->
+
+    <servlet>
+        <servlet-name>resultGetClass</servlet-name>
+        <servlet-class>zu.b5.doctrina.controller.classroom.GetClassroom</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>resultGetClass</servlet-name>
+        <url-pattern>/getclassroom</url-pattern>
+    </servlet-mapping>
+    
+    <filter>  
+      <filter-name>getClass</filter-name>  
+      <filter-class>zu.b5.doctrina.controller.authorization.GetClassroomAuth</filter-class>  
+    </filter>  
+  
+    <filter-mapping>  
+      <filter-name>getClass</filter-name>  
+      <url-pattern>/getclassroom</url-pattern>  
+    </filter-mapping>
+    
+ <!--/getClassroom  -->
+ 
+<!-- Settings -->
+    
+     <servlet>
+        <servlet-name>settings</servlet-name>
+        <jsp-file>/JSP/settings.jsp</jsp-file>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>settings</servlet-name>
+        <url-pattern>/doctrina.settings</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
+        <servlet-name>settingsJava</servlet-name>
+        <servlet-class>zu.b5.doctrina.controller.notification.NotificationSettings</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>settingsJava</servlet-name>
+        <url-pattern>/settings_valuesGet</url-pattern>
+    </servlet-mapping>
+    
+     <servlet>
+        <servlet-name>SaveSettings</servlet-name>
+        <servlet-class>zu.b5.doctrina.controller.notification.SaveSettings</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>SaveSettings</servlet-name>
+        <url-pattern>/SaveNotification_Settings</url-pattern>
+    </servlet-mapping>
+    <!-- Auth for settings Save  -->
+     <filter>  
+      <filter-name>savesettingsauth</filter-name>  
+      <filter-class>zu.b5.doctrina.controller.authorization.SaveSettingsAuth</filter-class>  
+    </filter>  
+  
+    <filter-mapping>  
+      <filter-name>savesettingsauth</filter-name>  
+      <url-pattern>/SaveNotification_Settings</url-pattern>  
+    </filter-mapping>
+    
+<!-- /Settings --> 
+
+<!-- create classroom --> 
+    <servlet>
+        <servlet-name>resultCreateClass</servlet-name>
+        <servlet-class>zu.b5.doctrina.controller.classroom.CreateClassroom</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>resultCreateClass</servlet-name>
+        <url-pattern>/createclassroom</url-pattern>
+    </servlet-mapping>
+    
+    <filter>  
+      <filter-name>createClass</filter-name>  
+      <filter-class>zu.b5.doctrina.controller.authorization.CreateClassroomAuth</filter-class>  
+    </filter>  
+  
+    <filter-mapping>  
+      <filter-name>createClass</filter-name>  
+      <url-pattern>/createclassroom</url-pattern>  
+    </filter-mapping>
+<!-- /create classroom --> 
+
+<!-- getMyclassroom --> 
+    <servlet>
+        <servlet-name>getMyClass</servlet-name>
+        <servlet-class>zu.b5.doctrina.controller.classroom.GetMyClassroom</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>getMyClass</servlet-name>
+        <url-pattern>/myclassroom</url-pattern>
+    </servlet-mapping>
+<!--/getMyclassroom  -->
+
+<!-- ClassroomJoinRequest -->
+    <servlet>
+        <servlet-name>askRequest</servlet-name>
+        <servlet-class>zu.b5.doctrina.controller.requests.ClassroomJoinRequest</servlet-class>
+    </servlet>
+    
+    <servlet-mapping>
+        <servlet-name>askRequest</servlet-name>
+        <url-pattern>/Classroom_JoinRequest</url-pattern>
+    </servlet-mapping>
+    
+    <filter>
+        <filter-name>askRequest</filter-name>
+        <filter-class>zu.b5.doctrina.controller.authorization.ClassroomJoinRequestAuth</filter-class>
+    </filter>
+    
+    <filter-mapping>
+        <filter-name>askRequest</filter-name>
+        <url-pattern>/Classroom_JoinRequest</url-pattern>
+    </filter-mapping>
+
+<!-- /ClassroomJoinRequest -->
+
+<!-- replyJoinrequest -->
+
+    <servlet>
+        <servlet-name>replyRequest</servlet-name>
+        <servlet-class>zu.b5.doctrina.controller.requests.ReplyJoinRequest</servlet-class>
+    </servlet>
+    
+    <servlet-mapping>
+        <servlet-name>replyRequest</servlet-name>
+        <url-pattern>/ReplyRequest</url-pattern>
+    </servlet-mapping>
+    
+    <filter>
+        <filter-name>replyRequestAuth</filter-name>
+        <filter-class>zu.b5.doctrina.controller.authorization.ReplyJoinrequestAuth</filter-class>
+    </filter>
+    
+    <filter-mapping>
+        <filter-name>replyRequestAuth</filter-name>
+        <url-pattern>/ReplyRequest</url-pattern>
+    </filter-mapping>
+    
+<!-- /replyJoinrequest -->
+
+</web-app>

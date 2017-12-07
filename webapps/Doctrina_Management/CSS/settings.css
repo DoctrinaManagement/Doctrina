@@ -1,0 +1,198 @@
+*{
+    padding:0;
+    margin:0;
+    font-family: 'Lato', sans-serif;
+    color:#222;
+}
+body, html, .whole, .add, .blur{
+    height:100%;
+    width:100%;
+}
+ li{
+    list-style:none;
+}
+button{
+    outline: none;
+}
+    /*---------------------------common--------------------------------------*/
+
+header,.conts_div{
+    box-sizing:border-box;
+}
+.close,button,label{
+    cursor:pointer;
+}
+    /*----------------------------header--------------------------------*/
+
+/*header{*/
+/*    width: 100%;*/
+/*    height: 70px;*/
+/*    background: rgba(0, 0, 0, 0.82);*/
+/*    padding: 6px 10px;*/
+/*    box-shadow: 1px 1px 10px rgba(255, 255, 255, 0.3) inset, 1px 1px 10px rgba(0, 0, 0, 0.3);*/
+/*}*/
+/*header img{*/
+/*    height:55px;*/
+/*}*/
+    /*--------------------------------main--------------------------------------*/
+.main{
+    height:100% ;
+    width:100%;
+    position: relative;
+}
+.conts_div{
+    width: 1280px;
+    height: 100%;
+    padding: 0 50px;
+    margin: auto
+}
+.conts_div>h1{
+    color: #222;
+    font-size: 28px;
+    letter-spacing: 1px;
+    padding: 30px 0 10px;
+    border-bottom: 1px solid lightslategray;
+}
+.conts_div>h1>i{
+    padding: 0 15px 0 0;
+}
+.notis>h2{
+    padding: 15px 0;
+    color: #555;
+    font-size: 20px;
+}
+.notis>ul>li>p{
+    display:inline-block;
+}
+.notis{
+    width: 1080px;
+    margin: auto;
+    height: 470px
+}
+.notis>ul{
+    padding: 0 40px;
+    float: left;
+    width: 50%;
+    box-sizing: border-box;
+}
+.notis>ul label{
+    height: 1em;
+    width: 1em;
+    border-radius: 4px;
+    background: white;
+    box-shadow: 0 0 1px 1px lightgrey;
+    box-sizing: border-box;
+    vertical-align: text-bottom;
+    position: relative;
+    display: inline-block;
+    margin: 0 20px 0 0;
+}
+.notis>ul input {
+	display:none;
+}
+.notis>ul>li label:after {
+    content: '';
+    position: absolute;
+    color: white;
+    top: -19px;
+    font-size: 21px;
+}
+.notis>ul>li{
+    line-height: 2.5;
+}
+.notis>ul input:checked + label:after {
+	content: '\2713';
+}
+.notis>ul input:checked + label{
+	background:#516df7
+}
+.notis>ul>li>p{
+    font-size: 19px;
+    letter-spacing: 1px;
+}
+.notis+h3{
+    padding: 10px 0 0 0;
+    border-top: 1px solid lightslategray;
+    margin: 0 50px;
+    color: #555;
+}
+.delete{
+    padding: 7px 1em;
+    font-size: 16px;
+    border-radius: 5px;
+    border: 1px solid lightgrey;
+    display: block;
+    margin: 30px 86px;;
+    background: rgb(247, 62, 62);
+    color: white;
+    font-weight: 600;
+}
+.delete:hover{
+    background:rgb(255, 35, 35);
+}
+.close{
+    float: right;
+    padding: 10px !important;
+}
+
+/* ----- Pop Up ----- */
+
+.popup,.popup>aside {
+    height: 100%;
+    width: 100%;
+    position: fixed;
+    top: 0;
+}
+.popup {
+    display:none;
+    opacity: 0;
+    transition:0.3s;
+}
+.popup>aside {
+    background: rgba(0,0,0,0.7);
+}
+.popup > div{
+    border:1px solid lightgrey;
+    background:white;
+    text-align:center;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin: -50px 0 0 -150px;
+    padding:40px;
+    box-sizing:border-box;
+    transform:scale(0);
+    transition:0.5s;
+    border-radius: 4px;
+    box-shadow: 2px 2px 12px 0 rgba(255, 255, 255, 0.22);
+}
+.popup>div>p{
+    padding: 0 0 20px;
+    font-size: 18px;;
+}
+.popup>div>button{
+    padding: 6px 0;
+    width: 75px;
+    background: #333;
+    border-radius: 5px;
+    color: white;
+    border: none;
+}
+.popup>div>button:last-child{
+    margin-left:20px;
+}
+.popup>div>button:hover{
+    background:#555;
+}
+.save{
+    padding: 8px 22px;
+    border: none;
+    border-radius: 5px;
+    font-size: 14px;
+    font-weight: 600;
+    color: white;
+    display: block;
+    background: #03A9F4;
+    transition: 0.5s;
+    margin: 15px 0;
+}
