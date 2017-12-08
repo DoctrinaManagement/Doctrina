@@ -38,7 +38,7 @@ public class Signup extends HttpServlet {
         notification_details.put("notification", "Welcome to Doctrina. Learn Anything easy and better ...");
         notification_details.put("status", "true");
         notification_details.put("sender", "105457747522331469494");
-        notification_details.put("userId", request.getParameter("user_id"));
+        notification_details.put("user_id", request.getParameter("user_id"));
         String noti_status = process.notificationAdd(notification_details);
         
 //         String cookie = get.CookieCreate();

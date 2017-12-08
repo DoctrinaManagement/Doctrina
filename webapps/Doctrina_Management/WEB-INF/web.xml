@@ -250,4 +250,64 @@
     
 <!-- /replyJoinrequest -->
 
+<!-- classRoom -->
+
+     <servlet>
+        <servlet-name>enterClassroom</servlet-name>
+        <servlet-class>zu.b5.doctrina.controller.classroom.Classroom</servlet-class>
+    </servlet>
+    
+    <servlet-mapping>
+        <servlet-name>enterClassroom</servlet-name>
+        <url-pattern>/enter_Classroom</url-pattern>
+    </servlet-mapping>
+
+<!-- /classRoom -->
+
+<!-- Assignments -->
+    <servlet>
+        <servlet-name>addAssignmentsTests</servlet-name>
+        <servlet-class>zu.b5.doctrina.controller.insideclassroom.AddAssignment</servlet-class>
+    </servlet>
+    
+    <servlet-mapping>
+        <servlet-name>addAssignmentsTests</servlet-name>
+        <url-pattern>/AddTasks</url-pattern>
+    </servlet-mapping>
+    
+    <filter>
+        <filter-name>addAssignmentsTestsAuth</filter-name>
+        <filter-class>zu.b5.doctrina.controller.authorization.AddAssignmentTestAuth</filter-class>
+    </filter>
+    
+    <filter-mapping>
+        <filter-name>addAssignmentsTestsAuth</filter-name>
+        <url-pattern>/AddTasks</url-pattern>
+    </filter-mapping>
+    
+    <!-- /Assignments -->
+    
+    <!-- Tests -->
+    
+     <servlet>
+        <servlet-name>addAssignmentsTests</servlet-name>
+        <servlet-class>zu.b5.doctrina.controller.insideclassroom.AddTest</servlet-class>
+    </servlet>
+    
+    <servlet-mapping>
+        <servlet-name>addAssignmentsTests</servlet-name>
+        <url-pattern>/AddTasks</url-pattern>
+    </servlet-mapping>
+    
+    <filter>
+        <filter-name>addAssignmentsTestsAuth</filter-name>
+        <filter-class>zu.b5.doctrina.controller.authorization.AddAssignmentTestAuth</filter-class>
+    </filter>
+    
+    <filter-mapping>
+        <filter-name>addAssignmentsTestsAuth</filter-name>
+        <url-pattern>/AddTasks</url-pattern>
+    </filter-mapping>
+    
+    <!-- /Tests -->
 </web-app>

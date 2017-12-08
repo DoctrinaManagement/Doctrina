@@ -6,32 +6,35 @@ import zu.b5.doctrina.model.export.*;
 
 public class SigninProcess{
     Connection conn;
-    Statement stmt = null;
-    
+    PreparedStatement stmt;
+    ReUsable get;
     public SigninProcess(Object connection) {
         conn = (Connection) connection;
-        
-        try {
-            stmt = conn.createStatement();
-        } catch (Exception e) {
-            System.out.println("SigninProcess -- constructor");
-        }
+        get = new ReUsable(conn);
     }
     
     public HashMap<String, String> userdetailsCheck(HashMap<String,String> details) {
         HashMap<String, String> user_details = new HashMap<String,String>();
         try {
-            ResultSet rs = stmt
-    					.executeQuery("select * from userdetails where user_id = '"
-    							+ details.get("user_id")+"'");
-    		ReUsable get = new ReUsable(conn);
+            stmt = conn.prepareStatement("select * from userdetails where user_id = ?;");
+            stmt.setString(1, details.get("user_id"));
+            ResultSet rs = stmt.executeQuery();
+    		
     		user_details = get.resultSetToHashMap(rs);
     		if(user_details.get("image").equals(details.get("image")) == false || user_details.get("name").equals(details.get("name")) == false) {
 				
-				stmt.executeUpdate("update userdetails set name='"+details.get("name")+"',email_id='"+details.get("email_id")+"',image='"+details.get("image")+"where user_id='"+user_details.get("user_id")+"';");
+				
+				stmt = conn.prepareStatement("update userdetails set name = ?, email_id = ?, image = ? where user_id = ?;");
+				stmt.setString(1, details.get("name"));
+				stmt.setString(2, details.get("email_id"));
+				stmt.setString(3, details.get("image"));
+				stmt.setString(4, details.get("user_id"));
+				stmt.executeUpdate();
+				
+				stmt = conn.prepareStatement("select * from userdetails where user_id = ?;");
+				stmt.setString(1, details.get("user_id"));
 				rs = stmt
-						.executeQuery("select * from userdetails where user_id = '"
-								+ user_details.get("user_id")+"'");
+						.executeQuery();
 				
 				user_details = get.resultSetToHashMap(rs);
 			}

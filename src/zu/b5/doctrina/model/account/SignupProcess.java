@@ -6,29 +6,31 @@ import java.util.*;
 
 public class SignupProcess {
 	Connection conn;
-    Statement stmt = null;
+    PreparedStatement stmt;
+    // Statement stmt;
 	public SignupProcess(Object connection) {
 		conn = (Connection) connection;
-		try {
-		    stmt = conn.createStatement();
-		} catch (Exception e) {
-		    System.out.println("SignupProcess -- constructor");
-		}
+		
 	}
 
 	public String userdetailsAdd(HashMap<String, String> details) {
 
-		
-
 		try {
 			
-			String Userdetails_Query = "insert into userdetails values('"
-					+ details.get("user_id") + "','" + details.get("name")
-					+ "','" + details.get("email_id") + "','"
-					+ details.get("image") + "','" + details.get("role")
-					+ "');";
-
-			stmt.executeUpdate(Userdetails_Query);
+// 			String Userdetails_Query = "insert into userdetails values('"
+// 					+ details.get("user_id") + "','" + details.get("name")
+// 					+ "','" + details.get("email_id") + "','"
+// 					+ details.get("image") + "','" + details.get("role")
+// 					+ "');";
+            String role = details.get("role");
+            stmt = conn.prepareStatement("insert into userdetails values (?, ?, ?, ?, ?::\"enum_role\")");
+            stmt.setString(1, details.get("user_id"));
+            stmt.setString(2, details.get("name"));
+            stmt.setString(3, details.get("email_id"));
+            stmt.setString(4, details.get("image"));
+            stmt.setString(5, role);
+            System.out.println(details.get("role"));
+			stmt.executeUpdate();
             return "done";
 		} catch (SQLException e) {
 			System.out.println("SignupProcess -- userdetailsAdd"
@@ -41,8 +43,14 @@ public class SignupProcess {
 	    
 	    try {
 	        
-	        String Notification_Query = "insert into notification(user_id,message,status,sender) values('" + details.get("userId")+ "','" + details.get("notification") + "','" + details.get("status") +"','"+details.get("sender") +"');";
-            stmt.executeUpdate(Notification_Query);
+	       // String Notification_Query = "insert into notification(user_id,message,status,sender) values('" + details.get("userId")+ "','" + details.get("notification") + "','" + details.get("status") +"','"+details.get("sender") +"');";
+            stmt = conn.prepareStatement("insert into notification(user_id,message,status,sender) values(?, ?, ?::\"enum_status\", ?) ");
+            stmt.setString(1, details.get("user_id"));
+            stmt.setString(2, details.get("notification"));
+            stmt.setString(3, details.get("status"));
+            stmt.setString(4, details.get("sender"));
+            System.out.println(details.get("status"));
+            stmt.executeUpdate();
             return "done";
 	    } catch (SQLException e) {
 	        System.out.println("SignupProcess -- notificationAdd"
@@ -54,7 +62,11 @@ public class SignupProcess {
 	public String cookieAdd(String cookie, String userId) {
 
 	    try {
-	        stmt.executeUpdate("insert into cookie values('"+cookie+"','"+userId+"');");
+	        stmt = conn.prepareStatement("insert into cookie values (?, ?)");
+	        stmt.setString(1, cookie);
+	        stmt.setString(2, userId);
+	        stmt.executeUpdate();
+	       // stmt.executeUpdate("insert into cookie values('"+cookie+"','"+userId+"');");
 	        return "done";
 	    } catch (SQLException e) {
 	        System.out.println("SignupProcess -- cookieAdd"

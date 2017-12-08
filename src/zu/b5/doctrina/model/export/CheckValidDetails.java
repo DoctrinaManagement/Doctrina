@@ -107,5 +107,42 @@ public class CheckValidDetails {
 	    }
 	    return false;
 	}
-
+	
+	public boolean checkAddPermission (String user_id, String class_id) {
+	    try {
+	    ResultSet rs = stmt
+					.executeQuery("select * from classroom where class_creater= '"
+							+ user_id + "' and classroom_id = '" + class_id
+							+ "';");
+    	    ReUsable get = new ReUsable(conn);
+    		ArrayList<String> joinrequestDetails = get.resultSetToUserID(rs);
+            
+            if(joinrequestDetails.size() != 0) {
+                return true;
+            }
+	    }
+	    catch (SQLException e) {
+	        System.out.println("CheckValidDetails - checkpermission" + e.getMessage());
+	    }
+	    return false;
+	}
+	
+	public boolean checkClassroomPermission (String user_id, String class_id) {
+	    try {
+	    ResultSet rs = stmt
+					.executeQuery("select * from members where member= '"
+							+ user_id + "' and classroom_id = '" + class_id
+							+ "';");
+    	    ReUsable get = new ReUsable(conn);
+    		ArrayList<String> memberDetails = get.resultSetToUserID(rs);
+            
+            if(memberDetails.size() != 0) {
+                return true;
+            }
+	    }
+	    catch (SQLException e) {
+	        System.out.println("CheckValidDetails - checkpermission" + e.getMessage());
+	    }
+	    return false;
+	}
 }

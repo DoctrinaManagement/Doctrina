@@ -39,7 +39,6 @@
                     }
                 %>
                 classroomRender(data,"allclass");
-                
             });
         }
          function signOut() {
@@ -140,12 +139,14 @@
             //notificationObj.notifications = notifi.reverse();
             document.getElementById("notified").innerHTML= templete(notificationObj);
             
-            
             var requestTemplete = document.getElementById("request-details").innerHTML;
             var Compile_requestTemplete = Handlebars.compile(requestTemplete);
-            <% if((session.getAttribute("role")+"").equals("Teacher")) { 
-                        %>document.getElementById("invited").innerHTML= Compile_requestTemplete(notificationObj);<%
-                }%>
+            //notificationObj.notifications = notifi.reverse();
+
+            <% if ((session.getAttribute("role")+"").equals("Teacher")){
+                %>document.getElementById("invited").innerHTML= Compile_requestTemplete(notificationObj);<%
+            }%>
+            //var key = Object.keys();
             var dot = false;
             var notification_count = notificationObj.requests.length;
             if(notification_count != 0) {
@@ -244,11 +245,11 @@
                         <p id="dotPoint"></p>
                         <div class="noti">
                             <span>Notifications</span>
-                            
                             <p id="InviteDot"></p>
-                            <% if((session.getAttribute("role")+"").equals("Teacher")) { 
-                                    %><img src="../IMAGES/invite.png" title="Invites" alt="Invites" /><%
+                            <% if ((session.getAttribute("role")+"").equals("Teacher")) {
+                                %><img src="../IMAGES/invite.png" title="Invites" alt="Invites" /><%
                             }%>
+                            
                             <div style="clear: both"></div>
                    
                             <aside class="note-inv">
@@ -257,11 +258,11 @@
                                 </div>
                    
                                 <!-- Invites Only -->
-                                <% if((session.getAttribute("role")+"").equals("Teacher")) { 
-                                        %><div>
-                                            <ul class="invites" id="invited">
-                                            </ul>
-                                        </div><%
+                                <% if ((session.getAttribute("role")+"").equals("Teacher")) {
+                                    %><div>
+                                        <ul class="invites" id="invited">
+                                        </ul>
+                                      </div><%
                                 }%>
                                 
                             </aside>
