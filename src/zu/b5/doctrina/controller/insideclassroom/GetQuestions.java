@@ -12,7 +12,7 @@ import zu.b5.doctrina.model.insideclassroom.*;
  * @author Basheer
  */
  
-public class GetAssignmentTest extends HttpServlet {
+public class GetQuestions extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
@@ -30,7 +30,7 @@ public class GetAssignmentTest extends HttpServlet {
 		
 		try {
     		stmt = conn.createStatement();
-    		ResultSet rs = stmt.executeQuery("select question from "+type+" where id = "+id+" and class_id = "+class_id+";");
+    		ResultSet rs = stmt.executeQuery("select * from "+type+" where id = "+id+" and class_id = "+class_id+";");
     		
     		ArrayList<HashMap<String,String>> questions = get.resultSetToArrayList(rs);
     		

@@ -28,12 +28,13 @@ public class AddMember extends HttpServlet {
 		            stmt.setString(2, request.getParameter("requester"));
 		            stmt.setString(3, "Student");
 		            stmt.executeUpdate();
-		            String message = "";
+		            String message = "You have just now added in "+session.getAttribute("class_name")+" classroom";
 		            stmt = conn.prepareStatement("insert into notification(user_id,message,status,sender) values(?, ?, ?::\"enum_status\", ?) ");
                     stmt.setString(1, request.getParameter("requester"));
                     stmt.setString(2, message);
                     stmt.setString(3, "true");
                     stmt.setString(4, session.getAttribute("user_id")+"");
+                    stmt.executeUpdate();
 		            writer.write("ok");
 		        } catch (Exception e) {
 		            System.out.println("AddMember - " + e.getMessage());

@@ -8,7 +8,7 @@ import javax.servlet.*;
 import zu.b5.doctrina.model.insideclassroom.*;
 
 /**
- * @author Pandi
+ * @author Basheer
  */
 public class AddTest extends HttpServlet {
 	@Override

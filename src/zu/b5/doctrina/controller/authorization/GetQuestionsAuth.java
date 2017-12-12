@@ -7,7 +7,7 @@ import javax.servlet.http.*;
 /** 
  * @author Basheer
  */
-public class GetAssignmentTestAuth implements Filter {
+public class GetQuestionsAuth implements Filter {
 
 	public void init(FilterConfig arg0) throws ServletException {}
 
@@ -26,7 +26,7 @@ public class GetAssignmentTestAuth implements Filter {
 		
 		if(checkDetails.userIdCheck(user) && checkDetails.classIdCheck(class_id)) {
     		   
-	        if (type.equals("assignments") || type.equals("tests")) {
+	        if (type.equals("assignments") || type.equals("tests") || type.equals("quiz")) {
 	            
 	            if (checkDetails.checkClassroomPermission(user, class_id)) {
 	                

@@ -165,7 +165,7 @@ public class CheckValidDetails {
 	
 	public boolean checkClassCreater (String user_id, String class_id) {
 	    try {
-	        ResultSet rs = stmt.executeQuery("select class_creater from classroom where classroom_id ="+class_id+" and class_creater =" +user_id+ ";");
+	        ResultSet rs = stmt.executeQuery("select class_creater from classroom where classroom_id ='"+class_id+"' and class_creater ='" +user_id+ "';");
 	        
 	        ReUsable get = new ReUsable(conn);
     		ArrayList<String> classCreater = get.resultSetToUserID(rs);

@@ -163,6 +163,7 @@
         }
             $.get("/AddAssignment", {"class_id":"<%=session.getAttribute("class_id")%>", "title":title, "questions":JSON.stringify(questionsList)}, function(data, status) {
                 if (data == "200") {
+                    $(".more").css("display", "none");
                     alert('Success');
                 }
             })
@@ -179,30 +180,35 @@
         }
             $.get("/AddTest", {"class_id":"<%=session.getAttribute("class_id")%>", "title":title, "questions":JSON.stringify(questionsList)}, function(data, status) {
                 if (data == "200") {
+                    $(".more").css("display", "none");
                     alert('Success');
                 }
             })
     }
     //QuizQuestionAdd
     function AddQuizQuestions() {
+    var title = document.getElementById("quiz_title").value;
         var output = [];
     
-            var a = document.getElementsByClassName("q");
-            for (i=0; a[i]; i++) {
-            	var obj = {};
-                obj["question"] = a[i].value;
-            	
-                for(j = 1; j < 5 ; j++) {
-                	var b = document.getElementsByClassName("a"+j);
-            		obj["option"+j] = b[i].value;
-            	}
-                output.push(obj);
-            }
-            sentAddQuizQuestions(output);
+        var a = document.getElementsByClassName("quiz_question");
+        var b = document.getElementsByClassName("ans-slct");
+        for (i=0; a[i]; i++) {
+        	var obj = {};
+            obj["question"] = a[i].innerText;
+        	obj["answer"] = b[i].value;
+            for(j = 1; j < 5 ; j++) {
+            	var b = document.getElementsByClassName("option"+j);
+        		obj["option"+j] = b[i].value;
+        	}
+            output.push(obj);
+        }console.log(output);
+        
+        sentAddQuizQuestions(output,title);
     }
-    function sentAddQuizQuestions(array) {
-        $.get("/AddQuizQuestions", {"class_id":"<%=session.getAttribute("class_id")%>", "questionAnswers":JSON.stringify(array)}, function(data, status) {
+    function sentAddQuizQuestions(array, title) {
+        $.get("/AddQuizQuestions", {"class_id":"<%=session.getAttribute("class_id")%>","title":title, "questionAnswers":JSON.stringify(array)}, function(data, status) {
             if (data = "200") {
+                $(".more").css("display", "none");
                 alert("Success...")
             }
         })
@@ -222,6 +228,14 @@
             var tempTemplete = document.getElementById("Test_titles").innerHTML;
             var templete  = Handlebars.compile(tempTemplete);
             document.getElementById("test_hdng").innerHTML = templete(titleObj);
+        });
+    }
+    function getQuizTitles() {
+        $.get("/getTitles", {"user_id":"<%=session.getAttribute("user_id")%>","class_id":"<%=session.getAttribute("class_id")%>","type":"quiztitles"}, function(data, status) {
+            var titleObj = JSON.parse(data);
+            var tempTemplete = document.getElementById("quiz_titles").innerHTML;
+            var templete  = Handlebars.compile(tempTemplete);
+            document.getElementById("quiz_hdng").innerHTML = templete(titleObj);
         });
     }
     //GetAssignmentQuestions
@@ -248,7 +262,18 @@
             $(".test_ol").css("display", "block");
         })    
     }
-    
+    //getQuizQuestions
+    function getQuizQuestions (id) {
+        $.get("/getQuizQuestions", {"user_id":"<%=session.getAttribute("user_id")%>", "class_id":"<%=session.getAttribute("class_id")%>", "type":"quiz", "id":id}, function(data, status) {
+            
+            var questionsObj = JSON.parse(data);
+            var tempTemplete = document.getElementById("quiz_question").innerHTML;
+            var templete  = Handlebars.compile(tempTemplete);
+            document.getElementById("quiz_questions").innerHTML= templete(questionsObj);
+            $(".quiz_hdng").css("display", "none");
+            $(".quiz_ol").css("display", "block");
+        })   
+    }
     function cls(value){
         if (value =="assignment"){
             $(".asign_hding").css("display", "block");
@@ -257,6 +282,10 @@
         else if (value =="test") {
             $(".test_hdng").css("display", "block");
             $(".test_ol").css("display", "none");
+        }
+        else if (value == "quiz") {
+             $(".quiz_hdng").css("display", "block");
+            $(".quiz_ol").css("display", "none");
         }
         else {
             alert("Something Wrong In close icon");
@@ -275,6 +304,7 @@
     function invite(user_id) {
         $.get("/inviteStudents",{"requester":user_id},  function(data, status) {
             if(data == "ok"){
+                webSocket.send("all");
                 alert("add successful");
             }
         });
@@ -283,6 +313,7 @@
     function leaveClassroom() {
         $.get("/leaveClassroom", function(data, status) {
             if(data == "ok"){
+                webSocket.send("all");
                 location.href = "doctrina.index.do";
             }
         });
@@ -406,7 +437,7 @@
                     %>
                 <ul class="ul1">
                     <li>Video</li>
-                    <li>Quiz</li>
+                    <li onclick="getQuizTitles()">Quiz</li>
                     <li onclick="getAssignmentTitles()">Assignment</li>
                     <li onclick="getTestTitles()">Test</li>
                     <li>Feeds</li>
@@ -530,7 +561,7 @@
                     </div>
                 </section>
 
-
+                <!-- Assignments titles-->
                 <script id="Assign_titles" type="text/x-handlebars-templete">
                     <h1>Assignments</h1>  
                     <ol>
@@ -569,36 +600,54 @@
                 
                 <!---    Quiz Div    -->
 
-                <div class="quiz_div">
-                    <h1>Quiz</h1>
+                <script id="quiz_titles" type="text/x-handlebars-templete">
+                    <h1>Quiz</h1>  
                     <ol>
-                        <li>
-                            <div> <span>1</span> What is html and css? find it? </div>
-                            <div>
-                                <div class="option">
-                                    <span>
-                                        <input type="radio" id="q1_opt1" name="option" />
-                                        <label for="q1_opt1">Option A</label>
-                                    </span>
-                                    <span>
-                                        <input type="radio" id="q1_opt2" name="option" />
-                                        <label for="q1_opt2">Option B</label>
-                                    </span>
-                                </div>
-                                <div class="option">
-                                    <span>
-                                        <input type="radio" id="q1_opt3" name="option" />
-                                        <label for="q1_opt3">Option C</label>
-                                    </span>
-                                    <span>
-                                        <input type="radio" id="q1_opt4" name="option" />
-                                        <label for="q1_opt4">Option D</label>
-                                    </span>
-                                </div>
-                            </div>
-                        </li>
+                    {{#each titles}}
+                        <li onclick="getQuizQuestions({{id}})">{{title}}</li>
+                    {{/each}}
                     </ol>
-                    <button class="submit" type="submit">Submit</button>
+                </script>
+                
+               <script id="quiz_question" type="text/x-handlebars-templete">
+                        <ol>
+                           <h1 class="h1_hding">Quiz Questions <i class="material-icons" onclick="cls('quiz')">close</i> </h1>
+                           {{#each questions}}
+                             <li>
+                                <div>
+                                    <span>{{tabIndex}}</span>
+                                    {{question}}</div>
+                                    <div>
+                                        <div class="option">
+                                            <span>
+                                                <input type="radio" id="q1_opt1" name="option" />
+                                                <label for="q1_opt1">{{option1}}</label>
+                                            </span>
+                                            <span>
+                                                <input type="radio" id="q1_opt2" name="option" />
+                                                <label for="q1_opt2">{{option2}}</label>
+                                            </span>
+                                        </div>
+                                        <div class="option">
+                                            <span>
+                                                <input type="radio" id="q1_opt3" name="option" />
+                                                <label for="q1_opt3">{{option3}}</label>
+                                            </span>
+                                            <span>
+                                                <input type="radio" id="q1_opt4" name="option" />
+                                                <label for="q1_opt4">{{option4}}</label>
+                                            </span>
+                                        </div>
+                                    </div>
+                             </li> 
+                           {{/each}}
+                            <button class="submit" type="submit">Submit</button>
+                        </ol>
+                     </script>
+                
+                <div class="quiz_div">
+                    <div class="quiz_hdng" id="quiz_hdng"></div>
+                    <div class="quiz_ol" id="quiz_questions" style="display:none"></div>
                 </div>
 
                 <!-- Test div -->
@@ -681,6 +730,7 @@
 
             <div class="add-quiz">
                 <p>Add Quiz Questions</p>
+                <input class="srch_title" id="quiz_title" type="text" style="margin-bottom:20px" placeholder="Enter the Quiz title" />
                 <ol class="quizzes">
                     <li>
                         <div contenteditable="true" class="quiz_question" placeholder="Enter your question here..."></div>

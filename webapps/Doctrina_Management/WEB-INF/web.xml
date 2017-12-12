@@ -357,7 +357,7 @@
     
     <filter>
         <filter-name>AddAssignmentAuth</filter-name>
-        <filter-class>zu.b5.doctrina.controller.authorization.AddAssignmentTestAuth</filter-class>
+        <filter-class>zu.b5.doctrina.controller.authorization.AddQuestionsAuth</filter-class>
     </filter>
     
     <filter-mapping>
@@ -381,7 +381,7 @@
     
     <filter>
         <filter-name>AddTestAuth</filter-name>
-        <filter-class>zu.b5.doctrina.controller.authorization.AddAssignmentTestAuth</filter-class>
+        <filter-class>zu.b5.doctrina.controller.authorization.AddQuestionsAuth</filter-class>
     </filter>
     
     <filter-mapping>
@@ -405,7 +405,7 @@
     
     <filter>
         <filter-name>AddQuizQuestionsAuth</filter-name>
-        <filter-class>zu.b5.doctrina.controller.authorization.AddQuizAuth</filter-class>
+        <filter-class>zu.b5.doctrina.controller.authorization.AddQuestionsAuth</filter-class>
     </filter>
     
     <filter-mapping>
@@ -430,7 +430,7 @@
     <!-- Assignments -->
     <servlet>
         <servlet-name>GetAssQuestions</servlet-name>
-        <servlet-class>zu.b5.doctrina.controller.insideclassroom.GetAssignmentTest</servlet-class>
+        <servlet-class>zu.b5.doctrina.controller.insideclassroom.GetQuestions</servlet-class>
     </servlet>
     
     <servlet-mapping>
@@ -440,7 +440,7 @@
     
     <filter>
         <filter-name>GetAssQuestionsAuth</filter-name>
-        <filter-class>zu.b5.doctrina.controller.authorization.GetAssignmentTestAuth</filter-class>
+        <filter-class>zu.b5.doctrina.controller.authorization.GetQuestionsAuth</filter-class>
     </filter>
     
     <filter-mapping>
@@ -451,7 +451,7 @@
     <!-- Test -->
     <servlet>
         <servlet-name>GettestQuestions</servlet-name>
-        <servlet-class>zu.b5.doctrina.controller.insideclassroom.GetAssignmentTest</servlet-class>
+        <servlet-class>zu.b5.doctrina.controller.insideclassroom.GetQuestions</servlet-class>
     </servlet>
     
     <servlet-mapping>
@@ -461,7 +461,7 @@
     
     <filter>
         <filter-name>GettestQuestionsAuth</filter-name>
-        <filter-class>zu.b5.doctrina.controller.authorization.GetAssignmentTestAuth</filter-class>
+        <filter-class>zu.b5.doctrina.controller.authorization.GetQuestionsAuth</filter-class>
     </filter>
     
     <filter-mapping>
@@ -469,6 +469,26 @@
         <url-pattern>/getTestQuestions</url-pattern>
     </filter-mapping>
     
+    <!-- QuizQuestions -->
+    <servlet>
+        <servlet-name>getQuizQuestions</servlet-name>
+        <servlet-class>zu.b5.doctrina.controller.insideclassroom.GetQuestions</servlet-class>
+    </servlet>
+    
+    <servlet-mapping>
+        <servlet-name>getQuizQuestions</servlet-name>
+        <url-pattern>/getQuizQuestions</url-pattern>
+    </servlet-mapping>
+    
+    <filter>
+        <filter-name>getQuizQuestionsAuth</filter-name>
+        <filter-class>zu.b5.doctrina.controller.authorization.GetQuestionsAuth</filter-class>
+    </filter>
+    
+    <filter-mapping>
+        <filter-name>getQuizQuestionsAuth</filter-name>
+        <url-pattern>/getQuizQuestions</url-pattern>
+    </filter-mapping>
     <!-- /getQuestions -->
     
 <!-- add members -->

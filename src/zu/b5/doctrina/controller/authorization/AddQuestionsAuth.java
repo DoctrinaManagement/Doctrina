@@ -9,8 +9,8 @@ import zu.b5.doctrina.model.export.*;
  * @author Basheer
  */
 
-public class AddQuizAuth implements Filter {
-    
+public class AddQuestionsAuth implements Filter {
+
 	public void init(FilterConfig arg0) throws ServletException {
 	}
 
@@ -22,7 +22,6 @@ public class AddQuizAuth implements Filter {
 		HttpSession session = req.getSession();
 		CheckValidDetails checkDetails = new CheckValidDetails(
 				session.getAttribute("connection"));
-
 		if (checkDetails.classIdCheck(request.getParameter("class_id"))) {
 		    // Check user permission for hihs classroom
 			if (checkDetails.checkAddPermission(session.getAttribute("user_id") + "",

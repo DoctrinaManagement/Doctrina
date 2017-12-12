@@ -8,7 +8,7 @@ import javax.servlet.*;
 import zu.b5.doctrina.model.insideclassroom.*;
 
 /**
- * @author Pandi
+ * @author Basheer
  */
 public class AddAssignment extends HttpServlet {
 	@Override
@@ -21,7 +21,6 @@ public class AddAssignment extends HttpServlet {
         
         String class_id = request.getParameter("class_id");
         String title = request.getParameter("title");
-        System.out.println("String - " + request.getParameter("class_id"));
         JsonArray questionArray = (JsonArray) new JsonParser().parse(request.getParameter("questions"));
         
             ArrayList<String> questionsList = new ArrayList<String>();
@@ -29,10 +28,8 @@ public class AddAssignment extends HttpServlet {
             for (JsonElement questions : questionArray ){
                 questionsList.add(questions.getAsString());
             }
-            System.out.println(questionsList);
         // Get title id from Process method 
         String title_id = process.getID(class_id, title,"assignmenttitles");
-        System.out.println("title_id - " +title_id);
         // Set values into table ...
         process.setValues(class_id, title_id, questionsList, "assignments");
         

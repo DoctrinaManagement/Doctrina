@@ -3,14 +3,13 @@ package zu.b5.doctrina.controller.insideclassroom;
 import java.io.*;
 import javax.servlet.http.*; // import javax.servlet.ServletException;
 import com.google.gson.*;
-import com.mysql.jdbc.Connection;
 import java.sql.*;
 import java.util.*; // import javax.servlet.http.HttpServletRequest;
 import javax.servlet.*;
 import zu.b5.doctrina.model.insideclassroom.*;
 
 /**
- * @author Basheer
+ * @author pandi
  */
  
 public class InviteStudent extends HttpServlet {

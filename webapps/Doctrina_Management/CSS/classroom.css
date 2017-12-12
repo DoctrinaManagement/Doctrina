@@ -89,7 +89,7 @@ h1, .add>div>p:first-child {
     padding: 10px 0;
     border-bottom: 1px solid #bbb;
 }
-.asign_hding li, .test_hdng li{
+.asign_hding li, .test_hdng li, .quiz_hdng li{
     list-style-type:decimal
 }
     /*----------------------------------width div------------------------------------------*/
@@ -550,7 +550,7 @@ nav ul:nth-child(3) li i{
     color: rgb(34, 34, 34);
     letter-spacing: 1.5px;
 }    
-.asign_ol ol>li,.test_div ol li{
+.asign_ol ol>li,.test_div ol li, .quiz_div ol li{
     box-shadow: 3px 3px 12px 1px rgba(0, 0, 0, 0.06);
     margin: 35px auto;
     padding: 12px;
@@ -559,7 +559,7 @@ nav ul:nth-child(3) li i{
 .asign_ol{
     display:none;
 }
-.asign_ol>ol>h1>i, .test_ol>ol>h1>i{
+.asign_ol>ol>h1>i, .test_ol>ol>h1>i, .quiz_ol>ol>h1>i{
     display: inline-block;
     float: right;
     cursor:pointer;
