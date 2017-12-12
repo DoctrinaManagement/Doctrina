@@ -7,8 +7,9 @@ import javax.servlet.*;
 import zu.b5.doctrina.model.insideclassroom.*;
 
 /**
- * @author Pandi
+ * @author Basheer
  */
+ 
 public class InsertFeeds extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest request,

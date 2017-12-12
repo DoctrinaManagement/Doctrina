@@ -8,8 +8,10 @@ public class ReUsable {
 
     private String userId;
     Connection conn;
+    boolean status;
     public ReUsable(Object connection) {
         conn = (Connection) connection;
+        status = true;
         
     }
     public void setUserId(String user_id) {
@@ -88,6 +90,8 @@ public class ReUsable {
 			tab_index++;
 			result.put("tabIndex", (tab_index+""));
 			out.add(result);
+			
+			
 		}
 		return out;
 	}
@@ -158,4 +162,5 @@ public class ReUsable {
 	    
 	    return result;
 	}
+	
 }

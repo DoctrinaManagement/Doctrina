@@ -19,32 +19,37 @@
     
     <script>
         var webSocket;
-        var course;
+        var course
+        var course_name;
         function notification_function(a){
-            $.get("notification_click",{"user_id":"<%=session.getAttribute("user_id")%>","message":a},function(data, status){
+            $.get("http://basheerahameds-1508.zcodeusers.com/notification_click",{"user_id":"<%=session.getAttribute("user_id")%>","message":a},function(data, status){
                 if(data == "ok"){
                     webSocket.send("<%=session.getAttribute("user_id")%>");
                 }
             });
         }
         
-        function getClassroom(course_id) {
+        function getClassroom(course_id, courseName) {
             course = course_id;
+            $(".all").css("display","none");
+            $(".allclass").css("display","block");
             document.getElementById("myclassroom").innerHTML="";
             document.getElementById("classroom").innerHTML="<h1 class='h1' id='course_name'></h1>";
-            $.get("getclassroom",{"user_id":"<%=session.getAttribute("user_id")%>","course_id":course_id},function(data, status){
+            $.get("http://basheerahameds-1508.zcodeusers.com/getclassroom",{"user_id":"<%=session.getAttribute("user_id")%>","course_id":course_id},function(data, status){
                 <%
                     if((session.getAttribute("role")+"").equals("Teacher")) {
                         %>document.getElementById("classroom").innerHTML+="<div class='title_div'><div class='title'><i class='fa fa-times-circle fa-2' aria-hidden='true' onclick='close_cls()'></i><label>Classroom Name</label><input type='text' id = 'cls_name' required autofocus/><label>Description</label><textarea maxlength='110' id='cls_des'></textarea><button type='submit' class='done_btn' onclick='done_crt()'>Done</button></div><div class='crt_div'><p>Create New Classroom</p><button type='submit' class='create_btn' onclick='crt_cls()'>+</button></div></div>";<%
                     }
                 %>
                 classroomRender(data,"allclass");
+                history.pushState(null, null, '/course/'+courseName);
             });
+            
         }
          function signOut() {
             var auth2 = gapi.auth2.getAuthInstance();
             auth2.signOut().then(function () {
-              location.href = "/";
+              location.href = "/landingpage";
             });
         }
         
@@ -65,7 +70,7 @@
             if(ret.authResponse) {
 
                 FB.logout(function(response) {
-                   location.href = "/";
+                   location.href = "/landingpage";
                 });
             } 
         });
@@ -74,8 +79,8 @@
     var getMyclassroom = function(userId) {
         document.getElementById("myclassroom").innerHTML="";
         document.getElementById("classroom").innerHTML="";
-        $.get("myclassroom",{"user_id":userId},function(data, status){
-        
+        $.get("http://basheerahameds-1508.zcodeusers.com/myclassroom",{"user_id":userId},function(data, status){
+                history.pushState(null,null,"/myclassroom");
                 classroomRender(data,"myclass");
             });
     }
@@ -87,6 +92,7 @@
         if (state == "allclass") {    
             document.getElementById("classroom").innerHTML += templete(classroomObj);
             document.getElementById("course_name").innerHTML = classroomObj.courseName[0].courseName;
+            course_name = classroomObj.courseName[0].courseName;
         } else {
             document.getElementById("myclassroom").innerHTML += templete(classroomObj);
         }
@@ -115,11 +121,13 @@
         }
     } 
     var onloaded = function() {
+        <%=session.getAttribute("course")%> = "<%=session.getAttribute("course")%>"
+        <%=session.getAttribute("function")%>
     	socket();
     	//myclassroom();
     }
 
-    var socket = function() {
+        var socket = function() {
     
         document.getElementById("profile_image").style.background = "url('<%=session.getAttribute("image")%>') 100%/100% 100%";
         if(webSocket !== undefined && webSocket.readyState !== WebSocket.CLOSED){
@@ -188,10 +196,10 @@
         var class_name = $("#cls_name").val();
         var des = $("#cls_des").val();
         if(class_name != "" && des != "") {
-            $.get("createclassroom",{"user_id":"<%=session.getAttribute("user_id")%>","classroom_name":class_name,"classroom_description":des,"course_id":course},function(data, status){
+            $.get("http://basheerahameds-1508.zcodeusers.com/createclassroom",{"user_id":"<%=session.getAttribute("user_id")%>","classroom_name":class_name,"classroom_description":des,"course_id":course},function(data, status){
                 if(data == "classroom has been created.") {
                     webSocket.send("all");
-                    getClassroom(course);
+                    getClassroom(course, course_name);
                 }
             });
         }
@@ -210,7 +218,7 @@
     
     function Class_JoinRequest (classId, id ) {
         document.getElementById("join"+id).innerHTML="<button>Request sent</button>";
-        $.get("/Classroom_JoinRequest",{"requester":"<%=session.getAttribute("user_id")%>","class_id":classId},function(data, status) {
+        $.get("http://basheerahameds-1508.zcodeusers.com/Classroom_JoinRequest",{"requester":"<%=session.getAttribute("user_id")%>","class_id":classId},function(data, status) {
             if(data == "ok"){
                 webSocket.send("all");
             }
@@ -218,9 +226,17 @@
     }
     
     function replyRequest (requester, class_id, status) {
-        $.get("/ReplyRequest",{"requester":requester,"class_id":class_id,"status":status}, function(data, status) {
+        $.get("http://basheerahameds-1508.zcodeusers.com/ReplyRequest",{"requester":requester,"class_id":class_id,"status":status}, function(data, status) {
             if(data == "ok"){
                 webSocket.send("all");
+            }
+        });
+    }
+    
+    function gotoClassroom(class_id) {
+        $.get("http://basheerahameds-1508.zcodeusers.com/enterClassroom",{"class_id":class_id, "user_id" : "<%=session.getAttribute("user_id")%>" }, function(data, status) {
+            if(data == "200" ) {
+                location.href = "http://basheerahameds-1508.zcodeusers.com/classroom";
             }
         });
     }
@@ -327,78 +343,78 @@
            
             <main class="all">
                 
-                <div onclick="getClassroom('1')">
+                <div onclick="getClassroom('1','Maths')">
                     <img src="../IMAGES/tags/maths.jpg" alt="Maths" />
                     <div>Maths</div>
                 </div>
                 
-                <div onclick="getClassroom('2')">
+                <div onclick="getClassroom('2','English')">
                     <img src="../IMAGES/tags/english.jpg" alt="English" />
                     <div>English</div>
                 </div>
                 
-                <div onclick="getClassroom('3')">
+                <div onclick="getClassroom('3','Programming')">
                     <img src="../IMAGES/tags/programming.jpg" alt="Programming" />
                     <div>Programming</div>
                 </div>
                 
-                <div onclick="getClassroom('4')">
+                <div onclick="getClassroom('4','Designing')">
                     <img src="../IMAGES/tags/designing.jpg" alt="Designing" />
                     <div>Designing</div>
                 </div>
                 
-                <div onclick="getClassroom('5')">
+                <div onclick="getClassroom('5','Artificial Inteligence')">
                     <img src="../IMAGES/tags/ai.jpg" alt="AI" />
                     <div>Artificial Inteligence</div>
                 </div>
                 
-                <div onclick="getClassroom('6')">
-                    <img src="../IMAGES/tags/science.png" alt="Science" style="box-shadow: 0 0 30px rgba(0, 0, 0, 0.08) inset" />
+                <div onclick="getClassroom('6','Science')">
+                    <img src="../IMAGES/tags/science.jpg" alt="Science" style="box-shadow: 0 0 30px rgba(0, 0, 0, 0.08) inset" />
                     <div>Science</div>
                 </div>
                 
-                <div onclick="getClassroom('7')">
+                <div onclick="getClassroom('7','History')">
                     <img src="../IMAGES/tags/history.jpg" alt="History" />
                     <div>History</div>
                 </div>
                 
-                 <div onclick="getClassroom('8')">
+                 <div onclick="getClassroom('8','Animation')">
                     <img src="../IMAGES/tags/animation.jpg" alt="Animation" />
                     <div>Animation</div>
                 </div>
                 
-                <div onclick="getClassroom('9')">
+                <div onclick="getClassroom('9','Medical')">
                     <img src="../IMAGES/tags/medical.jpg" alt="Medical" />
                     <div>Medical</div>
                 </div>
                 
-                <div onclick="getClassroom('10')">
+                <div onclick="getClassroom('10','Engineering')">
                     <img src="../IMAGES/tags/engineer.jpg" alt="Engineering" />
                     <div>Engineering</div>
                 </div>
                 
                 
-                <div onclick="getClassroom('11')">
+                <div onclick="getClassroom('11','Arts')">
                     <img src="../IMAGES/tags/art.jpg" alt="Arts" />
                     <div>Arts</div>
                 </div>
                 
-                <div onclick="getClassroom('12')"> 
+                <div onclick="getClassroom('12','Robotics')"> 
                     <img src="../IMAGES/tags/robotics.jpg" alt="Robotics" />
                     <div>Robotics</div>
                 </div>
                 
-                <div onclick="getClassroom('13')">
+                <div onclick="getClassroom('13','Music')">
                     <img src="../IMAGES/tags/music.jpg" alt="Music" />
                     <div>Music</div>
                 </div>
                  
-                <div onclick="getClassroom('14')">
+                <div onclick="getClassroom('14','Tamil')">
                     <img src="../IMAGES/tags/tamil.jpg" alt="Tamil" />
                     <div>Tamil</div>
                 </div>
                 
-                <div onclick="getClassroom('15')">
+                <div onclick="getClassroom('15','Economics')">
                     <img src="../IMAGES/tags/economic.jpg" alt="Economic" />
                     <div>Economics</div>
                 </div>
@@ -428,11 +444,11 @@
         {{#each classrooms}}           
                  <div class='new' id="{{tabIndex}}">
                     <div class='newclass' >
-                        <img src='../IMAGES/classs.png'>
-                        <p>{{classroom_name}}</p>
+                        <img src='../IMAGES/classs.png' onclick='gotoClassroom({{classroom_id}})'>
+                        <p onclick='gotoClassroom({{classroom_id}})'>{{classroom_name}}</p>
                         <p id="join{{tabIndex}}"></p>
                     </div>
-                    <img src="../IMAGES/info.png" tabindex="{{tabIndex}}" class="info" onclick="des(this)"> 
+                    <img src="../IMAGES/info.png" tabindex="{{tabIndex}}" class="info"> 
                     <div class='des' tabindex='2'> 
                         <p>Created by</p> 
                         <p>{{name}}</p> 

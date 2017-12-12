@@ -9,16 +9,14 @@ public class AddProcess{
     Connection conn;
     PreparedStatement stmt;
     ReUsable get;
-    String tableName;
     
-    public AddProcess(Object connection, String tableName) {
+    public AddProcess(Object connection) {
         conn = (Connection) connection;
         get = new ReUsable(conn);
-        tableName = tableName;
     }
     
-    public void setValues(String class_id, String title_id, ArrayList<String> questions) {
-        String Query = "insert into "+tableName+"values(?,?,?)";
+    public void setValues(String class_id, String title_id, ArrayList<String> questions, String tableName) {
+        String Query = "insert into "+tableName+" values(?,?,?)";
         try {
             for (String question : questions ) {
                 stmt = conn.prepareStatement(Query);
@@ -32,19 +30,19 @@ public class AddProcess{
         }
     }
     
-    public String getID(String class_id, String title) {
+    public String getID(String class_id, String title, String tableName) {
         String title_id = "";
-        if(isTitle(class_id, title)) {
-            title_id = get_ID(class_id, title);
+        if(isTitle(class_id, title, tableName)) {
+            title_id = get_ID(class_id, title, tableName);
             
         } else {
             try {
-                String Query = "insert into "+tableName+"(ass_title, class_id) values(?,?);";
+                String Query = "insert into "+tableName+" (title, class_id) values(?,?);";
                 stmt = conn.prepareStatement(Query);
                 stmt.setString(1, title);
                 stmt.setInt(2, Integer.parseInt(class_id));
                 stmt.executeUpdate();
-                title_id = get_ID(class_id, title);
+                title_id = get_ID(class_id, title, tableName);
             } catch (SQLException e) {
                 System.out.println("AddProcess - getID" + e.getMessage());
             }
@@ -53,10 +51,11 @@ public class AddProcess{
         return title_id;
     }
     
-    private String get_ID(String class_id, String title) {
+    private String get_ID(String class_id, String title, String tableName) {
         String Id = "";
         try{
-            String Query = "select ass_id from "+tableName+"where class_id = ? and ass_title = ?;";
+            String Query = "select id from "+tableName+" where class_id = ? and title = ?;";
+            System.out.println("get_id    "+Query);
             stmt = conn.prepareStatement(Query);
             stmt.setInt(1, Integer.parseInt(class_id));
             stmt.setString(2, title);
@@ -68,10 +67,11 @@ public class AddProcess{
         }
         return Id;
     }
-    public boolean isTitle(String class_id, String title) {
+    public boolean isTitle(String class_id, String title, String tableName) {
         try {
             
-            String Query = "select * from "+tableName+"where class_id = ? and ass_title = ?;";
+            String Query = "select * from "+tableName+" where class_id = ? and title = ?;";
+            System.out.println("isTittle    "+Query);
             stmt = conn.prepareStatement(Query);
             stmt.setInt(1, Integer.parseInt(class_id));
             stmt.setString(2, title);

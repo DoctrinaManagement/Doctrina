@@ -22,7 +22,7 @@ public class Signup extends HttpServlet {
 		HttpSession session = request.getSession();
 		SignupProcess process = new SignupProcess(session.getAttribute("connection"));
 		HashMap<String,String> user_details = new  HashMap<String,String>();
-		
+		session.setAttribute("course", "Maths");
 		String[] keys = {"user_id", "name", "email_id", "image", "role"};
 		for (String key : keys) {
 		    user_details.put(key, request.getParameter(key) );

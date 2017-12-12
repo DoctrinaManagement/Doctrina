@@ -28,16 +28,13 @@ public class AddAssignmentTestAuth implements Filter {
 			if (checkDetails.checkAddPermission(session.getAttribute("user_id") + "",
 					request.getParameter("class_id"))) {
 				chain.doFilter(request, response);
-			}
-
-			else {
+			} else {
 				writer.write("404");
-			}
+			  }
 		} else {
 			writer.write("404");
 		}
 	}
-
 	public void destroy() {
 	}
 }

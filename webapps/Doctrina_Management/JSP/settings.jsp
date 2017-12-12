@@ -27,11 +27,12 @@
         // SaveNotification_Settings 
         
         function getValues() {
-            var checkedValue = "";
+            var checkedValue = [];
             var inputElements = document.getElementsByClassName('setting');
             for(var i=0; inputElements[i]; ++i){
                   if(inputElements[i].checked){
-                       checkedValue += (inputElements[i].value + "A");
+                        checkedValue.push(inputElements[i].value);
+                       //checkedValue += (inputElements[i].value + "A");
                   }
             }
            // checkedValue = checkedValue.substring(0,checkedValue.length-1);console.log(checkedValue);
@@ -39,7 +40,7 @@
         }
         
         function SaveNotification_Settings(values) {console.log(values);
-            $.get("SaveNotification_Settings",{"user_id":"<%=session.getAttribute("user_id")%>","courses":values},function(data,status){
+            $.get("SaveNotification_Settings",{"user_id":"<%=session.getAttribute("user_id")%>","courses":JSON.stringify(values)},function(data,status){
                if(data == "save successfully") {
                    $(".save").text("Save Successfully...");
                    setTimeout(function(){

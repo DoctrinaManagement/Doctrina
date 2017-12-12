@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
 <web-app xmlns="http://java.sun.com/xml/ns/j2ee"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"
@@ -6,7 +5,7 @@
 
 
 <!--1st landing page when app open is execute  -->
-  <servlet>
+    <servlet>
         <servlet-name>docs</servlet-name>
         <jsp-file>/HTML/landing-page.html</jsp-file>
     </servlet>
@@ -18,7 +17,7 @@
 <!--/1st landing page when app open is execute  -->
   
   
-  <servlet>
+    <servlet>
         <servlet-name>resultSignup</servlet-name>
         <servlet-class>zu.b5.doctrina.controller.account.Signup</servlet-class>
     </servlet>
@@ -31,12 +30,12 @@
     <filter>  
       <filter-name>signup</filter-name>  
       <filter-class>zu.b5.doctrina.controller.authorization.SignupAuth</filter-class>  
-  </filter>  
+    </filter>  
   
-  <filter-mapping>  
+    <filter-mapping>  
       <filter-name>signup</filter-name>  
       <url-pattern>/doctrina.signup</url-pattern>  
-  </filter-mapping>
+    </filter-mapping>
   
   
   
@@ -156,7 +155,9 @@
         <servlet-name>SaveSettings</servlet-name>
         <url-pattern>/SaveNotification_Settings</url-pattern>
     </servlet-mapping>
-    <!-- Auth for settings Save  -->
+    
+    
+<!-- Auth for settings Save  -->
      <filter>  
       <filter-name>savesettingsauth</filter-name>  
       <filter-class>zu.b5.doctrina.controller.authorization.SaveSettingsAuth</filter-class>  
@@ -251,63 +252,274 @@
 <!-- /replyJoinrequest -->
 
 <!-- classRoom -->
-
-     <servlet>
+    
+    <servlet>
         <servlet-name>enterClassroom</servlet-name>
         <servlet-class>zu.b5.doctrina.controller.classroom.Classroom</servlet-class>
     </servlet>
     
     <servlet-mapping>
         <servlet-name>enterClassroom</servlet-name>
-        <url-pattern>/enter_Classroom</url-pattern>
+        <url-pattern>/enterClassroom</url-pattern>
+    </servlet-mapping>
+    
+    
+    <servlet>
+        <servlet-name>classroompage</servlet-name>
+        <jsp-file>/JSP/classroom.jsp</jsp-file>
+    </servlet>
+    
+    <servlet-mapping>
+        <servlet-name>classroompage</servlet-name>
+        <url-pattern>/classroom</url-pattern>
     </servlet-mapping>
 
 <!-- /classRoom -->
 
-<!-- Assignments -->
+<!-- videos get  -->
     <servlet>
-        <servlet-name>addAssignmentsTests</servlet-name>
+        <servlet-name>getVideoResult</servlet-name>
+        <servlet-class>zu.b5.doctrina.controller.classroom.getVideos</servlet-class>
+    </servlet>
+    
+    <servlet-mapping>
+        <servlet-name>getVideoResult</servlet-name>
+        <url-pattern>/getVideos</url-pattern>
+    </servlet-mapping>
+    
+    <filter>
+        <filter-name>getVideos</filter-name>
+        <filter-class>zu.b5.doctrina.controller.authorization.GetVideosAuth</filter-class>
+    </filter>
+    
+    <filter-mapping>
+        <filter-name>getVideos</filter-name>
+        <url-pattern>/getVideos</url-pattern>
+    </filter-mapping>
+<!--/videos get -->
+
+
+    
+
+    <servlet>
+        <servlet-name>videoupload</servlet-name>
+        <jsp-file>/HTML/video.html</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>videoupload</servlet-name>
+        <url-pattern>/videoUpload</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
+        <servlet-name>findFriends</servlet-name>
+        <servlet-class>zu.b5.doctrina.controller.find.FindFriends</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>findFriends</servlet-name>
+        <url-pattern>/find</url-pattern>
+    </servlet-mapping>
+    
+    <!-- Titlesget -->
+    
+    <!-- Titles Set -->
+    <servlet>
+        <servlet-name>getTitles</servlet-name>
+        <servlet-class>zu.b5.doctrina.controller.insideclassroom.GetTitles</servlet-class>
+    </servlet>
+    
+    <servlet-mapping>
+        <servlet-name>getTitles</servlet-name>
+        <url-pattern>/getTitles</url-pattern>
+    </servlet-mapping>
+
+    <filter>
+        <filter-name>getTitlesAuth</filter-name>
+        <filter-class>zu.b5.doctrina.controller.authorization.GetTitlesAuth</filter-class>
+    </filter>
+    
+    <filter-mapping>
+        <filter-name>getTitlesAuth</filter-name>
+        <url-pattern>/getTitles</url-pattern>
+    </filter-mapping>
+    <!-- /Titlesget -->
+    
+    <!-- AddAssignment -->
+    
+    <servlet>
+        <servlet-name>AddAssignment</servlet-name>
         <servlet-class>zu.b5.doctrina.controller.insideclassroom.AddAssignment</servlet-class>
     </servlet>
     
     <servlet-mapping>
-        <servlet-name>addAssignmentsTests</servlet-name>
-        <url-pattern>/AddTasks</url-pattern>
+        <servlet-name>AddAssignment</servlet-name>
+        <url-pattern>/AddAssignment</url-pattern>
     </servlet-mapping>
     
     <filter>
-        <filter-name>addAssignmentsTestsAuth</filter-name>
+        <filter-name>AddAssignmentAuth</filter-name>
         <filter-class>zu.b5.doctrina.controller.authorization.AddAssignmentTestAuth</filter-class>
     </filter>
     
     <filter-mapping>
-        <filter-name>addAssignmentsTestsAuth</filter-name>
-        <url-pattern>/AddTasks</url-pattern>
+        <filter-name>AddAssignmentAuth</filter-name>
+        <url-pattern>/AddAssignment</url-pattern>
     </filter-mapping>
     
-    <!-- /Assignments -->
+    <!-- /AddAssignment -->
     
-    <!-- Tests -->
+    <!-- Add test-->
     
-     <servlet>
-        <servlet-name>addAssignmentsTests</servlet-name>
+    <servlet>
+        <servlet-name>AddTest</servlet-name>
         <servlet-class>zu.b5.doctrina.controller.insideclassroom.AddTest</servlet-class>
     </servlet>
     
     <servlet-mapping>
-        <servlet-name>addAssignmentsTests</servlet-name>
-        <url-pattern>/AddTasks</url-pattern>
+        <servlet-name>AddTest</servlet-name>
+        <url-pattern>/AddTest</url-pattern>
     </servlet-mapping>
     
     <filter>
-        <filter-name>addAssignmentsTestsAuth</filter-name>
+        <filter-name>AddTestAuth</filter-name>
         <filter-class>zu.b5.doctrina.controller.authorization.AddAssignmentTestAuth</filter-class>
     </filter>
     
     <filter-mapping>
-        <filter-name>addAssignmentsTestsAuth</filter-name>
-        <url-pattern>/AddTasks</url-pattern>
+        <filter-name>AddTestAuth</filter-name>
+        <url-pattern>/AddTest</url-pattern>
     </filter-mapping>
     
-    <!-- /Tests -->
+    
+    <!-- /Add test -->
+    
+    <!-- AddQuiz -->
+        <servlet>
+        <servlet-name>AddQuizQuestions</servlet-name>
+        <servlet-class>zu.b5.doctrina.controller.insideclassroom.AddQuiz</servlet-class>
+    </servlet>
+    
+    <servlet-mapping>
+        <servlet-name>AddQuizQuestions</servlet-name>
+        <url-pattern>/AddQuizQuestions</url-pattern>
+    </servlet-mapping>
+    
+    <filter>
+        <filter-name>AddQuizQuestionsAuth</filter-name>
+        <filter-class>zu.b5.doctrina.controller.authorization.AddQuizAuth</filter-class>
+    </filter>
+    
+    <filter-mapping>
+        <filter-name>AddQuizQuestionsAuth</filter-name>
+        <url-pattern>/AddQuizQuestions</url-pattern>
+    </filter-mapping>
+        
+    <!-- /AddQuiz-->
+    
+    <servlet>
+        <servlet-name>getNames</servlet-name>
+        <servlet-class>zu.b5.doctrina.controller.report.ClassStudentName</servlet-class>
+    </servlet>
+    
+    <servlet-mapping>
+        <servlet-name>getNames</servlet-name>
+        <url-pattern>/getNames</url-pattern>
+    </servlet-mapping>
+    
+    <!-- getQuestions -->
+    
+    <!-- Assignments -->
+    <servlet>
+        <servlet-name>GetAssQuestions</servlet-name>
+        <servlet-class>zu.b5.doctrina.controller.insideclassroom.GetAssignmentTest</servlet-class>
+    </servlet>
+    
+    <servlet-mapping>
+        <servlet-name>GetAssQuestions</servlet-name>
+        <url-pattern>/getAssignmentQuestions</url-pattern>
+    </servlet-mapping>
+    
+    <filter>
+        <filter-name>GetAssQuestionsAuth</filter-name>
+        <filter-class>zu.b5.doctrina.controller.authorization.GetAssignmentTestAuth</filter-class>
+    </filter>
+    
+    <filter-mapping>
+        <filter-name>GetAssQuestionsAuth</filter-name>
+        <url-pattern>/getAssignmentQuestions</url-pattern>
+    </filter-mapping>
+    
+    <!-- Test -->
+    <servlet>
+        <servlet-name>GettestQuestions</servlet-name>
+        <servlet-class>zu.b5.doctrina.controller.insideclassroom.GetAssignmentTest</servlet-class>
+    </servlet>
+    
+    <servlet-mapping>
+        <servlet-name>GettestQuestions</servlet-name>
+        <url-pattern>/getTestQuestions</url-pattern>
+    </servlet-mapping>
+    
+    <filter>
+        <filter-name>GettestQuestionsAuth</filter-name>
+        <filter-class>zu.b5.doctrina.controller.authorization.GetAssignmentTestAuth</filter-class>
+    </filter>
+    
+    <filter-mapping>
+        <filter-name>GettestQuestionsAuth</filter-name>
+        <url-pattern>/getTestQuestions</url-pattern>
+    </filter-mapping>
+    
+    <!-- /getQuestions -->
+    
+<!-- add members -->
+    
+    <servlet>
+        <servlet-name>AddMember</servlet-name>
+        <servlet-class>zu.b5.doctrina.controller.find.AddMember</servlet-class>
+    </servlet>
+    
+    <servlet-mapping>
+        <servlet-name>AddMember</servlet-name>
+        <url-pattern>/inviteStudents</url-pattern>
+    </servlet-mapping>
+    
+<!-- /add members -->
+
+<!-- add members -->
+    
+    <servlet>
+        <servlet-name>deleteMember</servlet-name>
+        <servlet-class>zu.b5.doctrina.controller.classroom.LeaveClassroom</servlet-class>
+    </servlet>
+    
+    <servlet-mapping>
+        <servlet-name>deleteMember</servlet-name>
+        <url-pattern>/leaveClassroom</url-pattern>
+    </servlet-mapping>
+    
+<!-- /add members -->
+    
+    
+    
+    
+    
+    <servlet>
+        <servlet-name>urlLoader</servlet-name>
+        <servlet-class>zu.b5.doctrina.controller.url.CourseLoad</servlet-class>
+    </servlet>
+    
+    <servlet-mapping>
+        <servlet-name>urlLoader</servlet-name>
+        <url-pattern>/course/*</url-pattern>
+    </servlet-mapping>
+    
+    <!--<servlet>-->
+    <!--    <servlet-name>Reload</servlet-name>-->
+    <!--    <servlet-class>zu.b5.doctrina.controller.url.Reload</servlet-class>-->
+    <!--</servlet>-->
+    
+    <!--<servlet-mapping>-->
+    <!--    <servlet-name>Reload</servlet-name>-->
+    <!--    <url-pattern>/*</url-pattern>-->
+    <!--</servlet-mapping>-->
 </web-app>

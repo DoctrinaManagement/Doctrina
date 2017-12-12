@@ -20,7 +20,7 @@ public class CheckValidDetails {
 	public boolean userIdCheck(String userId) {
 		try {
 			String userId_Query = "select * from userdetails where user_id = '"
-					+ userId + "'";
+					+ userId + "';";
 			ResultSet rs = stmt.executeQuery(userId_Query);
             ReUsable get = new ReUsable(conn);
 			HashMap<String, String> details = get.resultSetToHashMap(rs);
@@ -142,6 +142,40 @@ public class CheckValidDetails {
 	    }
 	    catch (SQLException e) {
 	        System.out.println("CheckValidDetails - checkpermission" + e.getMessage());
+	    }
+	    return false;
+	}
+	
+	public boolean checkID (String id, String tableName) {
+	    try {
+	        ResultSet rs = stmt.executeQuery("select id from "+tableName+" where id = "+id+";");
+	        
+	        ReUsable get = new ReUsable(conn);
+    		ArrayList<String> idValues = get.resultSetToUserID(rs);
+            
+            if(idValues.size() != 0) {
+                return true;
+            }
+	    }
+	    catch (SQLException e) {
+	        System.out.println("CheckValidDetails - checkID" + e.getMessage());
+	    }
+	    return false;
+	}
+	
+	public boolean checkClassCreater (String user_id, String class_id) {
+	    try {
+	        ResultSet rs = stmt.executeQuery("select class_creater from classroom where classroom_id ="+class_id+" and class_creater =" +user_id+ ";");
+	        
+	        ReUsable get = new ReUsable(conn);
+    		ArrayList<String> classCreater = get.resultSetToUserID(rs);
+            
+            if(classCreater.size() != 0) {
+                return true;
+            }
+	    }
+	    catch (SQLException e) {
+	        System.out.println("CheckValidDetails - checkClassCreater" + e.getMessage());
 	    }
 	    return false;
 	}

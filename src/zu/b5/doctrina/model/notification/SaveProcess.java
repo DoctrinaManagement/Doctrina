@@ -1,6 +1,7 @@
 package zu.b5.doctrina.model.notification;
 
 import java.sql.*;
+import java.util.Arrays.*;
 
 public class SaveProcess{
     Connection conn;
@@ -16,11 +17,11 @@ public class SaveProcess{
     }
     
     
-    public void updateSetting(String userId, String[] values) {
+    public void updateSetting(String userId, java.util.ArrayList<String> course_id) {
         try {
             String Query = "delete from settings where user_id ='"+userId+"';";
 			stmt.executeUpdate(Query);
-			for(String course_idValues : values) {
+			for(String course_idValues : course_id) {
 			    if (course_idValues.equals("")) {
 			        break;
 			    }

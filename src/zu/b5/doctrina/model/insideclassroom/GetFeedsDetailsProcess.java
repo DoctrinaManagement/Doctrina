@@ -17,9 +17,10 @@ public class GetFeedsDetailsProcess{
         
     }
     
-    public void getObject(String class_id) {
+    public ArrayList<HashMap<String,String>> getObject(String class_id) {
 
-        String Query = "select id from posts where class_id = ?;";
+        String Query = "select * from posts where class_id = ? order by date desc limit 10;";
+        
         try {
             stmt = conn.prepareStatement(Query);
             stmt.setString(1, class_id);
@@ -51,10 +52,13 @@ public class GetFeedsDetailsProcess{
                 
                 post.put("comments", (comments+""));
                 Obj.add(post);
+                
             }
         } catch (SQLException e) {
             
         }
+        
+        return Obj;
         
     }
     

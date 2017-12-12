@@ -49,7 +49,6 @@ public class SignupProcess {
             stmt.setString(2, details.get("notification"));
             stmt.setString(3, details.get("status"));
             stmt.setString(4, details.get("sender"));
-            System.out.println(details.get("status"));
             stmt.executeUpdate();
             return "done";
 	    } catch (SQLException e) {

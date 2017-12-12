@@ -104,6 +104,7 @@ $(document).ready(function(){
     });
     
     $(".la1").click(function(){
+        history.pushState(null, null, '/doctrina.index.do');
         $(".la1").addClass("select");
         $(".la2").removeClass("select");
         $(".all").css("display","block");
@@ -145,15 +146,18 @@ $(document).ready(function(){
     
     // -------------- go to create class rooms ----------------------------
     
-    $(".all>div").click(function(){
-       $(".all").css("display","none");
-       $(".allclass").css("display","block");
-    });
+    // $(".all>div").click(function(){
+    //   $(".all").css("display","none");
+    //   $(".allclass").css("display","block");
+    // });
     $("header>img").click(function(){
+        history.pushState(null, null, '/doctrina.index.do');
+        $("#myclassroom").html("");
         $(".la1").addClass("select");
         $(".la2").removeClass("select");
         $(".allclass").css("display","none");
         $(".all").css("display","block");
+        $("#myclassroom").css("display","none");
     });
     
     setTimeout(function(){

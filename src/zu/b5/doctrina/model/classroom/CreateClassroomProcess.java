@@ -13,7 +13,7 @@ public class CreateClassroomProcess {
 		conn = (Connection) connection;
 	}
 
-	public void createClassroom(HashMap<String, String> details) {
+	public String createClassroom(HashMap<String, String> details) {
 		try {
 			// String Query =
 			// "insert into classroom(classroom_name, classroom_description, course, class_creater) values('"+
@@ -24,27 +24,28 @@ public class CreateClassroomProcess {
 					.prepareStatement("insert into classroom (classroom_name, classroom_description, course, class_creater) values(?, ?, ?, ?)");
 			stmt.setString(1, details.get("classroom_name"));
 			stmt.setString(2, details.get("classroom_description"));
-			stmt.setString(3, details.get("course_id"));
+			stmt.setInt(3, Integer.parseInt(details.get("course_id")));
 			stmt.setString(4, details.get("user_id"));
 			stmt.executeUpdate();
 
-			String message = "'A new classroom <b>"
-					+ details.get("classroom_name") + "</b> has been created.'";
-			ResultSet rs = stmt
-					.executeQuery("select user_id from settings where course_id ='"
-							+ details.get("course_id") + "';");
+			String message = "A new classroom <b>"
+					+ details.get("classroom_name") + "</b> has been created.";
+					
+			stmt = conn.prepareStatement("select user_id from settings where course_id =?;");
+			stmt.setInt(1, Integer.parseInt(details.get("course_id")));
+			ResultSet rs = stmt.executeQuery();
 			ReUsable get = new ReUsable(conn);
 
 			ArrayList<String> user_id = get.resultSetToUserID(rs);
 			for (String id : user_id) {
-				id = "'" + id + "'";
 				
 				stmt = conn
-					.prepareStatement("insert into notification (user_id, message, status, sender) values(?, ?, 'True', ?)");
+					.prepareStatement("insert into notification (user_id, message, status, sender) values(?, ?, ?::\"enum_status\", ?)");
     			
-    			stmt.setString(1, details.get(id));
-    			stmt.setString(2, details.get(message));
-    			stmt.setString(3, details.get(details.get("user_id")));
+    			stmt.setString(1, id);
+    			stmt.setString(2, message);
+    			stmt.setString(3, "true");
+    			stmt.setString(4, details.get("user_id"));
     			stmt.executeUpdate();
 				
 				// stmt.executeUpdate("insert into notification(user_id,message,status,sender) values("
@@ -54,20 +55,24 @@ public class CreateClassroomProcess {
 				// 		+ ",'true','"
 				// 		+ details.get("user_id") + "');");
 			}
-			rs = stmt.executeQuery("select classroom_id from classroom");
+			System.out.println("hi");
+			stmt = conn.prepareStatement("select classroom_id from classroom");
+			rs = stmt.executeQuery();
 			ArrayList<String> classroom_ids = get.resultSetToUserID(rs);
 			int classroom_id = Integer.parseInt(classroom_ids.get(classroom_ids
 					.size() - 1));
 					
-			stmt = conn.prepareStatement("insert into members values(?, ?, 'Teacher')");
+			stmt = conn.prepareStatement("insert into members values(?, ?, ?::\"member\")");
 			stmt.setInt(1, classroom_id);
 			stmt.setString(2, details.get("user_id"));
+			stmt.setString(3, "Teacher");
 			stmt.executeUpdate();
+			return "OK";
 // 			stmt.executeUpdate("insert into members values(" + classroom_id
 // 					+ ",'" + details.get("user_id") + "','Teacher');");
 		} catch (SQLException e) {
-
+            System.out.println(e.getMessage());
 		}
-
+        return "not ok";
 	}
 }

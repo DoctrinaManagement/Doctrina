@@ -21,7 +21,9 @@ public class CreateClassroom extends HttpServlet {
 		    details.put(key, request.getParameter(key));
 		}
 		
-		process.createClassroom(details);
-		writer.write("classroom has been created.");
+		if (process.createClassroom(details).equals("OK")){
+		
+		    writer.write("classroom has been created.");
+		}
 	}
 }

@@ -19,7 +19,7 @@ public class Signin extends HttpServlet {
 		ReUsable get = new ReUsable(session.getAttribute("connection"));
 		SignupProcess process1 = new SignupProcess(session.getAttribute("connection"));
 		SigninProcess process = new SigninProcess(session.getAttribute("connection"));
-		
+		session.setAttribute("course", "Maths");
 		String[] keys = {"user_id", "name", "email_id", "image", "role"};
 	    HashMap<String,String> user_details = new HashMap<String,String>();
 		for (String key : keys) {

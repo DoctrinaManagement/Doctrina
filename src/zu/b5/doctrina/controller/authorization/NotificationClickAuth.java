@@ -37,11 +37,11 @@ public class NotificationClickAuth implements Filter {
     			if (details.size() != 0 && details.get("user_id").equals((request.getParameter("user_id")+"")) && details.get("message").equals((request.getParameter("message")+""))) {
     				chain.doFilter(request, response);
     			} else {
-    				writer.write("404");
+    				throw new Exception();
     			}
 		    }
-		} catch (SQLException e) {
-			writer.write("error");
+		} catch (Exception e) {
+			writer.write("404");
 		}
 	}
 
