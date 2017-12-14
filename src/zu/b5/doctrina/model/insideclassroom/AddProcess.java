@@ -18,7 +18,8 @@ public class AddProcess {
 
 	public void setValues(String class_id, String title_id,
 			ArrayList<String> questions, String tableName) {
-		String Query = "insert into " + tableName + " (class_id, id, question) values(?,?,?)";
+		String Query = "insert into " + tableName
+				+ " (class_id, id, question) values(?,?,?)";
 		try {
 			for (String question : questions) {
 				stmt = conn.prepareStatement(Query);
@@ -92,32 +93,34 @@ public class AddProcess {
 		return false;
 	}
 
-	public void addquizQuestions(JsonElement obj, String class_id, String title) {
-		JsonObject object = (JsonObject) obj;
+	public void addquizQuestions(JsonObject object, String class_id, String title) {
+		
 		String title_id = getID(class_id, title, "quiztitles");
 		ArrayList<String> answer = new ArrayList<String>();
 		answer.add("a");
 		answer.add("b");
 		answer.add("c");
 		answer.add("d");
-		String s =object.get("answer").getAsString();
+		String s = object.get("answer").getAsString();
 		int idx = answer.indexOf(s) + 1;
-		
+System.out.println(idx);
 		try {
 			stmt = conn
 					.prepareStatement("insert into quiz (class_id, id, question, option1, option2, option3, option4, answer) values (?, ?, ?, ?, ?, ?, ?, ?);");
+			
 			stmt.setInt(1, Integer.parseInt(class_id));
 			stmt.setInt(2, Integer.parseInt(title_id));
-			stmt.setString(3, object.get("question").getAsString().toLowerCase());
+			stmt.setString(3, object.get("question").getAsString()
+					.toLowerCase());
 			stmt.setString(4, object.get("option1").getAsString().toLowerCase());
 			stmt.setString(5, object.get("option2").getAsString().toLowerCase());
 			stmt.setString(6, object.get("option3").getAsString().toLowerCase());
 			stmt.setString(7, object.get("option4").getAsString().toLowerCase());
-			stmt.setString(8, object.get("option"+idx).getAsString().toLowerCase());
+			stmt.setString(8, object.get("option" + idx).getAsString()
+					.toLowerCase());
 			stmt.executeUpdate();
-
 		} catch (Exception e) {
-			System.out.println("addquizQuestions -" + e.getMessage());
+			System.out.println("addquizQuestions -" + e);
 		}
 	}
 }

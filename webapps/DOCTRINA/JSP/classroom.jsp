@@ -163,7 +163,8 @@
         }
             $.get("/AddAssignment", {"class_id":"<%=session.getAttribute("class_id")%>", "title":title, "questions":JSON.stringify(questionsList)}, function(data, status) {
                 if (data == "200") {
-                    $(".more").css("display", "none");
+                    $(".blur").trigger("click");
+                    $("#ass-add-templete").html("<p>Add Asssignments</p><input type='text' id='ass_title' placeholder='Enter the Assignment Name' /><ol class='asmnts'><li><div contenteditable='true' class='ass_question' placeholder='Enter your question here...'></div><i class='fa fa-times' onclick='del_input(this)' aria-hidden='true'></i><p style='clear: both'></p></li></ol><button type='text'>+ Add new</button><div onclick='AddAssignmentQuestions()'>Submit</div>");
                     alert('Success');
                 }
             })
@@ -180,7 +181,8 @@
         }
             $.get("/AddTest", {"class_id":"<%=session.getAttribute("class_id")%>", "title":title, "questions":JSON.stringify(questionsList)}, function(data, status) {
                 if (data == "200") {
-                    $(".more").css("display", "none");
+                    $(".blur").trigger("click");
+                    $("#test-add-templete").html("<p>Add Test Questions</p><input type='text' id='test_title' placeholder='Enter the Test Name' /><ol class='tests'><li><div contenteditable='true' class='test_question' placeholder='Enter your question here...'></div><i class='fa fa-times' onclick='del_input(this)' aria-hidden='true'></i><p style='clear: both'></p></li></ol><button type='text'>+ Add new</button><div onclick='AddTestQuestions()'>Submit</div>");
                     alert('Success');
                 }
             })
@@ -191,11 +193,11 @@
         var output = [];
     
         var a = document.getElementsByClassName("quiz_question");
-        var b = document.getElementsByClassName("ans-slct");
+        var answer = document.getElementsByClassName("ans-slct");
         for (i=0; a[i]; i++) {
         	var obj = {};
             obj["question"] = a[i].innerText;
-        	obj["answer"] = b[i].value;
+        	obj["answer"] = answer[i].value;
             for(j = 1; j < 5 ; j++) {
             	var b = document.getElementsByClassName("option"+j);
         		obj["option"+j] = b[i].value;
@@ -208,8 +210,9 @@
     function sentAddQuizQuestions(array, title) {
         $.get("/AddQuizQuestions", {"class_id":"<%=session.getAttribute("class_id")%>","title":title, "questionAnswers":JSON.stringify(array)}, function(data, status) {
             if (data = "200") {
-                $(".more").css("display", "none");
-                alert("Success...")
+                $(".blur").trigger("click");
+                $("#quiz-add-templete").html("<p>Add Quiz Questions</p><input class='srch_title' id='quiz_title' type='text' placeholder='Enter the Quiz Name' /><ol class='quizzes'><li><div contenteditable='true' class='quiz_question' placeholder='Enter your question here...'></div><i class='fa fa-times' onclick='del_input(this)' aria-hidden='true'></i><p style='clear: both'></p><section class='options'><span>(a)</span><input type='text' class='option1'/><span>(b)</span><input type='text' class='option2'/><span>(c)</span><input type='text' class='option3'/><span>(d)</span><input type='text' class='option4'/></section><span>Answer : </span><select name='qus1' id='qus1' class='ans-slct'><option value='a'>a</option><option value='b'>b</option><option value='c'>c</option><option value='d'>d</option></select></li></ol><button type='text'>+ Add new</button><div onclick='AddQuizQuestions()'>Submit</div>");
+                alert("Success...");
             }
         })
     }
@@ -264,7 +267,7 @@
     }
     //getQuizQuestions
     function getQuizQuestions (id) {
-        $.get("/getQuizQuestions", {"user_id":"<%=session.getAttribute("user_id")%>", "class_id":"<%=session.getAttribute("class_id")%>", "type":"quiz", "id":id}, function(data, status) {
+        $.get("/getQuizQuestions", {"user_id":"<%=session.getAttribute("user_id")%>", "class_id":"<%=session.getAttribute("class_id")%>", "type":"quizs", "id":id}, function(data, status) {
             
             var questionsObj = JSON.parse(data);
             var tempTemplete = document.getElementById("quiz_question").innerHTML;
@@ -315,6 +318,70 @@
             if(data == "ok"){
                 webSocket.send("all");
                 location.href = "doctrina.index.do";
+            }
+        });
+    }
+    
+    // Answers Get
+    function SendAnswersFromAssignments() {
+    
+        var ass_answers = [];
+        var ass_takeValues = document.getElementsByClassName("AssignmentAnswers");
+    
+        for (i = 0; ass_takeValues[i]; i++) {
+        var ass_obj = {};
+            ass_obj["id"] = ass_takeValues[i].id;
+            ass_obj["answer"] = ass_takeValues[i].value;
+            ass_answers.push(ass_obj);
+        }
+        $.post("/SendAnswers", {"answers":JSON.stringify(ass_answers), "type":"assignmentanswer"}, function(data, status) {
+           
+            if (data == "200") {
+                alert("Success");
+            }
+        });
+    }
+    
+    function SendAnswersFromTests(){
+        
+        var test_answers = [];
+        var test_takeValues = document.getElementsByClassName("TestAnswers");
+    
+        for (i = 0; test_takeValues[i]; i++) {
+        var test_obj = {};
+            test_obj["id"] = test_takeValues[i].id;
+            test_obj["answer"] = test_takeValues[i].value;
+            test_answers.push(test_obj);
+        }
+    
+        $.post("/SendAnswers", {"answers":JSON.stringify(test_answers), "type":"testanswer"}, function(data, status) {
+            if (data == "200") {
+                alert("Success");
+            }
+        });
+    }
+    
+    function SendAnswersFromQuizes(){
+        var quiz_answers = [];
+        
+        var b = document.getElementsByClassName("quiz_quest"); 
+    
+        for (j = 0 ;b[j] ;j++) {
+        		var quiz_obj = {};
+                quiz_obj["id"] = b[j].id;
+            var a = document.getElementsByClassName("answer"+(j+1));
+    		for (i = 0;  a[i]; i++) {
+        		
+              if (a[i].checked) {
+                  quiz_obj["answer"] = a[i].value;
+              }
+       	 	}
+            quiz_answers.push(quiz_obj);
+    	}    
+        console.log(quiz_answers);
+        $.post("SendAnswers", {"answers":JSON.stringify(quiz_answers), "type":"quizanswer"}, function(data, status) {
+            if (data == "200") {
+                alert("Success");
             }
         });
     }
@@ -563,7 +630,7 @@
 
                 <!-- Assignments titles-->
                 <script id="Assign_titles" type="text/x-handlebars-templete">
-                    <h1>Assignments</h1>  
+                    <h1>Assignment Titles</h1>  
                     <ol>
                     {{#each titles}}
                         <li onclick="getAssignmentQuestions({{id}})">{{title}}</li>
@@ -587,10 +654,10 @@
                                     {{question}}</div>
                                     
                                     <p>Answer </p>
-                                    <input type="text" class="{{question}}"/>
+                                    <input type="text" id="{{question_id}}" class="AssignmentAnswers"/>
                              </li> 
                            {{/each}}
-                            <button class="submit" type="submit">Submit</button>
+                            <button class="submit" type="submit" onclick="SendAnswersFromAssignments()">Submit</button>
                         </ol>
                      </script>   
                     <div class="asign_ol" id="Assign_Questions"></div>
@@ -598,10 +665,10 @@
                 
                 <!-- /Asignment div -->
                 
-                <!---    Quiz Div    -->
+                <!-- Quiz Div -->
 
                 <script id="quiz_titles" type="text/x-handlebars-templete">
-                    <h1>Quiz</h1>  
+                    <h1>Quiz Titles</h1>  
                     <ol>
                     {{#each titles}}
                         <li onclick="getQuizQuestions({{id}})">{{title}}</li>
@@ -614,34 +681,34 @@
                            <h1 class="h1_hding">Quiz Questions <i class="material-icons" onclick="cls('quiz')">close</i> </h1>
                            {{#each questions}}
                              <li>
-                                <div>
+                                <div class="quiz_quest" id="{{question_id}}">
                                     <span>{{tabIndex}}</span>
                                     {{question}}</div>
                                     <div>
                                         <div class="option">
                                             <span>
-                                                <input type="radio" id="q1_opt1" name="option" />
-                                                <label for="q1_opt1">{{option1}}</label>
+                                                <input type="radio" class="answer{{tabIndex}}" id="q{{tabIndex}}_opt1" name="option{{tabIndex}}" value="{{option1}}"/>
+                                                <label for="q{{tabIndex}}_opt1">{{option1}}</label>
                                             </span>
                                             <span>
-                                                <input type="radio" id="q1_opt2" name="option" />
-                                                <label for="q1_opt2">{{option2}}</label>
+                                                <input type="radio" class="answer{{tabIndex}}" id="q{{tabIndex}}_opt2" name="option{{tabIndex}}" value="{{option2}}"/>
+                                                <label for="q{{tabIndex}}_opt2">{{option2}}</label>
                                             </span>
                                         </div>
                                         <div class="option">
                                             <span>
-                                                <input type="radio" id="q1_opt3" name="option" />
-                                                <label for="q1_opt3">{{option3}}</label>
+                                                <input type="radio" class="answer{{tabIndex}}" id="q{{tabIndex}}_opt3" name="option{{tabIndex}}" value="{{option3}}"/>
+                                                <label for="q{{tabIndex}}_opt3">{{option3}}</label>
                                             </span>
                                             <span>
-                                                <input type="radio" id="q1_opt4" name="option" />
-                                                <label for="q1_opt4">{{option4}}</label>
+                                                <input type="radio" class="answer{{tabIndex}}" id="q{{tabIndex}}_opt4" name="option{{tabIndex}}" value="{{option4}}"/>
+                                                <label for="q{{tabIndex}}_opt4">{{option4}}</label>
                                             </span>
                                         </div>
                                     </div>
                              </li> 
                            {{/each}}
-                            <button class="submit" type="submit">Submit</button>
+                            <button class="submit" type="submit" onclick="SendAnswersFromQuizes()">Submit</button>
                         </ol>
                      </script>
                 
@@ -649,18 +716,29 @@
                     <div class="quiz_hdng" id="quiz_hdng"></div>
                     <div class="quiz_ol" id="quiz_questions" style="display:none"></div>
                 </div>
-
+                
+                <!-- /Quiz Div -->
+                
+                <!--- Feeds Div --->
+                
+                <div class="feed">
+                  <div class="feeds">
+                     <textarea id="post_msg" class="msg" placeholder="Ask Your Doubts"></textarea>
+                     <button class="post_btn" onclick="postbtnClick()">POST</button>   
+                     <span style="clear:both"></span>
+                  </div>  
+                </div>
+                
                 <!-- Test div -->
+                
                  <script id="Test_titles" type="text/x-handlebars-templete">
-                    <h1>Tests</h1>
+                    <h1>Test Titles</h1>
                     <ol>
                         {{#each titles}}
                             <li onclick="getTestQuestions({{id}})">{{title}}</li>
                         {{/each}}
                     </ol>
                 </script>
-                
-                <!-- Get Questions-->
                 
                 <script id="test_question" type="text/x-handlebars-templete">
                         <ol>
@@ -672,10 +750,10 @@
                                     {{question}}</div>
                                     
                                     <p>Answer </p>
-                                    <input type="text" class="{{question}}"/>
+                                    <input type="text" id="{{question_id}}" class="TestAnswers"/>
                              </li> 
                            {{/each}}
-                            <button class="submit" type="submit">Submit</button>
+                            <button class="submit" type="submit" onclick="SendAnswersFromTests()">Submit</button>
                         </ol>
                      </script>   
                 <div class="test_div">
@@ -684,7 +762,9 @@
                 </div>
             </div>
         </div>
-
+        
+        <!-- /Test Div -->
+                
         <!-- Add Videos, Assignments, Quiz, Test -->
         <% if ((session.getAttribute("class_role")+"").equals("Teacher")) {
         %>
@@ -694,9 +774,9 @@
     
                 <!-- Assignment -->
     
-                <div class="add-asmnt">
+                <div class="add-asmnt" id="ass-add-templete">
                     <p>Add Asssignments</p>
-                    <input type="text" id="ass_title" placeholder="Enter the Assignment Heading" />
+                    <input type="text" class="srch_title" id="ass_title" placeholder="Enter the Assignment title" />
                     <ol class="asmnts">
                         <li>
                             <div contenteditable="true" class="ass_question" placeholder="Enter your question here..."></div>
@@ -710,9 +790,9 @@
     
                 <!-- Tests -->
     
-                <div class="add-test">
+                <div class="add-test" id = "test-add-templete">
                     <p>Add Test Questions</p>
-                    <input type="text" id="test_title" placeholder="Enter the Test Heading" />
+                    <input type="text" class="srch_title" id="test_title" placeholder="Enter the Test title" />
                     <ol class="tests">
                         <li>
                             <div contenteditable="true" class="test_question" placeholder="Enter your question here..."></div>
@@ -728,9 +808,9 @@
     
                 <!-- Quiz -->
 
-            <div class="add-quiz">
+            <div class="add-quiz" id = "quiz-add-templete">
                 <p>Add Quiz Questions</p>
-                <input class="srch_title" id="quiz_title" type="text" style="margin-bottom:20px" placeholder="Enter the Quiz title" />
+                <input class="srch_title" id="quiz_title" type="text" placeholder="Enter the Quiz title" />
                 <ol class="quizzes">
                     <li>
                         <div contenteditable="true" class="quiz_question" placeholder="Enter your question here..."></div>
@@ -748,10 +828,10 @@
                         </section>
                         <span>Answer : </span>
                         <select name="qus1" id="qus1" class="ans-slct">
-                            <option>a</option>
-                            <option>b</option>
-                            <option>c</option>
-                            <option>d</option>
+                            <option value="a">a</option>
+                            <option value="b">b</option>
+                            <option value="c">c</option>
+                            <option value="d">d</option>
                         </select>
                     </li>
                 </ol>

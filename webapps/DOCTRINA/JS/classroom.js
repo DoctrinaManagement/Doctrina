@@ -1,7 +1,18 @@
 $(document).ready(function() {
     //  -----------------------onload----------------------------
 
-    $(".asign_div,.quiz_div,.test_div").css("display", "none");
+    $(".asign_div,.quiz_div,.test_div,.feed").css("display", "none");
+    // --------------------------------- quiz hding ----------------------------
+    
+    $(".quiz_hd>li").click(function(){
+       $(".quiz_hd").css("display","none");
+       $(".quiz_qn,.quiz_div>button").css("display","block");
+       
+    });
+    $(".cls").click(function(){
+       $(".quiz_hd").css("display","block");
+       $(".quiz_qn,.quiz_div>button").css("display","none");
+    });
 
     // -------------------------notification and profile--------------------
 
@@ -89,32 +100,36 @@ $(document).ready(function() {
 
     $(".ul1 li:nth-child(1)").click(function() {
         $(".video_div").css("display", "block");
-        $(".quiz_div").css("display", "none");
-        $(".asign_div").css("display", "none");
-        $(".test_div").css("display", "none");
+        $(".quiz_div,.asign_div,.test_div,.feed").css("display", "none");
     });
 
     //---------------------------------Asignment Div----------------------------------- 
 
     $(".ul1 li:nth-child(2)").click(function() {
-        $(".video_div, .asign_div, .test_div").css("display", "none");
+        $(".video_div, .asign_div, .test_div,.feed").css("display", "none");
         $(".quiz_div").css("display", "block");
     });
 
     // ----------------------------------Quiz------------------------------------------
     
     $(".ul1 li:nth-child(3)").click(function() {
-        $(".video_div,.quiz_div,.test_div").css("display", "none");
+        $(".video_div,.quiz_div,.test_div,.feed").css("display", "none");
         $(".asign_div").css("display", "block");
+    });
+    
+    // --------------------------------Feeds------------------------------------------
+    
+    $(".ul1 li:nth-child(5)").click(function() {
+        $(".video_div,.quiz_div,.test_div,.asign_div").css("display", "none");
+        $(".feed").css("display", "block");
     });
     
     //---------------------------------test--------------------------------------------
     
     $(".ul1 li:nth-child(4)").click(function() {
-        $(".video_div,.asign_div,.quiz_div").css("display", "none");
+        $(".video_div,.asign_div,.quiz_div,.feed").css("display", "none");
         $(".test_div").css("display", "block");
     });
-
     // ---------------------------------- Add -----------------------------------------
 
     $(".ul2>li, #stdnts, .invt").click(function() {
@@ -150,7 +165,7 @@ $(document).ready(function() {
         }, 50);
     });
     $(".add-quiz>button").click(function() {
-         $(".quizzes").append("<li> <div contenteditable='true' class='quiz_question' placeholder='Enter your quiz question here...'></div> <i class='fa fa-times' onclick='del_input(this)' aria-hidden='true'></i> <p style='clear: both'></p> <section class='options'> <span>(a)</span> <input type='text' class='option1'/> <span>(b)</span> <input type='text' class='option2'/> <span>(c)</span> <input type='text' class='option3'/> <span>(d)</span> <input type='text' class='option4'/> </section> <span>Answer : </span> <select name='qus1' id='qus1' class='ans-slct'> <option>a</option> <option>b</option> <option>c</option> <option>d</option> </select> </li>");
+         $(".quizzes").append("<li> <div contenteditable='true' class='quiz_question' placeholder='Enter your quiz question here...'></div> <i class='fa fa-times' onclick='del_input(this,1)' aria-hidden='true'></i> <p style='clear: both'></p> <section class='options' > <span>(a)</span> <input type='text' class='option1'/> <span>(b)</span> <input type='text' class='option2'/> <span>(c)</span> <input type='text' class='option3'/> <span>(d)</span> <input type='text' class='option4'/> </section> <span>Answer : </span> <select name='qus1' id='qus1' class='ans-slct'> <option value='a' >a</option> <option value='b' >b</option> <option value='c' >c</option> <option value='d' >d</option> </select> </li>");
     });
 
     // ------------------------------Add Assignments -----------------------------------
@@ -162,7 +177,7 @@ $(document).ready(function() {
         }, 50);
     });
     $(".add-asmnt>button").click(function() {
-        $(".asmnts").append("<li> <div contenteditable='true' class='ass_question' placeholder='Enter your question here...'></div> <i class='fa fa-times' onclick='del_input(this)' aria-hidden='true'></i> <p style='clear: both'></p> </li>");
+        $(".asmnts").append("<li> <div contenteditable='true' class='ass_question' placeholder='Enter your question here...'></div> <i class='fa fa-times' onclick='del_input(this,2)' aria-hidden='true'></i> <p style='clear: both'></p> </li>");
     });
 
     // ------------------------------Add Tests -----------------------------------
@@ -174,7 +189,7 @@ $(document).ready(function() {
         }, 50);
     });
     $(".add-test>button").click(function() {
-        $(".tests").append("<li> <div contenteditable='true' class='test_question' placeholder='Enter your question here...'></div> <i class='fa fa-times' onclick='del_input(this)' aria-hidden='true'></i> <p style='clear: both'></p> </li>");
+        $(".tests").append("<li> <div contenteditable='true' class='test_question' placeholder='Enter your question here...'></div> <i class='fa fa-times' onclick='del_input(this,2)' aria-hidden='true'></i> <p style='clear: both'></p> </li>");
     });
 
     // ------------------------------Add Tests -----------------------------------
@@ -196,6 +211,8 @@ $(document).ready(function() {
         $(".asign_hding").css("display", "block");
         $(".asign_ol").css("display", "none");
     });
+    
+    
 
     // ------------------------------------- more ----------------------------------------
     n = 0;
@@ -213,6 +230,8 @@ $(document).ready(function() {
         $(".more").css("display", "none")
     });
     
+    
+    
     // --------------------------- Invite Actions -----------------------------------
     
     $(".invt").click(function(){
@@ -229,6 +248,11 @@ $(document).ready(function() {
 
 });
 
-function del_input(elmnt) {
+
+
+
+function del_input(elmnt,n) {
     $(elmnt).parent().css("display", "none");
+    $(elmnt).prev("div").removeAttr("class");
+    $(elmnt).next("div").removeAttr("class");
 }

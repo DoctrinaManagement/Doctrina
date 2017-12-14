@@ -4,6 +4,7 @@ import java.io.*;
 import javax.servlet.*;
 import javax.servlet.http.*;
 import zu.b5.doctrina.model.export.*;
+import com.google.gson.*;
 
 /**
  * @author Basheer
@@ -22,15 +23,19 @@ public class AddQuestionsAuth implements Filter {
 		HttpSession session = req.getSession();
 		CheckValidDetails checkDetails = new CheckValidDetails(
 				session.getAttribute("connection"));
+				
 		if (checkDetails.classIdCheck(request.getParameter("class_id"))) {
 		    // Check user permission for hihs classroom
 			if (checkDetails.checkAddPermission(session.getAttribute("user_id") + "",
 					request.getParameter("class_id"))) {
-				chain.doFilter(request, response);
-			} else {
+					    
+                    chain.doFilter(request, response);
+			} 
+			else {
 				writer.write("404");
 			  }
-		} else {
+		}
+		else {
 			writer.write("404");
 		}
 	}

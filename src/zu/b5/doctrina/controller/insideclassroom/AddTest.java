@@ -25,15 +25,26 @@ public class AddTest extends HttpServlet {
         JsonArray questionsArray = (JsonArray) new JsonParser().parse(questions);
         
         ArrayList<String> questionsList = new ArrayList<String>();
+        int count = 0;
+        
         for (JsonElement question : questionsArray ){
-            questionsList.add(question.getAsString());
+            if (question.getAsString().equals("")) {
+                count++;
+            }
+            else {
+                questionsList.add(question.getAsString());
+            }
         }
-        
-        // Get title id from Process method 
-        String title_id = process.getID(class_id, title, "testtitles");
-        // Set values into table ...
-        process.setValues(class_id, title_id, questionsList, "tests");
-        
-        writer.write("200");
+         if (count != questionsArray.size()) { 
+            // Get title id from Process method 
+            String title_id = process.getID(class_id, title, "testtitles");
+            // Set values into table ...
+            process.setValues(class_id, title_id, questionsList, "tests");
+            
+            writer.write("200");
+        }
+        else {
+            writer.write("400");
+        }
 	}
 }

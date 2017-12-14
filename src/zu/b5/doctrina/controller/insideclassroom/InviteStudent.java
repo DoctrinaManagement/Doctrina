@@ -9,7 +9,7 @@ import javax.servlet.*;
 import zu.b5.doctrina.model.insideclassroom.*;
 
 /**
- * @author pandi
+ * @author Basheer
  */
  
 public class InviteStudent extends HttpServlet {

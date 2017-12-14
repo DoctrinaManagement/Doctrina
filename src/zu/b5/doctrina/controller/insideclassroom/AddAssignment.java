@@ -24,15 +24,27 @@ public class AddAssignment extends HttpServlet {
         JsonArray questionArray = (JsonArray) new JsonParser().parse(request.getParameter("questions"));
         
             ArrayList<String> questionsList = new ArrayList<String>();
+            int count = 0;
             
             for (JsonElement questions : questionArray ){
-                questionsList.add(questions.getAsString());
+                if (questions.getAsString().equals("")) {
+                    count++;
+                }
+                else {
+                    questionsList.add(questions.getAsString());
+                }
             }
-        // Get title id from Process method 
-        String title_id = process.getID(class_id, title,"assignmenttitles");
-        // Set values into table ...
-        process.setValues(class_id, title_id, questionsList, "assignments");
+      
+        if (count != questionArray.size()) {
+              // Get title id from Process method 
+            String title_id = process.getID(class_id, title,"assignmenttitles");
+            // Set values into table ...
+            process.setValues(class_id, title_id, questionsList, "assignments");
         
-        writer.write("200");
+            writer.write("200");
+        }
+        else {
+            writer.write("400");
+        }
 	}
 }

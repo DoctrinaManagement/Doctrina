@@ -179,4 +179,68 @@ public class CheckValidDetails {
 	    }
 	    return false;
 	}
+	
+	public boolean titleIdCheck(String id, String tableName) {
+	    try {
+	        tableName = tableName.substring(0, tableName.length()-6) + "s";
+	        ResultSet rs = stmt.executeQuery("select question_id from "+tableName+" where question_id ='"+id+"';");
+	        
+	        ReUsable get = new ReUsable(conn);
+    		ArrayList<String> answerList = get.resultSetToUserID(rs);
+            
+            if(answerList.size() != 0) {
+                return true;
+            }
+	    }
+	    catch (SQLException e) {
+	        System.out.println("CheckValidDetails - titleIdCheck" + e.getMessage());
+	    }
+	    return false;
+	}
+	
+	
+	public boolean PostIdCheck(String id, String class_id) {
+	    
+	    try{
+	        ResultSet rs = stmt.executeQuery("select * from posts where id = '"+id+"' and class_id = '"+class_id+"';");
+	        ReUsable get = new ReUsable(conn);
+	        HashMap<String,String> result = get.resultSetToHashMap(rs);
+	        if(result.size() != 0) {
+	            return true;
+	        }
+	    } catch(Exception e) {
+	        System.out.println("CheckValidDetails - IdCheck"+e);
+	    }
+	    
+	    return false;
+	}
+	
+	
+	public boolean CommentIdCheck(String class_id, String comment_id) {
+	    
+	    try{
+	        ResultSet rs = stmt.executeQuery("select class_id from posts where id = (select post_id from comments where id = '"+comment_id+"');");
+	        ReUsable get = new ReUsable(conn);
+	        ArrayList<String> result = get.resultSetToUserID(rs);
+	        if(result.get(0).equals(class_id)) {
+	            return true;
+	        }
+	        
+	    } catch (Exception e) {
+	        System.out.println("CheckValidDetails - CommentIdCheck"+e);
+	    }
+	    
+	    return false;
+	}
 }
+
+
+
+
+
+
+
+
+
+
+

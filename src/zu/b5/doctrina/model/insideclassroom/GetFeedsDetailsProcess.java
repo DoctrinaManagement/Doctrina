@@ -10,16 +10,20 @@ public class GetFeedsDetailsProcess{
     ReUsable get;
     ArrayList<HashMap<String,String>> Obj ;
     
-    public GetFeedsDetailsProcess(Object connection, String tableName) {
+    public GetFeedsDetailsProcess(Object connection) {
         conn = (Connection) connection;
         get = new ReUsable(conn);
         Obj = new ArrayList<HashMap<String,String>>();
         
     }
     
-    public ArrayList<HashMap<String,String>> getObject(String class_id) {
-
-        String Query = "select * from posts where class_id = ? order by date desc limit 10;";
+    public ArrayList<HashMap<String,String>> getObject(String class_id, String date, String type) {
+        String Query = "";
+        if(type.equals("get")) {
+            Query = "select * from posts where class_id = ? date < '"+date+"' order by date desc limit 10;";
+        } else {
+            
+        }
         
         try {
             stmt = conn.prepareStatement(Query);

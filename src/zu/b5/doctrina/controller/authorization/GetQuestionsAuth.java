@@ -26,7 +26,7 @@ public class GetQuestionsAuth implements Filter {
 		
 		if(checkDetails.userIdCheck(user) && checkDetails.classIdCheck(class_id)) {
     		   
-	        if (type.equals("assignments") || type.equals("tests") || type.equals("quiz")) {
+	        if (type.equals("assignments") || type.equals("tests") || type.equals("quizs")) {
 	            
 	            if (checkDetails.checkClassroomPermission(user, class_id)) {
 	                

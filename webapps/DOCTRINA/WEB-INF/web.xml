@@ -491,6 +491,31 @@
     </filter-mapping>
     <!-- /getQuestions -->
     
+    <!-- Add Answers -->
+    
+    <!-- Assignments || Tests -->
+    
+    <servlet>
+        <servlet-name>SendAnswersFromAssignmentsTests</servlet-name>
+        <servlet-class>zu.b5.doctrina.controller.insideclassroom.AddAnswers</servlet-class>
+    </servlet>
+    
+    <servlet-mapping>
+        <servlet-name>SendAnswersFromAssignmentsTests</servlet-name>
+        <url-pattern>/SendAnswers</url-pattern>
+    </servlet-mapping>
+    
+    <filter>
+        <filter-name>SendAnswersFromAssignmentsTestsAuth</filter-name>
+        <filter-class>zu.b5.doctrina.controller.authorization.AddAnswersAuth</filter-class>
+    </filter>
+    
+    <filter-mapping>
+        <filter-name>SendAnswersFromAssignmentsTestsAuth</filter-name>
+        <url-pattern>/SendAnswers</url-pattern>
+    </filter-mapping>
+    <!-- /AddAnswers-->
+    
 <!-- add members -->
     
     <servlet>

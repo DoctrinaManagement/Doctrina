@@ -16,16 +16,6 @@ body, html, .whole, .add, .blur{
     overflow:hidden;
     position:relative;
 }
-.submit  {
-    height: 36px;
-    width: 120px;
-    border-radius: 4px;
-    margin: 20px 0;
-    background: #444;
-    float: right;
-    color: white;
-    font-size: 17px;
-}
 
 /* ----- */
 
@@ -50,7 +40,7 @@ body, html, .whole, .add, .blur{
     margin: 20px 0 0 80%;
 }
 .add>div>div:last-child:hover {background: #111}
-.add>div>div:active {transform: scale(0.8)}
+.add>div>div:last-child:active {transform: scale(0.8)}
 
 /* ----- */
 
@@ -67,14 +57,14 @@ body, html, .whole, .add, .blur{
 }
         /*----------------------------------common----------------------------------*/
         
-header, .header_div, .box_div, .noti, .video_div, .asign_div, .quiz_div, .noti_conts>div, .test_div, .asign_div ol li div, .test_div ol li div,.more,.dlt_popup,.test_div ol li input {
+header, .header_div, .box_div, .noti, .video_div, .asign_div, .quiz_div, .noti_conts>div, .test_div, .asign_div ol li div, .test_div ol li div,.more,.dlt_popup {
     box-sizing: border-box;
 }    
 button{
     outline: none;
     border: none;
 }
-button, .header_div i, .profile, .title i, .newclass i, .dlt, .newclass, nav li, .noti_conts>div, .close, .add-video>p + label, .add>div>div:last-child, .add-asmnt ol li i, .add-test ol li i, .add-quiz ol li i,.option>label,.option>label input ,.asign_hding li,.asign_ol>ol>i,.pro>div>button+p,nav>p+i{
+button, .header_div i, .profile, .title i, .newclass i, .dlt, .newclass, nav li, .noti_conts>div, .close, .add-video>p + label, .add>div>div:last-child, .add-asmnt ol li i, .add-test ol li i, .add-quiz ol li i,.option>label,.option>label input ,.asign_hding li,.asign_ol>ol>h1>i, .pro>div>button+p, nav>p+i, .srch_ul>li, .cls, .quiz_hd>li, .test_hdng>ol>li{
     cursor:pointer
 }
 .header_div,.profile{
@@ -89,9 +79,9 @@ h1, .add>div>p:first-child {
     padding: 10px 0;
     border-bottom: 1px solid #bbb;
 }
-.asign_hding li, .test_hdng li, .quiz_hdng li{
-    list-style-type:decimal
-}
+/*.asign_hding li{*/
+/*    list-style-type:decimal*/
+/*}*/
     /*----------------------------------width div------------------------------------------*/
 .width_div{
     width: 1280px;
@@ -102,7 +92,7 @@ h1, .add>div>p:first-child {
 header{
     width: 100%;
     height: 70px;
-    background: #1d5d72;
+    background: #333;
     padding: 6px 10px;
     box-shadow: 1px 1px 10px rgba(255, 255, 255, 0.3) inset, 1px 1px 10px rgba(0, 0, 0, 0.3);
 }
@@ -214,7 +204,6 @@ header img{
     border-bottom: 1px solid #eee;
     margin-bottom: 3px;
     cursor: pointer;
-    font-size:13px;
 }
 .noti_conts>li:focus , .noti_conts>li:focus>div {
     height: auto;
@@ -301,7 +290,6 @@ header img{
     top: 54px;
     z-index: 1;
     text-align: center;
-    font-size:16px;
 }    
 .pro img{
     height: 86px;
@@ -447,7 +435,7 @@ nav ul:nth-child(3) li i{
     position:relative;
 }
     /*--------------------------------------video div-------------------------------------*/
-.video_div,.asign_div,.quiz_div,.test_div{
+.video_div,.asign_div,.quiz_div,.test_div,.feed{
     width: 1010px;
     height: 100%;
     padding: 20px 61px;
@@ -550,13 +538,19 @@ nav ul:nth-child(3) li i{
     color: rgb(34, 34, 34);
     letter-spacing: 1.5px;
 }    
-.asign_ol ol>li,.test_div ol li, .quiz_div ol li{
+.asign_ol ol>li,.test_div ol li{
     box-shadow: 3px 3px 12px 1px rgba(0, 0, 0, 0.06);
     margin: 35px auto;
     padding: 12px;
     border-radius: 5px;
 }
-.asign_ol{
+/*.asign_hding>ul>li>span{*/
+/*    margin: 0 10px 0 0;*/
+/*    padding: 4px 10px;*/
+/*    background: #eee;*/
+/*    border-radius: 50%;*/
+/*}*/
+.asign_ol,.quiz_qn{
     display:none;
 }
 .asign_ol>ol>h1>i, .test_ol>ol>h1>i, .quiz_ol>ol>h1>i{
@@ -597,20 +591,26 @@ nav ul:nth-child(3) li i{
     /*color: #607D8B;*/
     font: 18px/25px 'Lato',sans-serif;
 }
-.asign_hding li{
-    box-shadow: 2px 1px 2px rgba(0,0,0,0.1);
+.asign_hding li, .test_hdng li, .test_hdng>ol>li, .quiz_hdng>ol>li{
+    list-style-type:decimal;
+    box-shadow: 0 0 15px rgba(0,0,0,0.1);
     padding: 15px;
     margin: 30px auto;
     border-radius: 3px;
     width: 700px;
+    cursor:pointer;
 }
-ol li>div:first-child>span{
+ol li>div:first-child>span,.asign_hding>ul>li>span,.quiz_hd>li>span, .test_hdng>ol>li>span{
     color: #999;
+    width: 25px;
+    display: inline-block;
     font-size: 15px;
-    padding: 3px 8px 4px;
+    text-align: center;
     border-radius: 50%;
     margin: 0 10px 0 0;
     box-shadow: 0 0 0 1px;
+    height: 25px;
+    line-height: 25px;
 }
 /*.asign_div i{*/
 /*    float:right;*/
@@ -621,9 +621,6 @@ ol li>div:first-child>span{
     vertical-align: middle;
 }
     /*-------------------------quiz_div-----------------------------------*/
-.quiz_div ol li{
-    margin: 15px 0;
-}    
 .quiz_div ol li>div:first-child{
     padding-bottom: 11px;
 }
@@ -647,6 +644,15 @@ ol li>div:first-child>span{
     width: 95%;
     margin-left: 4%;
 }
+.quiz_hd>li{
+    padding: 15px;
+    box-shadow: 0 0 5px rgba(0,0,0,0.2);
+    margin:30px;
+}
+.cls{
+    float:right;
+    display:inline-block;
+}
 .option, .option span input+label{
     color:lightslategray ;
 }
@@ -658,7 +664,7 @@ ol li>div:first-child>span{
     cursor: pointer;
 }
 .option>span>label:before {
-        content: "";
+    content: "";
     position: absolute;
     padding: 0px 8px 0 3px;
     line-height: 13px;
@@ -674,6 +680,7 @@ ol li>div:first-child>span{
 .option input:checked+label:before {
     content: "\26ab";
 }
+
 /*---------------------------Test div--------------------------------------*/
 
 
@@ -720,11 +727,46 @@ ol li>div:first-child>span{
 .add-video>p + label:hover {
     background: #ccc;
 }
+.srch_title{
+    border: none;
+    border-bottom: 1px solid #ddd;
+    width: 320px;
+    padding: 5px 4px;
+    font-size: 15px;
+    outline: none;
+    margin-bottom: 20px;
+}
+.srch_div{
+    width: 400px;
+    margin: 20px auto;
+    position: relative;
+}
+.srch_ul{
+    background: white;
+    font-size: 17px;
+    position: absolute;
+    width: 82%;
+    border-radius: 5px;
+    box-shadow: 0 0 15px rgba(0,0,0,0.2);
+    text-align: left;
+    display:none;
+    left: 35px;
+    transition:1s;
+}
+.srch_ul>li{
+    padding:10px;
+}
+.srch_ul>li:hover{
+    background:#eee;
+}
+.other {
+    max-height: 41px;
+    outline-color: #ccc;
+}
 
 /* -------------------------- Add - Other ------------------------------- */
 
 .add-asmnt, .add-test, .add-quiz, .report {
-    
     max-height: 550px;
     width: 700px;
     margin-left: -350px;
@@ -783,14 +825,6 @@ div[contenteditable=true]:empty:before{
 .add-asmnt>button:hover, .add-test>button:hover, .add-quiz>button:hover {
     background: #333;
 }
-.add-test>input {
-    padding: 5px;
-    width: 60%;
-    margin-bottom: 20px;
-    background: transparent;
-    border: 1px solid #ddd;
-    outline-color: #ccc;
-}
 .options>input {
     width: 40%;
     background: transparent;
@@ -833,32 +867,53 @@ div[contenteditable=true]:empty:before{
     margin: 0 10px 0 20px;
     vertical-align: middle
 }
-        
+    
     /*--------------------------------- delete -----------------------------------*/
 
-.dlt_popup{
-    height: 118px;
+.popup{
     position: absolute;
     top: 0;
     left: 50%;
-    margin-left: -120px;
+    margin-left: -150px;
     background: white;
     border-radius: 0 0 4px 4px;
-    box-shadow: 0 0 20px 0 rgba(0,0,0,0.2);
-    padding: 25px 20px;
+    box-shadow: 2px 2px 1em 0 rgba(0,0,0,0.15);
+    padding: 25px 20px 20px;
     text-align: center;
-    display:none;
+    display: none; 
 }
-.dlt_popup>p{
-    font-size: 14px;
+.popup>p{
+    font-size: 16px;
+    letter-spacing: 0.6px;
+}
+.popup>p>.fa-trash-o {
+    color: rgb(255,65,65);
+    margin-right: 10px;
+    font-size: 25px;
+}
+.btns {
+    margin-top: 25px;
+    display: flex;
+    justify-content: space-around;
+}
+.btns>button {
+    padding: 5px 12px;
+    border-radius: 4px;
     letter-spacing: 1px;
+    background: none;
+    border: 1px solid
 }
-.dlt_popup>button{
-    padding: 6px 10px;
-    border-radius: 2px;
-    margin: 25px 10px;
-    color:white;
-    background:#333;
+.btns>button:first-child {
+    color: rgb(245,20,20);
+}
+.btns>button:first-child:hover {
+    background: rgba(245,20,20,0.1);
+}
+.btns>button:last-child {
+    color: #333;
+}
+.btns>button:last-child:hover {
+    background: rgba(128,128,128,0.05)
 }
 
 
@@ -893,7 +948,6 @@ div[contenteditable=true]:empty:before{
     padding: 5px 0;
     border-bottom: 1px solid transparent;
     cursor: pointer;
-    font-size:15px;
 }
 .invt-ppl>ul>li:hover {
     border-bottom: 1px solid #ddd;
@@ -901,7 +955,6 @@ div[contenteditable=true]:empty:before{
 .invt-ppl>ul>li>img {
     border-radius: 50%;
     height: 40px;
-    margin-left:5px;
     vertical-align: middle;
 }
 .invt-ppl>ul>li>button {
@@ -919,4 +972,167 @@ div[contenteditable=true]:empty:before{
     display: block;
 }
 
+    /*-----------------------------------------------------------------------------------------------------------------------------------*/
+                    /* --------------------------------------- Feeds Div CSS only ----------------------------------- */
+                    
+body,html{
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    border: 1px solid transparent;
+    box-sizing: border-box;
+    font-family:lato
+}
+.like_div>span{
+    cursor:pointer;
+}
+/*.whole{*/
+/*    height: calc(100% - 80px);*/
+/*    width: calc(100% - 250px);*/
+/*    border: 1px solid;*/
+/*    margin: 80px 0 0 250px;*/
+/*    background: rgba(238, 238, 238, 0.65);*/
+/*    padding: 28px 0 0 0;*/
+/*    box-sizing: border-box;*/
+/*    overflow:auto;*/
+/*}*/
+.msg{
+    height: 55px;
+    width: 888px;
+    display: block;
+    padding: 6px;
+    margin: auto;
+    resize: none;
+    font-size: 16px;
+    outline: none;
+    color: #222;
+    border: none;
+    box-shadow: 0 0 14px rgba(0,0,0,0.2);
+}
+.post_btn{
+    color: white;
+    padding: 11px 42px;
+    border-radius: 3px;
+    background: #1d5d72;
+    float:right;
+    margin:30px 60px 0 30px;
+}
+.post_btn:hover{
+    background:#136d8b
+}
+.feeds *{
+    box-sizing:border-box;
+}
+.feed{
+    padding:20px 25px;
+}
+.feeds main{
+    width: 80%;
+    /* height: 10px; */
+    margin: auto;
+    padding: 11px;
+    background: white;
+    border-radius: 5px;
+    box-shadow: 0px 3px 7px 0px rgba(0, 0, 0, 0.17);
+    margin-bottom: 26px
+}
+.feeds img{
+    width: 35px;
+    margin: 0 9px 0 8px;
+    border-radius:50%;
+    float:left
+}
+.feeds h2{
+    font-size: 15px;
+    margin: 12px 0 0 0;
+    padding: 0px
+}
+#main>p{
+    margin: 0;
+    padding: 6px 56px 10px 54px;
+    color: rgba(0, 0, 0, 0.71);
+    line-height: 24px;
+    letter-spacing: 0.1px;
+    word-wrap: break-word;
+}
+.footer{
+    height: 35px;
+    border-top: 1px solid #eee;
+    width: 100% ;
+    padding-left: 46px;
+    line-height: 35px
+}
+.footer i:nth-child(2){
+    padding:0 6px 0 32px
+}
+.footer>span{
+    float: right;
+    padding-right: 26px;
+    color: rgba(192, 192, 192, 0.84)
+}
+.footer span i:first-child{
+    color:red;
+}
+.feeds i{
+    padding: 0 6px 0 6px;
+    font-size: 12px !important
+}
+.footer span i{
+    color:#eee;
+    padding-right: 6px;
+}
+.feeds aside{
+    max-height:200px;
+    padding: 14px;
+    overflow-y:auto;
+    width: 80%;
+    border: 1px solid #eee;
+    margin: 12px 0 0 141px;
+    border-radius: 5px
+}
+/*.comment{*/
+/*    display:none;*/
+/*}*/
+.comment button{
+    margin: 13px 0 5px 82%
+}
+#c{
+   word-wrap: break-word 
+}
+.comment_box{
+    background:#eee;
+    border-bottom:1px solid #eee;
+    margin-top:22px;
+}
+#c>main:last-child{
+     background: rgba(238, 238, 238, 0.47)
+}
+#c>main:nth-child(4) i{
+    display:none
+}
+.re{
+    background: white !important;
+    box-shadow: 1px 1px 6px #eee inset;
+    border: 1px solid #ddd;
+    margin-top: 15px;
+    width: 575px
+}
+/*-------------------------*/
+.like_div{
+    float:left;
+}
+.feeds{
+    margin:auto;
+} 
 
+.submit {
+    height: 36px;
+    width: 120px;
+    border-radius: 4px;
+    margin: 20px 0;
+    background: #444;
+    float: right;
+    color: white;
+    font-size: 17px;
+}
