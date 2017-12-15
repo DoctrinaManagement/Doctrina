@@ -106,7 +106,7 @@ public class AddProcess {
 System.out.println(idx);
 		try {
 			stmt = conn
-					.prepareStatement("insert into quiz (class_id, id, question, option1, option2, option3, option4, answer) values (?, ?, ?, ?, ?, ?, ?, ?);");
+					.prepareStatement("insert into quizs (class_id, id, question, option1, option2, option3, option4, answer) values (?, ?, ?, ?, ?, ?, ?, ?);");
 			
 			stmt.setInt(1, Integer.parseInt(class_id));
 			stmt.setInt(2, Integer.parseInt(title_id));

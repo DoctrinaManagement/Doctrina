@@ -27,8 +27,8 @@ public class AddAnswersAuth implements Filter {
 		String type = request.getParameter("type");
 		int count = 0;
 		if (checkDetails.classIdCheck(session.getAttribute("class_id") + "")) {
-			// Check user permission for hihs classroom
-			if (checkDetails.checkAddPermission(session.getAttribute("user_id")
+			// Check user permission for his classroom
+			if (checkDetails.checkClassroomPermission(session.getAttribute("user_id")
 					+ "", session.getAttribute("class_id") + "")) {
 				if (type.equals("assignmentanswer")
 						|| type.equals("testanswer")
@@ -40,7 +40,7 @@ public class AddAnswersAuth implements Filter {
 					for (JsonElement answers : answersArray) {
 					    
 						JsonObject obj = (JsonObject) answers;
-						if (checkDetails.titleIdCheck(obj.get("id").getAsString(), type)) {
+						if (checkDetails.questionIdCheck(obj.get("id").getAsString(), type)) {
 						    
 							count++;
 						} 
@@ -57,8 +57,9 @@ public class AddAnswersAuth implements Filter {
 				} else {
 					writer.write("400");
 				}
-			} else {
-				writer.write("404");
+			} 
+			else {
+			    writer.write("400");
 			}
 		} else {
 			writer.write("404");

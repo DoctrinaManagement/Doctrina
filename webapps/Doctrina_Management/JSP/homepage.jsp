@@ -193,19 +193,45 @@
     }
    
     function done_crt(){
+    //Regex
+    var classname_reg = /^[^_\W]{3,25}$/;
+    var des_reg = /^.{5,50}$/;
+    
         var class_name = $("#cls_name").val();
         var des = $("#cls_des").val();
-        if(class_name != "" && des != "") {
+    console.log(class_name + des);
+        if(class_name.match(classname_reg) && des.match(des_reg)) {
             $.get("http://basheerahameds-1508.zcodeusers.com/createclassroom",{"user_id":"<%=session.getAttribute("user_id")%>","classroom_name":class_name,"classroom_description":des,"course_id":course},function(data, status){
-                if(data == "classroom has been created.") {
+                if(data == "200") {
                     webSocket.send("all");
                     getClassroom(course, course_name);
+                }
+                else if (data == "400"){
+                    error('info');
+                }
+                else if (data ="403" || data == "401") {
+                    error('danger');
                 }
             });
         }
         else {
-            alert("give class name and classroom description");
+            error('danger');
         }
+    }
+    function error (type) {
+        if (type == "info") {
+           $(".alert").css("color", "rgb(0, 146, 255)"); 
+           $(".alert>i").css("background", "rgba(0, 146, 255,0.8)");
+        }
+        else if (type == "danger"){
+           $(".alert").css("color", "rgb(255, 0, 0)"); 
+           $(".alert>i").css("background", "#rgba(255, 0, 0, 0.7)");
+        }
+        
+        $(".alert").css("top","0");
+        setTimeout (function(){
+        $(".alert").css("top","-75px");
+        },2000);
     }
     
     function close_cls(){
@@ -437,6 +463,13 @@
            </div>
        </section>
     </div>
+    <!-- Alert -->
+
+    <div class="alert">
+           <i class="fa fa-exclamation" aria-hidden="true"></i>
+           Some unexpected error has been occured !
+    </div>
+       
     <script src="https://apis.google.com/js/platform.js" async defer></script>
     <meta name="google-signin-client_id" content="176409898115-eoi5sggfanbiq08h1e6soi4vtcm30mgf.apps.googleusercontent.com">
     <div class="g-signin2 a" data-onsuccess="onSignIn"></div>

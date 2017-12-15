@@ -1,0 +1,316 @@
+*{
+    font-family: 'Lato', sans-serif;
+}
+body, html, .whole{
+    height: 100%;
+    width: 100%;
+    margin: 0;
+}
+.main {
+    width: calc(100% - 240px);
+    overflow: auto
+}
+ul {
+    padding-left: 0;
+    margin: 0;
+}
+li {
+    list-style-type: none;
+}
+button,.asmnts_div>li,.close,.test_div,.close1{
+    cursor:pointer;
+}
+button{
+    border:none;
+    outline:none;
+}
+
+/* ------ Common -------*/
+
+.check, .whole_3>div, .videos-div>li {
+    box-sizing:border-box;
+}
+
+/* ----- Nav Bar ----- */
+
+.left-nav {
+    height: 100%;
+    width: 275px;
+    background: #333;
+    display: flex;
+}
+.nav-main {
+    margin: auto;
+    padding: 10px;
+    text-align: center;
+}
+.nav-main>img {
+    width: 100px;
+    border-radius: 50%;
+}
+.nav-main > p , .nav-main > span {
+    color: white;
+    line-height: 40px;
+    margin: 0;
+}
+.nav-main > img + p {
+    font: 18px/40px 'Raleway',sans-serif;
+}
+.nav-main > p:first-child {
+    font: 30px/50px 'Raleway',sans-serif;
+}
+.nav-main > span > input {
+    width: 26px;
+    padding: 6px 5px;
+    border: none;
+    border-radius: 3px;
+    margin: 0 5px 0 7px;
+    box-shadow: 0 0 7px #333 inset;
+    outline-color: #999;
+    text-align: center;
+}
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button { 
+    -webkit-appearance: none; 
+    margin: 0; 
+}
+.submit {
+    border-radius: 3px;
+    padding: 6px 18px;
+    margin: 18px 0;
+    font-weight: 600;
+    color: #333;
+    background:white;
+    transition: 0.4s;
+}
+.submit:hover {
+    background: #fff;
+}
+
+/* ----- Tabs ----- */
+
+.tabs {
+    width: 650px;
+    display: flex;
+    margin: 36px auto;
+    border: 1px solid rgba(29, 93, 114, 0.8);
+    border-radius: 3px;
+    overflow: hidden;
+}
+.tabs>div {
+    font: 18px/40px 'Lato',sans-serif;
+    flex: 1;
+    letter-spacing: 1px;
+    text-align: center;
+    cursor: pointer;
+    transition: 0.4s;
+}
+.select {
+    background: #333;
+    color: white;
+    font-weight: bold !important;
+}
+
+/* ----- Main Place ----- */
+
+.whole_3 {
+    height: calc(100% - 122px);
+}
+.whole_3>div {
+    width: 900px;
+    margin: 0 auto;
+    padding: 0 30px;
+    overflow:auto;
+    /*display: none;*/
+}
+
+/* ----- Videos - Div ----- */
+
+.heading {
+    font: 30px/50px 'Raleway',sans-serif;
+    text-align: center;
+    letter-spacing: 2px;
+    margin: 16px 0;
+    border: 1px solid;
+    border-width: 1px 0;
+}
+.total {
+    display: flex;
+}
+.total>p {
+    flex: 1;
+    font-size: 20px;
+    margin: 0;
+}
+.total>p:last-child {
+    text-align: right;
+}
+.videos-div, .quiz_div{
+    display: flex;
+    flex-wrap: wrap;
+}
+.videos-div>li{
+    padding: 16px;
+    width: 180px;
+    border-radius: 5px;
+    box-shadow: 1px 1px 12px rgba(0,0,0,0.1);
+}
+.videos-div>li>img, .quiz_div>li>img {
+    height: 60px;
+    border-radius: 50%;
+    display: block;
+    margin: 10px auto;
+}
+
+.videos-div>li,.quiz_div>li{
+    margin:15px;
+}
+.video-name {
+    text-align: center;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+.time{
+    font-size: 13px;
+    color: #aaa;
+}
+.check{
+    height: 18px;
+    width: 18px;
+    border: 1px solid #aaa;
+    border-radius: 3px;
+    display: inline-block;
+    float:right;
+    padding: 0px 2px 0;
+    font-size: 17px;
+    line-height: 16px;
+    background: #03a9f4;
+    color: white;
+}
+
+    /* --------------- asmnts and tests ------------------ */
+
+.asmnts,.tests,.quizs{
+    display:none;
+}
+
+    /* ---------------- asmnts div --------------- */
+
+.asmnts_div>li, .test_div>li{
+    width: 600px;
+    padding:15px;
+    border-radius: 3px;
+    margin: 15px auto;
+    box-shadow:0 0 7px 0 rgba(0, 0, 0, 0.17);
+}
+.asmnts_div>li>p , .test_div>li>p, .rats>li>p{
+    display:inline;
+    font-size: 18px;
+    line-height: 1.75;
+    margin: 0 15px 0;
+}
+.asmnt_icon{
+    height: 30px;
+    vertical-align: bottom;
+}
+.asmnts_div>li>div{
+    margin:6px 20px;
+}
+.all_asigns{
+    display:none;
+}
+.s_no{
+    color: #999;
+    font-size: 15px;
+    padding: 3px 8px 4px;
+    border-radius: 50%;
+    margin: 0 10px 0 0;
+    box-shadow: 0 0 0 1px;
+}
+.qn, .test_qn{
+    color: #607D8B;
+    font: 600 17px/25px 'Lato',sans-serif;
+}
+.p_cont{
+    display: inline-block;
+    font-size: 18px;
+    color: rgba(0, 0, 0, 0.52);
+    padding: 0 0 0 18px;
+}
+.ans{
+    width: 88%;
+    height: 37px;
+    margin: 13px 0 0 0;
+    padding: 5px;
+    float: right;
+    border-radius: 5px;
+    border: 2px solid #eee;
+    color: #4c4c4c;
+    font-size: 16px;
+    box-sizing: border-box;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.h1_hding{
+    display: inline-block;
+    vertical-align: middle;
+    margin: 0 0 20px 0;
+    color: rgb(34, 34, 34);
+    letter-spacing: 1.5px;
+}
+.close, .close1{
+    display: inline-block;
+    float: right;
+}
+
+/* ------------------ quiz ---------------------  */
+.quiz_div>li{
+    padding: 16px;
+    width: 147px;
+    border-radius: 5px;
+    box-shadow: 1px 1px 12px rgba(0,0,0,0.1)
+}
+.test_div>li>i{
+    color: #03A9F4;
+    font-size: 19px;
+}
+.all_test{
+    display:none;
+}
+.all_test>li,.all_asigns>li,.rats>li{
+    box-shadow: 0 0 8px 0 rgba(0,0,0,0.2);
+    padding: 20px;
+    margin: 30px 0;
+}
+
+/* ------------------ Ratings ----------------------- */
+.rating{
+    display:none;
+}
+.st_box{
+    float: right;
+    font-size: 23px;
+    display: inline;
+    background: linear-gradient(to right , gold 50%, lightgrey 0);
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    font-size: 35px;
+    line-height: 30px;
+    cursor: default;
+}
+.rats>li{
+    width:600px;
+    margin:30px auto;
+}
+section>i {
+    display: inline-block;
+    float: right;
+    margin: 10px;
+    color: #00000077;
+    cursor:pointer;
+}
+section>i:hover {
+    color:#000000c4;
+}

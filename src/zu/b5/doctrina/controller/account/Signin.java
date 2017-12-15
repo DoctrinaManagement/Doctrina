@@ -12,16 +12,20 @@ import zu.b5.doctrina.model.account.*;
  */
 public class Signin extends HttpServlet {
 	@Override
-	protected void doGet(HttpServletRequest request,
+	protected void doPost(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 		PrintWriter writer = response.getWriter();
 		HttpSession session = request.getSession();
 		ReUsable get = new ReUsable(session.getAttribute("connection"));
+		
 		SignupProcess process1 = new SignupProcess(session.getAttribute("connection"));
 		SigninProcess process = new SigninProcess(session.getAttribute("connection"));
+		
 		session.setAttribute("course", "Maths");
+		
 		String[] keys = {"user_id", "name", "email_id", "image", "role"};
 	    HashMap<String,String> user_details = new HashMap<String,String>();
+	    
 		for (String key : keys) {
 		    user_details.put(key, request.getParameter(key) );
 		}
@@ -38,7 +42,7 @@ public class Signin extends HttpServlet {
 // 		Cookie cookies=new Cookie("Name", cookie);//creating cookie object  
 //         response.addCookie(cookies);//adding cookie in the response  
 //         process1.cookieAdd(cookie, request.getParameter("user_id"));
-	    writer.write("Signin Successfull");
+	    writer.write("200");
 		
 	}
 }

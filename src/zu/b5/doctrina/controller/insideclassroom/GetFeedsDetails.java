@@ -20,8 +20,8 @@ public class GetFeedsDetails extends HttpServlet {
 		PrintWriter writer = response.getWriter();
 		HttpSession session = request.getSession();
         GetFeedsDetailsProcess value = new GetFeedsDetailsProcess(session.getAttribute("connection"));
-        HashMap<String, ArrayList<HashMap<String,String>>> result = new HashMap<String, ArrayList<HashMap<String,String>>>();
-        ArrayList<HashMap<String,String>> temp = new ArrayList<HashMap<String,String>>();
+        HashMap<String, ArrayList<HashMap<String,Object>>> result = new HashMap<String, ArrayList<HashMap<String,Object>>>();
+        ArrayList<HashMap<String,Object>> temp = new ArrayList<HashMap<String,Object>>();
         
         if(request.getParameter("type").equals("initial")) {
             SimpleDateFormat timeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -34,8 +34,11 @@ public class GetFeedsDetails extends HttpServlet {
             temp = value.getObject((session.getAttribute("class_id")+""), (session.getAttribute("date")+""), "get");
             result.put("posts", temp);
         }
-        String date = temp.get(9).get("date");
-        session.setAttribute("date", date);
+        if(temp.size() != 0) {
+            String date =(String) temp.get(temp.size() -1 ).get("date");
+            session.setAttribute("date", date);
+        }
+        
         String json = new Gson().toJson(result);
         writer.write(json);
 	}

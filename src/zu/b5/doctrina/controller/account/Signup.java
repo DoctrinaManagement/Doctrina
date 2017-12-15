@@ -15,7 +15,7 @@ import zu.b5.doctrina.model.account.*;
  
 public class Signup extends HttpServlet {
 	@Override
-	protected void doGet(HttpServletRequest request,
+	protected void doPost(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 
 		PrintWriter writer = response.getWriter();
@@ -45,6 +45,6 @@ public class Signup extends HttpServlet {
 // 		Cookie cookies=new Cookie("Name", cookie);//creating cookie object  
 //         response.addCookie(cookies);//adding cookie in the response  
 //         String cookie_status = process.cookieAdd(cookie, request.getParameter("user_id"));
-        writer.write("Signin Successfull");
+        writer.write("200");
 	}
 }

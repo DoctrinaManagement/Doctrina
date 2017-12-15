@@ -17,13 +17,15 @@ public class AnswerAddProcess{
         get = new ReUsable(conn);
     }
     
-    public void addAnswers (JsonObject object, String class_id, String tableName) {
+    public void addAnswers (JsonObject object, String class_id, String tableName, String user_id) {
         try {
-            stmt = conn.prepareStatement("insert into "+tableName+" values(?, ?, ?);");
+            stmt = conn.prepareStatement("insert into "+tableName+" values(?, ?, ?, ?);");
            
             stmt.setInt(1, Integer.parseInt(class_id));
             stmt.setInt(2, Integer.parseInt(object.get("id").getAsString()));
             stmt.setString(3, object.get("answer").getAsString());
+            stmt.setString(4, user_id);
+    
             stmt.executeUpdate();
         }
         catch (SQLException e) {

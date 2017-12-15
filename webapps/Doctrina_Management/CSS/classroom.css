@@ -5,7 +5,7 @@
     font-family: 'Lato', sans-serif;
     color:#222;
 }
-body, html, .whole, .add, .blur{
+body, html, .whole, .add, .blur, .feed {
     height:100%;
     width:100%;
 }
@@ -45,19 +45,19 @@ body, html, .whole, .add, .blur{
 /* ----- */
 
         /*--------------------------------scroll bar----------------------------------*/
-.show_div::-webkit-scrollbar {
+.show_div::-webkit-scrollbar, .feed::-webkit-scrollbar {
    width:10px;
    background:#f5f5f5;
 }
-.show_div::-webkit-scrollbar-track {
+.show_div::-webkit-scrollbar-track, .feed::-webkit-scrollbar-track {
     box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
 }
-.show_div::-webkit-scrollbar-thumb {
+.show_div::-webkit-scrollbar-thumb, .feed::-webkit-scrollbar-thumb {
   background-color: #ccc;
 }
         /*----------------------------------common----------------------------------*/
         
-header, .header_div, .box_div, .noti, .video_div, .asign_div, .quiz_div, .noti_conts>div, .test_div, .asign_div ol li div, .test_div ol li div,.more,.dlt_popup {
+header, .header_div, .box_div, .noti, .video_div, .asign_div, .quiz_div, .noti_conts>div, .test_div, .asign_div ol li div, .test_div ol li div,.more,.dlt_popup, .feeds, .feed {
     box-sizing: border-box;
 }    
 button{
@@ -435,7 +435,7 @@ nav ul:nth-child(3) li i{
     position:relative;
 }
     /*--------------------------------------video div-------------------------------------*/
-.video_div,.asign_div,.quiz_div,.test_div,.feed{
+.video_div,.asign_div,.quiz_div,.test_div {
     width: 1010px;
     height: 100%;
     padding: 20px 61px;
@@ -623,6 +623,10 @@ ol li>div:first-child>span,.asign_hding>ul>li>span,.quiz_hd>li>span, .test_hdng>
     /*-------------------------quiz_div-----------------------------------*/
 .quiz_div ol li>div:first-child{
     padding-bottom: 11px;
+}
+.quiz_div>ol>li>div:last-child{
+    width: 95%;
+    margin-left: 4%;
 }
 .option {
     padding: 10px 15px;
@@ -997,26 +1001,28 @@ body,html{
 /*    box-sizing: border-box;*/
 /*    overflow:auto;*/
 /*}*/
+
 .msg{
     height: 55px;
     width: 888px;
     display: block;
-    padding: 6px;
+    padding: 8px 16px;
     margin: auto;
     resize: none;
     font-size: 16px;
     outline: none;
     color: #222;
+    border-radius:5px;
     border: none;
     box-shadow: 0 0 14px rgba(0,0,0,0.2);
 }
 .post_btn{
     color: white;
-    padding: 11px 42px;
+    padding: 10px 31px;
     border-radius: 3px;
     background: #1d5d72;
-    float:right;
-    margin:30px 60px 0 30px;
+    float: right;
+    margin: 30px 64px 0 30px;
 }
 .post_btn:hover{
     background:#136d8b
@@ -1025,27 +1031,29 @@ body,html{
     box-sizing:border-box;
 }
 .feed{
-    padding:20px 25px;
+    padding: 20px 25px;
+    overflow: auto;
 }
-.feeds main{
-    width: 80%;
+.psts main{
+    width: 875px;
     /* height: 10px; */
-    margin: auto;
     padding: 11px;
     background: white;
     border-radius: 5px;
     box-shadow: 0px 3px 7px 0px rgba(0, 0, 0, 0.17);
-    margin-bottom: 26px
+    margin: 26px auto;
 }
-.feeds img{
+.psts img{
     width: 35px;
     margin: 0 9px 0 8px;
     border-radius:50%;
     float:left
 }
-.feeds h2{
+.psts h2{
     font-size: 15px;
     margin: 12px 0 0 0;
+    color:rgba(170,170,170,0.9);
+    font-weight:normal;
     padding: 0px
 }
 #main>p{
@@ -1074,7 +1082,7 @@ body,html{
 .footer span i:first-child{
     color:red;
 }
-.feeds i{
+.psts i{
     padding: 0 6px 0 6px;
     font-size: 12px !important
 }
@@ -1082,28 +1090,30 @@ body,html{
     color:#eee;
     padding-right: 6px;
 }
-.feeds aside{
-    max-height:200px;
+.psts aside{
+    max-height: 200px;
     padding: 14px;
-    overflow-y:auto;
+    overflow-y: auto;
     width: 80%;
     border: 1px solid #eee;
     margin: 12px 0 0 141px;
-    border-radius: 5px
+    border-radius: 5px;
 }
 /*.comment{*/
 /*    display:none;*/
 /*}*/
 .comment button{
-    margin: 13px 0 5px 82%
+    margin: 7px 50px 5px 0
 }
 #c{
    word-wrap: break-word 
 }
 .comment_box{
-    background:#eee;
-    border-bottom:1px solid #eee;
-    margin-top:22px;
+    background: rgba(240, 241, 240, 0.3) !important;
+    border: 1px solid #ccc;
+    margin-top: 22px;
+    box-shadow: none !important;
+    width: 750px !important;
 }
 #c>main:last-child{
      background: rgba(238, 238, 238, 0.47)
@@ -1113,19 +1123,68 @@ body,html{
 }
 .re{
     background: white !important;
-    box-shadow: 1px 1px 6px #eee inset;
+    box-shadow: none !important;
     border: 1px solid #ddd;
-    margin-top: 15px;
-    width: 575px
+    width: 630px !important;
 }
 /*-------------------------*/
 .like_div{
-    float:left;
+    float: left;
+    margin: 6px 45px;
+}
+.like_div>span, .cmnt>span{
+    color: #777;
+}
+.fa-heart,.fa-heart-o{
+    color:red;
+}
+.fa-comments-o, .fa-comment-o{
+    color:#bbb;
+}
+.cmnt{
+    float: right;
+    margin: 6px 45px;
 }
 .feeds{
     margin:auto;
 } 
+#replayMsg{
+        resize: none;
+    width: 630px;
+    height: 45px;
+    display: block;
+    margin: auto;
+    border: none;
+}
+#commentMsg{
+    width: 775px;
+    height: 40px;
+    resize: none;
+    box-sizing: border-box;
+    padding: 10px;
+    margin: 10px auto;
+    outline: none;
+    display: block;
+    letter-spacing: 1px;
+    border: navajowhite;
+    box-shadow: 0 0 6px rgba(0,0,0,0.4);
+    border-radius: 5px;
+}
 
+#replyMsg{
+    width: 651px;
+    height: 40px;
+    resize: none;
+    box-sizing: border-box;
+    padding: 10px;
+    margin: 10px auto;
+    outline: none;
+    display: block;
+    letter-spacing: 1px;
+    border: navajowhite;
+    box-shadow: 0 0 6px rgba(0,0,0,0.4);
+    border-radius: 5px;
+}
 .submit {
     height: 36px;
     width: 120px;
@@ -1135,4 +1194,8 @@ body,html{
     float: right;
     color: white;
     font-size: 17px;
+}
+
+.name{
+    color:rgba(38,141,128,0.8);
 }

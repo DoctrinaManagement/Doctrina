@@ -68,7 +68,6 @@ var user_id,name,image,role;
 }
 function onSignIn(googleUser) {
   var profile = googleUser.getBasicProfile();  //var profile = googleUser.reloadAuthResponse();
-  console.log(Setrole);
     
     var data1;
     if(check_var == "signup") {
@@ -110,7 +109,6 @@ function logout() {
 }
 
 function ajax(profile) {
-    console.log(profile);
     var URL;
     if(check_var == "signup") {
         URL = "/doctrina.signup";
@@ -118,9 +116,9 @@ function ajax(profile) {
     else {
         URL = "/doctrina.signin";
     }
-    $.get(URL,profile,function(data,status){
+    $.post(URL,profile,function(data,status){
         //response
-        if (data == "Signin Successfull") {
+        if (data == "200") {
 
             location.href = "/doctrina.index.do";
         }

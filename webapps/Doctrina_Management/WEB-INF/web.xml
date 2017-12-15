@@ -6,12 +6,12 @@
 
 <!--1st landing page when app open is execute  -->
     <servlet>
-        <servlet-name>docs</servlet-name>
+        <servlet-name>landingpage</servlet-name>
         <jsp-file>/HTML/landing-page.html</jsp-file>
     </servlet>
 
     <servlet-mapping>
-        <servlet-name>docs</servlet-name>
+        <servlet-name>landingpage</servlet-name>
         <url-pattern>/landingpage</url-pattern>
     </servlet-mapping>
 <!--/1st landing page when app open is execute  -->
@@ -543,11 +543,133 @@
     </servlet-mapping>
     
 <!-- /add members -->
+<!-- get feeds -->
+    <servlet>
+        <servlet-name>getFeeds</servlet-name>
+        <servlet-class>zu.b5.doctrina.controller.insideclassroom.GetFeedsDetails</servlet-class>
+    </servlet>
+    
+    <servlet-mapping>
+        <servlet-name>getFeeds</servlet-name>
+        <url-pattern>/getfeeds</url-pattern>
+    </servlet-mapping>
+    
+    <filter>
+        <filter-name>getFeedsAuth</filter-name>
+        <filter-class>zu.b5.doctrina.controller.authorization.GetFeedsAuth</filter-class>
+    </filter>
+    
+    <filter-mapping>
+        <filter-name>getFeedsAuth</filter-name>
+        <url-pattern>/getfeeds</url-pattern>
+    </filter-mapping>
+  
+<!-- get feeds -->  
+
+<!-- insert feeds -->
+    <servlet>
+        <servlet-name>insertFeeds</servlet-name>
+        <servlet-class>zu.b5.doctrina.controller.insideclassroom.InsertFeeds</servlet-class>
+    </servlet>
+    
+    <servlet-mapping>
+        <servlet-name>insertFeeds</servlet-name>
+        <url-pattern>/addfeeds</url-pattern>
+    </servlet-mapping>
+    
+    <filter>
+        <filter-name>insertFeedsAuth</filter-name>
+        <filter-class>zu.b5.doctrina.controller.authorization.InsertFeedsAuth</filter-class>
+    </filter>
+    
+    <filter-mapping>
+        <filter-name>insertFeedsAuth</filter-name>
+        <url-pattern>/addfeeds</url-pattern>
+    </filter-mapping>
+  
+<!-- insert feeds -->  
+    
+<!-- Reports -->
+    
+    <servlet>
+        <servlet-name>reports</servlet-name>
+        <jsp-file>/JSP/report.jsp</jsp-file>
+    </servlet>
+    
+    <servlet-mapping>
+        <servlet-name>reports</servlet-name>
+        <url-pattern>/reports</url-pattern>
+    </servlet-mapping>
     
     
+    <servlet>
+        <servlet-name>getReportDetails</servlet-name>
+        <servlet-class>zu.b5.doctrina.controller.report.GetReportDetails</servlet-class>
+    </servlet>
+    
+    <servlet-mapping>
+        <servlet-name>getReportDetails</servlet-name>
+        <url-pattern>/getreportdetails</url-pattern>
+    </servlet-mapping>
     
     
+    <servlet>
+        <servlet-name>ReportsLoad</servlet-name>
+        <servlet-class>zu.b5.doctrina.controller.report.ReportsPageEnter</servlet-class>
+    </servlet>
     
+    <servlet-mapping>
+        <servlet-name>ReportsLoad</servlet-name>
+        <url-pattern>/reportspageload</url-pattern>
+    </servlet-mapping>
+    
+    <!-- ReportGetTitles-->
+
+    <servlet>
+        <servlet-name>getreporttitles</servlet-name>
+        <servlet-class>zu.b5.doctrina.controller.report.ReportGetTitles</servlet-class>
+    </servlet>
+    
+    <servlet-mapping>
+        <servlet-name>getreporttitles</servlet-name>
+        <url-pattern>/getreporttitles</url-pattern>
+    </servlet-mapping>
+    
+    <filter>
+        <filter-name>getreporttitlesAuth</filter-name>
+        <filter-class>zu.b5.doctrina.controller.authorization.GetTitlesAuth</filter-class>
+    </filter>
+    
+    <filter-mapping>
+        <filter-name>getreporttitlesAuth</filter-name>
+        <url-pattern>/getreporttitles</url-pattern>
+    </filter-mapping>
+    
+    <!-- /ReportGetTitles -->
+        
+     <!--ReportGetAnswers -->
+        <servlet>
+            <servlet-name>GetReportAnswers</servlet-name>
+            <servlet-class>zu.b5.doctrina.controller.report.GetReportAnswers</servlet-class>
+        </servlet>
+        
+        <servlet-mapping>
+            <servlet-name>GetReportAnswers</servlet-name>
+            <url-pattern>/getreportanswers</url-pattern>
+        </servlet-mapping>
+        
+        <filter>
+            <filter-name>GetReportAnswersAuth</filter-name>
+            <filter-class>zu.b5.doctrina.controller.authorization.GetQuestionsAuth</filter-class>
+        </filter>
+        
+        <filter-mapping>
+            <filter-name>GetReportAnswersAuth</filter-name>
+            <url-pattern>/getreportanswers</url-pattern>
+        </filter-mapping>
+     <!--/ReportGetAnaaswers-->
+    
+<!-- /Reports -->
     <servlet>
         <servlet-name>urlLoader</servlet-name>
         <servlet-class>zu.b5.doctrina.controller.url.CourseLoad</servlet-class>

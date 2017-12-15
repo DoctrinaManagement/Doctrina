@@ -24,7 +24,7 @@ public class InsertFeedsAuth implements Filter {
 				if (checkDetails.classIdCheck(request.getParameter("class_id"))
 						&& checkDetails.checkClassroomPermission(
 								request.getParameter("user_id"),
-								request.getParameter("class_id"))) {
+								request.getParameter("class_id")) && request.getParameter("message") != "") {
 					chain.doFilter(request, response);
 				} else {
 					writer.write("400");
@@ -43,7 +43,7 @@ public class InsertFeedsAuth implements Filter {
 								request.getParameter("user_id"),
 								request.getParameter("class_id"))
 						&& checkDetails.PostIdCheck(request.getParameter("id"),
-								request.getParameter("class_id"))) {
+								request.getParameter("class_id"))  && request.getParameter("message") != "") {
 					chain.doFilter(request, response);
 				} else {
 					writer.write("400");
@@ -63,7 +63,7 @@ public class InsertFeedsAuth implements Filter {
 								request.getParameter("class_id"))
 						&& checkDetails.CommentIdCheck(
 								request.getParameter("class_id"),
-								request.getParameter("id"))) {
+								request.getParameter("id"))  && request.getParameter("message") != "") {
 					chain.doFilter(request, response);
 				} else {
 					writer.write("401");

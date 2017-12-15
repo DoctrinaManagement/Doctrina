@@ -164,7 +164,7 @@
             $.get("/AddAssignment", {"class_id":"<%=session.getAttribute("class_id")%>", "title":title, "questions":JSON.stringify(questionsList)}, function(data, status) {
                 if (data == "200") {
                     $(".blur").trigger("click");
-                    $("#ass-add-templete").html("<p>Add Asssignments</p><input type='text' id='ass_title' placeholder='Enter the Assignment Name' /><ol class='asmnts'><li><div contenteditable='true' class='ass_question' placeholder='Enter your question here...'></div><i class='fa fa-times' onclick='del_input(this)' aria-hidden='true'></i><p style='clear: both'></p></li></ol><button type='text'>+ Add new</button><div onclick='AddAssignmentQuestions()'>Submit</div>");
+                    $("#ass-add-templete").html("<p>Add Asssignments</p><input type='text' class='srch_title' id='ass_title' placeholder='Enter the Assignment title' /><ol class='asmnts'><li><div contenteditable='true' class='ass_question' placeholder='Enter your question here...'></div><i class='fa fa-times' onclick='del_input(this)' aria-hidden='true'></i><p style='clear: both'></p></li></ol><button type='text'>+ Add new</button><div onclick='AddAssignmentQuestions()'>Submit</div>");
                     alert('Success');
                 }
             })
@@ -182,7 +182,7 @@
             $.get("/AddTest", {"class_id":"<%=session.getAttribute("class_id")%>", "title":title, "questions":JSON.stringify(questionsList)}, function(data, status) {
                 if (data == "200") {
                     $(".blur").trigger("click");
-                    $("#test-add-templete").html("<p>Add Test Questions</p><input type='text' id='test_title' placeholder='Enter the Test Name' /><ol class='tests'><li><div contenteditable='true' class='test_question' placeholder='Enter your question here...'></div><i class='fa fa-times' onclick='del_input(this)' aria-hidden='true'></i><p style='clear: both'></p></li></ol><button type='text'>+ Add new</button><div onclick='AddTestQuestions()'>Submit</div>");
+                    $("#test-add-templete").html("<p>Add Test Questions</p><input type='text' class='srch_title' id='test_title' placeholder='Enter the Test title' /><ol class='tests'><li><div contenteditable='true' class='test_question' placeholder='Enter your question here...'></div><i class='fa fa-times' onclick='del_input(this)' aria-hidden='true'></i><p style='clear: both'></p></li></ol><button type='text'>+ Add new</button><div onclick='AddTestQuestions()'>Submit</div>");
                     alert('Success');
                 }
             })
@@ -211,7 +211,7 @@
         $.get("/AddQuizQuestions", {"class_id":"<%=session.getAttribute("class_id")%>","title":title, "questionAnswers":JSON.stringify(array)}, function(data, status) {
             if (data = "200") {
                 $(".blur").trigger("click");
-                $("#quiz-add-templete").html("<p>Add Quiz Questions</p><input class='srch_title' id='quiz_title' type='text' placeholder='Enter the Quiz Name' /><ol class='quizzes'><li><div contenteditable='true' class='quiz_question' placeholder='Enter your question here...'></div><i class='fa fa-times' onclick='del_input(this)' aria-hidden='true'></i><p style='clear: both'></p><section class='options'><span>(a)</span><input type='text' class='option1'/><span>(b)</span><input type='text' class='option2'/><span>(c)</span><input type='text' class='option3'/><span>(d)</span><input type='text' class='option4'/></section><span>Answer : </span><select name='qus1' id='qus1' class='ans-slct'><option value='a'>a</option><option value='b'>b</option><option value='c'>c</option><option value='d'>d</option></select></li></ol><button type='text'>+ Add new</button><div onclick='AddQuizQuestions()'>Submit</div>");
+                $("#quiz-add-templete").html("<p>Add Quiz Questions</p><input class='srch_title' id='quiz_title' type='text' placeholder='Enter the Quiz title' /><ol class='quizzes'><li><div contenteditable='true' class='quiz_question' placeholder='Enter your question here...'></div><i class='fa fa-times' onclick='del_input(this)' aria-hidden='true'></i><p style='clear: both'></p><section class='options'><span>(a)</span><input type='text' class='option1'/><span>(b)</span><input type='text' class='option2'/><span>(c)</span><input type='text' class='option3'/><span>(d)</span><input type='text' class='option4'/></section><span>Answer : </span><select name='qus1' id='qus1' class='ans-slct'><option value='a'>a</option><option value='b'>b</option><option value='c'>c</option><option value='d'>d</option></select></li></ol><button type='text'>+ Add new</button><div onclick='AddQuizQuestions()'>Submit</div>");
                 alert("Success...");
             }
         })
@@ -386,6 +386,136 @@
         });
     }
     
+    //  ______________feeds________________
+    // scroll bar reached bottom and get the 
+    function bottomReached() {
+        
+        if($(".feed")[0].scrollHeight === ( $(".feed").scrollTop() + $(".feed")[0].offsetHeight) || ($(".feed")[0].scrollHeight - ( $(".feed").scrollTop() + $(".feed")[0].offsetHeight)) < 50) {
+            $.get("/getfeeds",{"type" : "next" },  function(data, status) {
+                    var postObj = JSON.parse(data);
+                    postObj = rearrange(postObj);
+                    document.getElementById("posts").innerHTML += html(postObj);
+            });
+        }
+        
+    }
+    
+    // get feeds details initial
+    
+    function getFeeds() {
+        $.get("/getfeeds",{"type" : "initial" },  function(data, status) {
+            var postObj = JSON.parse(data);
+            
+            postObj = rearrange(postObj);
+            document.getElementById("posts").innerHTML = html(postObj);
+        });
+    }
+    
+    function html(postObj) {
+        var html = "";
+        for(i = 0; i < postObj.posts.length; i++) {
+            
+            var tempTemplete = document.getElementById("post-templete").innerHTML;
+            var templete  = Handlebars.compile(tempTemplete);
+            html = html + templete(postObj.posts[i]);
+        }
+        return html;
+    }
+    
+    function rearrange(postObj) {
+        for(i = 0; i < postObj.posts.length; i++) {
+            
+            postObj.posts[i].likers = JSON.parse(postObj.posts[i].likers);
+            postObj.posts[i]["likelength"] = postObj.posts[i].likers.length;
+            postObj.posts[i]["commentlength"] = postObj.posts[i].comments.length;
+            
+            for(j = 0; j < postObj.posts[i].comments.length; j++) {
+                
+                postObj.posts[i].comments[j].likers = JSON.parse(postObj.posts[i].comments[j].likers);
+                postObj.posts[i].comments[j]["likelength"] = postObj.posts[i].comments[j].likers.length;
+                postObj.posts[i].comments[j]["commentlength"] = postObj.posts[i].comments[j].replies.length;
+                
+                for(k = 0; k < postObj.posts[i].comments[j].replies.length;  k++) {
+                    postObj.posts[i].comments[j].replies[k].likers = JSON.parse(postObj.posts[i].comments[j].replies[k].likers);
+                    postObj.posts[i].comments[j].replies[k]["likelength"] = postObj.posts[i].comments[j].replies[k].likers.length;
+                }
+                
+            }
+        }
+        return postObj;
+    }
+    
+    function postbtnClick() {
+        var message = document.getElementById("post_msg").value;
+        $(".post_btn").attr("disabled","true");
+        if(message != "") {
+            $.get("/addfeeds",{"user_id":"<%=session.getAttribute("user_id")%>","class_id": "<%=session.getAttribute("class_id")%>","message":message,"type" : "posts" },  function(data, status) {
+                document.getElementById("post_msg").value = "";
+                var postObj = JSON.parse(data);
+                postObj = rearrange(postObj);
+                $("#posts").prepend(html(postObj));
+                $(".post_btn").attr("disabled","false");
+                webSocket.send("all");
+            });
+        }
+    }
+    
+    function comment(id) {
+        $(".comment").remove();
+        $("#"+id).parent().parent().parent().append("<div id='c' class='comment'><textarea id='commentMsg' ></textarea><button class='post_btn' onclick='addcomment(\""+id+"\")'>POST</button><div style='clear:both'></div></div>");
+        
+    }
+    function addcomment(post_id) {
+        postId = post_id
+        post_id = post_id.substring(3);
+        var message = document.getElementById("commentMsg").value;
+        $(".post_btn").attr("disabled","true");
+        $.get("/addfeeds",{"id":post_id,"user_id":"<%=session.getAttribute("user_id")%>","class_id": "<%=session.getAttribute("class_id")%>","message":message,"type" : "comments" },  function(data, status) {
+                var commentObj = JSON.parse(data);
+                var tempTemplete = document.getElementById("comment-templete").innerHTML;
+                var templete  = Handlebars.compile(tempTemplete);
+                $(".comment").remove();
+                var com = "post_comment"+postId.substring(3);
+                $("#"+postId).parent().parent().parent().append(templete(commentObj));
+                document.getElementById(com).innerText = (Number(document.getElementById(com).innerText)) + 1;
+                $(".post_btn").attr("disabled","false");
+                webSocket.send("all");
+            });
+    }
+    
+    
+    function reply(id) {
+        $(".comment").remove();
+        $("#"+id).parent().parent().parent().append("<div id='c' class='reply comment'><textarea id='replyMsg' ></textarea><button class='post_btn' onclick='addreply(\""+id+"\")'>POST</button><div style='clear:both'></div></div>");
+        
+    }
+    
+    function addreply(com_id) {
+        commentId = com_id
+        com_id = com_id.substring(3);
+        var message = document.getElementById("replyMsg").value;
+        $(".post_btn").attr("disabled","true");
+        $.get("/addfeeds",{"id":com_id,"user_id":"<%=session.getAttribute("user_id")%>","class_id": "<%=session.getAttribute("class_id")%>","message":message,"type" : "replies" },  function(data, status) {
+                var replyObj = JSON.parse(data);
+                var tempTemplete = document.getElementById("reply-templete").innerHTML;
+                var templete  = Handlebars.compile(tempTemplete);
+                $(".comment").remove();
+                var com = "comment_comment"+commentId.substring(3);
+                $("#"+commentId).parent().parent().parent().append(templete(replyObj));
+                document.getElementById(com).innerText = (Number(document.getElementById(com).innerText)) + 1;
+                $(".post_btn").attr("disabled","false");
+                webSocket.send("all");
+            });
+    }
+    //ReportDetails
+    function getReportDetails(user_id) {
+        $.get("/getreportdetails", {"student_id":user_id}, function(data, status) {
+            if(data == "200") {
+                location.href="/reports";
+            }
+        })
+    }   
+    
     </script>
 </head>
 
@@ -507,7 +637,7 @@
                     <li onclick="getQuizTitles()">Quiz</li>
                     <li onclick="getAssignmentTitles()">Assignment</li>
                     <li onclick="getTestTitles()">Test</li>
-                    <li>Feeds</li>
+                    <li onclick="getFeeds()">Feeds</li>
                 </ul>
                 <% if ((session.getAttribute("class_role")+"").equals("Teacher")) {
                 %>
@@ -721,12 +851,15 @@
                 
                 <!--- Feeds Div --->
                 
-                <div class="feed">
+                <div class="feed" onscroll="bottomReached()">
                   <div class="feeds">
                      <textarea id="post_msg" class="msg" placeholder="Ask Your Doubts"></textarea>
                      <button class="post_btn" onclick="postbtnClick()">POST</button>   
-                     <span style="clear:both"></span>
+                     <div style="clear:both"></div>
                   </div>  
+                  <div class="psts" id = "posts">
+                  
+                  </div>
                 </div>
                 
                 <!-- Test div -->
@@ -847,6 +980,7 @@
                         
                     </ul>
                 </div>
+                
                 <script id = "reportName-templete" type="x-handlebars-templete">
                     {{#each Name}}
                         <li onclick="getReportDetails('{{user_id}}')">
@@ -885,7 +1019,108 @@
             </div>
             <%}%>
     </div>
-     
+     <script id="post-templete" type="text/x-handlebars-templete">
+            <main id='main'>
+                <img src='{{image}}'>
+                <h2 ><b class='name'>{{name}}</b>  has posted. </h2>
+                <p>{{message}}</p>
+                <div>
+                    <div class='like_div'>
+                        <i class='fa fa-heart-o' onclick='inverseLike("post",{{id}})' aria-hidden='true'></i>
+                        <span onclick='inverseLike("post",{{id}})'>Like</span>
+                        <i class='fa fa-comment-o' aria-hidden='true' onclick='comment(pos{{id}})'></i>
+                        <span onclick='comment("pos{{id}}")' id="pos{{id}}">Comment</span>
+                    </div>
+                    <div class='cmnt'>
+                        <i class='fa fa-heart' aria-hidden='true'></i><span id="post_like{{id}}">{{likelength}}</span>
+                        <i class='fa fa-comments-o' aria-hidden='true'></i><span id="post_comment{{id}}">{{commentlength}}</span>
+                    </div>
+                    <div style="clear:both"></div>
+                </div>
+                {{#each comments}} 
+                    
+                    <main class='comment_box'>
+                        <img src='{{image}}'>
+                        <h2 ><b class='name'>{{name}}</b>  has commented in your post.</h2>
+                        <p>{{message}}</p>
+                        <div>
+                            <div class="like_div">
+                                <i class='fa fa-heart-o' onclick = 'inverseLike("comment",{{id}})' aria-hidden='true'></i>
+                                <span onclick = 'inverseLike("comment",{{id}})'>Like</span>
+                                <i class='fa fa-comment-o' aria-hidden='true' onclick='reply("com{{id}}")' id="com{{id}}"></i>
+                                <span onclick='reply("com{{id}}")'>Reply</span>
+                            </div>
+                            <div class='cmnt'>
+                                <i class='fa fa-heart' aria-hidden='true'></i><span id="comment_like{{id}}">{{likelength}}</span>
+                                <i class='fa fa-comments-o' aria-hidden='true'></i><span id="comment_comment{{id}}">{{commentlength}}</span>
+                            </div>
+                            <div style="clear:both"></div>
+                        </div>
+                        {{#each replies}}
+                        
+                            <main class='comment_box re'>
+                                <img src='{{image}}'>
+                                <h2 ><b class='name'>{{name}}</b>  has replied in your comment.</h2>
+                                <p>{{message}} </p>
+                                <div >
+                                    <div class='like_div'>
+                                        <i class='fa fa-heart-o' onclick = 'inverseLike("reply",{{id}})' aria-hidden='true'></i>
+                                        <span onclick = 'inverseLike("reply",{{id}})'>Like</span>
+                                    </div>
+                                    <div class='cmnt'>
+                                        <span>
+                                            <i class='fa fa-heart' aria-hidden='true'></i><span id="reply_like{{id}}">{{likelength}}</span>
+                                        </span>
+                                    </div>
+                                    <div style="clear:both"></div>
+                                </div>
+                            </main>
+                        {{/each}}
+                    </main>
+                {{/each}}
+            </main>
+        </script>
+        
+        <script id="comment-templete" type="text/x-handlebars-templete">
+            <main class='comment_box'>
+                <img src='{{image}}'>
+                <h2 ><b class='name'>{{name}}</b>  has commented in your post.</h2>
+                <p>{{message}} </p>
+                <div>
+                    <div class='like_div'>
+                        <i class='fa fa-heart-o' onclick = 'inverseLike("comment",{{id}})' aria-hidden='true'></i>
+                        <span onclick = 'inverseLike("comment",{{id}})'>Like</span>
+                        <i class='fa fa-comment-o' aria-hidden='true' onclick='reply("com{{id}}")' id="com{{id}}"></i>
+                        <span onclick='reply("com{{id}}")'>Reply</span>
+                    </div>
+                    <div class='cmnt'>
+                        <i class='fa fa-heart' aria-hidden='true'></i><span id="comment_like{{id}}">{{likelength}}</span>
+                        <i class='fa fa-comments-o' aria-hidden='true'></i><span id="comment_comment{{id}}">{{commentlength}}</span>
+                    </div>
+                    <div style="clear:both"></div>
+                </div>
+            </main>
+        </script>
+        
+        <script id="reply-templete" type="text/x-handlebars-templete">
+            <main class='comment_box re'>
+                    <img src='{{image}}'>
+                    <h2 ><b class='name'>{{name}}</b>  has replied in your comment.</h2>
+                    <p>{{message}}</p>
+                    <div >
+                        <div class='like_div'>
+                            <i class='fa fa-heart-o' onclick = 'inverseLike("reply",{{id}})' aria-hidden='true'></i>
+                            <span onclick = 'inverseLike("reply",{{id}})'>Like</span>
+                        </div>
+                        <div class='cmnt'>
+                            <span>
+                                <i class='fa fa-heart' aria-hidden='true'></i><span id="reply_like{{id}}">0</span>
+                            </span>
+                        </div>
+                        <div style="clear:both"></div>
+                    </div>
+                </main>
+        </script>
     <script src="https://apis.google.com/js/platform.js" async defer></script>
     <meta name="google-signin-client_id" content="176409898115-eoi5sggfanbiq08h1e6soi4vtcm30mgf.apps.googleusercontent.com">
     <div class="g-signin2" data-onsuccess="onSignIn" style="display:none"></div>

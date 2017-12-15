@@ -180,7 +180,7 @@ public class CheckValidDetails {
 	    return false;
 	}
 	
-	public boolean titleIdCheck(String id, String tableName) {
+	public boolean questionIdCheck(String id, String tableName) {
 	    try {
 	        tableName = tableName.substring(0, tableName.length()-6) + "s";
 	        ResultSet rs = stmt.executeQuery("select question_id from "+tableName+" where question_id ='"+id+"';");

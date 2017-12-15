@@ -23,7 +23,7 @@ public class CreateClassroom extends HttpServlet {
 		
 		if (process.createClassroom(details).equals("OK")){
 		
-		    writer.write("classroom has been created.");
+		    writer.write("200");
 		}
 	}
 }
