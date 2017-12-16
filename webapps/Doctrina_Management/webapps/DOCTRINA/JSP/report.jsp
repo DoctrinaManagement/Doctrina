@@ -12,7 +12,7 @@
     <title>DOCTRINA | Report page</title>
     
     <script>
-        function ReportPagegLoad() {
+        function ReportPageLoad() {
             $.get("/reportspageload", {"student_id":"<%=session.getAttribute("student_id")%>", "class_id":"<%=session.getAttribute("class_id")%>"}, function(data, status) {
             data = JSON.parse(data);
                 document.getElementById("nav").innerHTML = "<p><%=session.getAttribute("class_name")%></p><img src="+data.image+" alt='Profile' /><p>"+data.name+"</p>"
@@ -28,10 +28,14 @@
         function assignmentReports () {
         // user_id used for same auth
             $.get("/getreporttitles", {"user_id":"<%=session.getAttribute("student_id")%>", "class_id":"<%=session.getAttribute("class_id")%>","type":"assignmenttitles"}, function(data, status){
-                var titleObj = JSON.parse(data);
+                var titleObj = JSON.parse(data);console.log(titleObj);
+                var values = titleObj.values[0];
+                document.getElementById("ass_total").innerHTML = "<p>Total Assignments - "+values.count+"</p><p>Completed Assignments - <span>"+values.finish+"</span></p>";
+                
                 var tempTemplete = document.getElementById("ass_titles").innerHTML;
                 var templete  = Handlebars.compile(tempTemplete);
-                document.getElementById("assignments").innerHTML= templete(titleObj);
+                document.getElementById("asstitle_ul").innerHTML= templete(titleObj);
+                finishCheck(titleObj.finished, "ass");
                 show(2);
             })
         }
@@ -39,12 +43,38 @@
         function testReports () {
         // user_id used for same auth
             $.get("/getreporttitles", {"user_id":"<%=session.getAttribute("student_id")%>", "class_id":"<%=session.getAttribute("class_id")%>","type":"testtitles"}, function(data, status){
-                var titleObj = JSON.parse(data);console.log(titleObj);
+                var titleObj = JSON.parse(data);
                 var tempTemplete = document.getElementById("test_titles").innerHTML;
                 var templete  = Handlebars.compile(tempTemplete);
-                document.getElementById("tests").innerHTML= templete(titleObj);
+                var values = titleObj.values[0];
+                document.getElementById("testtitle_ul").innerHTML = templete(titleObj);
+                document.getElementById("test_total").innerHTML = "<p>Total Tests - "+values.count+"</p><p>Completed Tests - <span>"+values.finish+"</span></p>";
+                finishCheck(titleObj.finished, "test");
                 show(3);
             })
+        }
+        
+        function quizReports() {
+            $.get("/getreporttitles", {"user_id":"<%=session.getAttribute("student_id")%>", "class_id":"<%=session.getAttribute("class_id")%>","type":"quiztitles"}, function(data, status){
+                var titleObj = JSON.parse(data);
+                var tempTemplete = document.getElementById("quiz_titles").innerHTML;
+                var templete  = Handlebars.compile(tempTemplete);
+                document.getElementById("quizs").innerHTML = templete(titleObj);
+                finishCheck(titleObj.finished, "quiz");
+                QuizMark(titleObj.mark);
+                show(4);
+            })
+        }
+        function QuizMark(mark) {
+            var keys = Object.keys(mark);
+            for(i = 0; i < keys.length; i++) {
+                document.getElementById("mark_"+keys[i]).innerHTML = "<span class='time'>"+mark[keys[i]].marks+"/"+mark[keys[i]].total+"</span>";
+            }
+        }
+        function finishCheck(finishID, type) {
+            for (i = 0; i < finishID.length; i++) {
+                document.getElementById(type+finishID[i]).innerHTML += "<div class='check'>&#10004;</div><div style='clear:right'></div>";
+            }
         }
         // Titles Show 
         function show(n) {
@@ -60,7 +90,7 @@
                 titleObj["heading"] = heading;
                 var tempTemplete = document.getElementById("test_answers").innerHTML;
                 var templete  = Handlebars.compile(tempTemplete);
-                document.getElementById("tests").innerHTML += templete(titleObj);
+                document.getElementById("testAnswers").innerHTML = templete(titleObj);
                 
                 $(".test_div").css("display","none");
                 $(".all_test").css("display","block");
@@ -75,7 +105,7 @@
                 titleObj["heading"] = heading;
                 var tempTemplete = document.getElementById("ass_answers").innerHTML;
                 var templete  = Handlebars.compile(tempTemplete);
-                document.getElementById("assignments").innerHTML += templete(titleObj);
+                document.getElementById("assignmentAnswers").innerHTML = templete(titleObj);
                 
                 $(".asmnts_div").css("display","none");
                 $(".all_asigns").css("display","block");
@@ -85,7 +115,7 @@
         function closeDiv (type){
             if (type == "test") {
                 $(".test_div").css("display","block");
-                $(".all_test").css("display","none") ;
+                $(".all_test").css("display","none");
             }
             else if (type == "assignment") {
                 $(".asmnts_div").css("display","block");
@@ -95,7 +125,7 @@
         
     </script>
 </head>
-<body onload="ReportPagegLoad()">
+<body onload="ReportPageLoad()">
     <main class="whole" style="display: flex">
         <nav class="left-nav">
             <div class="nav-main" id="nav">
@@ -114,55 +144,62 @@
                 <div class="select" onclick="show(1)">Videos</div>
                 <div onclick="assignmentReports()">Assignments</div>
                 <div onclick="testReports()">Tests</div>
-                <div onclick="show(4)">Quizes</div>
+                <div onclick="quizReports()">Quizes</div>
                 <div onclick="show(5)">Ratings</div>
             </aside>
             
             <!-- Assignment_titles -->
                 <script id="ass_titles" type="text/x-handlebars-templete">
-                {{#each values}}
-                    <div class="total">
-                        <p>Total Assignments - {{count}}</p>
-                        <p>Completed Assignments - <span> {{finish}} </span></p>
-                    </div>
-                {{/each}}
-                     <p class="heading">Assignments</p>
-                     <ul class="asmnts_div">
                     {{#each titles}}
-                         <li>
+                         <li id="ass{{id}}" onclick="getAnswersfromAssignmentReports({{id}}, {{tabIndex}})">
                           <img src="../IMAGES/a.jpg" class="asmnt_icon" alt="asimnt icon" />
-                          <p id='ass_title{{tabIndex}}' onclick="getAnswersfromAssignmentReports({{id}}, {{tabIndex}})">{{title}}</p>
+                          <p id='ass_title{{tabIndex}}'>{{title}}</p>
                        </li> 
                      {{/each}}
-                     </ul>
                 </script>
             <!-- /Assignment_titles -->
             
             <!-- Test_titles -->
                 <script id="test_titles" type="text/x-handlebars-templete">
-                    {{#each values}}
-                        <div class="total">
-                            <p>Total Tests - {{count}}</p>
-                            <p>Completed Test - <span> {{finish}} </span></p>
-                        </div>
-                    {{/each}}
-                         <p class="heading">Tests</p>
-                         
-                         <ul class="test_div">
                     {{#each titles}}
-                             <li>
+                             <li id="test{{id}}" onclick="getAnswersfromTestReports({{id}}, {{tabIndex}})">
                               <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-                              <p id="test_title{{tabIndex}}" onclick="getAnswersfromTestReports({{id}}, {{tabIndex}})">{{title}}</p>
+                              <p id="test_title{{tabIndex}}">{{title}}</p>
                            </li> 
                      {{/each}}
-                     </ul>
                 </script>
             <!-- /Test_titles -->
+            
+            <!-- quiztitles -->
+            <script id="quiz_titles" type="text/x-handlebars-templete">
+                    
+                    {{#each values}}
+                        <div class="total">
+                            <p>Total Quiz - {{count}}</p>
+                            <p>Completed Quiz - <span> {{finish}} </span></p>
+                        </div>
+                    {{/each}}
+                    <p class="heading">Quizes</p> 
+                        <ul class="quiz_div">
+                            {{#each titles}}
+                                    <li id="quiz{{id}}">
+                                        <img src="../IMAGES/Quiz.png" alt="Quiz-icon" />
+                                        <p class="video-name" title="{{title}}">{{title}}</p>
+                                <span id='mark_{{id}}'></span>
+                             {{/each}}
+                             </li>
+                        </ul>
+                </script>
+                            <!--<div class="last">
+                                <span class="time">13/15</span>
+                                <div class="check">&#10004;</div>
+                                <div style="clear:right"></div>
+                            </div>-->
+            <!-- /quiztitles -->
             
             <!-- Assignment Answers-->
                 <script id="ass_answers" type="text/x-handlebars-templete">
                     
-                <ul class="all_asigns">
                     <h1 class="h1_hding">{{heading}}</h1><i class="close material-icons" onclick="closeDiv('assignment')">close</i>
                     <span style="clear:right"></span>
                     
@@ -177,15 +214,13 @@
                         <span style="clear:right"></span>
                     </li>
                     {{/each}}
-                <ul>
                 </script>
             <!-- /Assignment Answers-->
             
             <!-- Test Answers-->
                 <script id="test_answers" type="text/x-handlebars-templete">
                     
-                <ul class="all_test">
-                    <h1 class="h1_hding">{{heading}}</h1><i class="close material-icons" onclick="close('test')">close</i>
+                    <h1 class="h1_hding">{{heading}}</h1><i class="close material-icons" onclick="closeDiv('test')">close</i>
                     <span style="clear:right"></span>
                     
                     {{#each questionanswers}}
@@ -199,7 +234,6 @@
                         <span style="clear:right"></span>
                     </li>
                     {{/each}}
-                <ul>
                 </script>
             <!-- /Test Answers-->
             
@@ -223,127 +257,22 @@
                     </ul>
                 </div>
                 
-                <div class="asmnts" id='assignments'></div>
-                
-                <div class="tests" id='tests'></div>
-                
-                <div class="quizs">
-                   <div class="total">
-                        <p>Total Quiz - 13</p>
-                        <p>Watched Videos - <span> 8 </span></p>
-                    </div>
-                    <p class="heading">Quizes</p> 
-                    <ul class="quiz_div">
-                        <li>
-                            <img src="../IMAGES/Quiz.png" alt="Quiz-icon" />
-                            <p class="video-name" title="HTML-CSS">HTML-CSS</p>
-                            <div class="last">
-                                <span class="time">13/15</span>
-                                <div class="check">&#10004;</div>
-                                <div style="clear:right"></div>
-                            </div>
-                        </li>
-                        <li>
-                            <img src="../IMAGES/Quiz.png" alt="Quiz-icon" />
-                            <p class="video-name" title="HTML-CSS">HTML-CSS</p>
-                            <div class="last">
-                                <span class="time">13/15</span>
-                                <div class="check">&#10004;</div>
-                                <div style="clear:right"></div>
-                            </div>
-                        </li>
-                        <li>
-                            <img src="../IMAGES/Quiz.png" alt="Quiz-icon" />
-                            <p class="video-name" title="HTML-CSS">HTML-CSS</p>
-                            <div class="last">
-                                <span class="time">13/15</span>
-                                <div class="check">&#10004;</div>
-                                <div style="clear:right"></div>
-                            </div>
-                        </li>
-                        <li>
-                            <img src="../IMAGES/Quiz.png" alt="Quiz-icon" />
-                            <p class="video-name" title="HTML-CSS">HTML-CSS</p>
-                            <div class="last">
-                                <span class="time">13/15</span>
-                                <div class="check">&#10004;</div>
-                                <div style="clear:right"></div>
-                            </div>
-                        </li>
-                        <li>
-                            <img src="../IMAGES/Quiz.png" alt="Quiz-icon" />
-                            <p class="video-name" title="HTML-CSS">HTML-CSS</p>
-                            <div class="last">
-                                <span class="time">13/15</span>
-                                <div class="check">&#10004;</div>
-                                <div style="clear:right"></div>
-                            </div>
-                        </li>
-                        <li>
-                            <img src="../IMAGES/Quiz.png" alt="Quiz-icon" />
-                            <p class="video-name" title="HTML-CSS">HTML-CSS</p>
-                            <div class="last">
-                                <span class="time">13/15</span>
-                                <div class="check">&#10004;</div>
-                                <div style="clear:right"></div>
-                            </div>
-                        </li>
-                        <li>
-                            <img src="../IMAGES/Quiz.png" alt="Quiz-icon" />
-                            <p class="video-name" title="HTML-CSS">HTML-CSS</p>
-                            <div class="last">
-                                <span class="time">13/15</span>
-                                <div class="check">&#10004;</div>
-                                <div style="clear:right"></div>
-                            </div>
-                        </li>
-                        <li>
-                            <img src="../IMAGES/Quiz.png" alt="Quiz-icon" />
-                            <p class="video-name" title="HTML-CSS">HTML-CSS</p>
-                            <div class="last">
-                                <span class="time">13/15</span>
-                                <div class="check">&#10004;</div>
-                                <div style="clear:right"></div>
-                            </div>
-                        </li>
-                        <li>
-                            <img src="../IMAGES/Quiz.png" alt="Quiz-icon" />
-                            <p class="video-name" title="HTML-CSS">HTML-CSS</p>
-                            <div class="last">
-                                <span class="time">13/15</span>
-                                <div class="check">&#10004;</div>
-                                <div style="clear:right"></div>
-                            </div>
-                        </li>
-                        <li>
-                            <img src="../IMAGES/Quiz.png" alt="Quiz-icon" />
-                            <p class="video-name" title="HTML-CSS">HTML-CSS</p>
-                            <div class="last">
-                                <span class="time">13/15</span>
-                                <div class="check">&#10004;</div>
-                                <div style="clear:right"></div>
-                            </div>
-                        </li>
-                        <li>
-                            <img src="../IMAGES/Quiz.png" alt="Quiz-icon" />
-                            <p class="video-name" title="HTML-CSS">HTML-CSS</p>
-                            <div class="last">
-                                <span class="time">13/15</span>
-                                <div class="check">&#10004;</div>
-                                <div style="clear:right"></div>
-                            </div>
-                        </li>
-                        <li>
-                            <img src="../IMAGES/Quiz.png" alt="Quiz-icon" />
-                            <p class="video-name" title="HTML-CSS">HTML-CSS</p>
-                            <div class="last">
-                                <span class="time">13/15</span>
-                                <div class="check">&#10004;</div>
-                                <div style="clear:right"></div>
-                            </div>
-                        </li>
-                    </ul>
+                <div class="asmnts" id='assignments'>
+                    <div class="total" id="ass_total"></div>
+                    <p class="heading">Assignments</p>
+                    <ul class="asmnts_div" id="asstitle_ul"></ul>    
+                    <ul class="all_asigns" id="assignmentAnswers"></ul>
                 </div>
+                
+                <div class="tests" id='tests'>
+                        <div class="total" id="test_total"></div>
+                        <p class="heading">Tests</p>
+                        <ul class="test_div" id="testtitle_ul"></ul>
+                        <ul class="all_test" id="testAnswers"></ul>
+                </div>
+                
+                <div class="quizs" id="quizs"></div>
+                
                 <div class="rating">
                     <p class="heading">Ratings</p>
                     <ul class="rats">

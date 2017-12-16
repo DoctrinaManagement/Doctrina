@@ -13,4 +13,12 @@ $(document).ready(function(){
        $(".save").text("Saving Changes...");
        
    });
+   
+   $("ul li p").click(function(){
+        if( $(this).siblings("input").is(":checked") ) {
+            $(this).siblings("input").prop("checked",false);
+        } else {
+            $(this).siblings("input").prop("checked",true);
+        }
+   });
 });

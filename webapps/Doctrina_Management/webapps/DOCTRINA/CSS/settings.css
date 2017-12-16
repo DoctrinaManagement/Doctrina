@@ -19,8 +19,9 @@ button{
 header,.conts_div{
     box-sizing:border-box;
 }
-.close,button,label{
+.close,button,label, ul li p{
     cursor:pointer;
+    
 }
     /*----------------------------header--------------------------------*/
 

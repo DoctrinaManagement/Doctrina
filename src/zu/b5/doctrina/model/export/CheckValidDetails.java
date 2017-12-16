@@ -232,6 +232,24 @@ public class CheckValidDetails {
 	    
 	    return false;
 	}
+	
+	public boolean ReplyIdCheck(String class_id, String comment_id) {
+	    
+	    try{
+	        ResultSet rs = stmt.executeQuery("select class_id from posts where id = (select post_id from comments where id = (select comment_id from replies where id = "+comment_id+"));");
+	        ReUsable get = new ReUsable(conn);
+	        ArrayList<String> result = get.resultSetToUserID(rs);
+	        if(result.get(0).equals(class_id)) {
+	            return true;
+	        }
+	        
+	    } catch (Exception e) {
+	        System.out.println("CheckValidDetails - ReplyIdCheck"+e);
+	    }
+	    
+	    return false;
+	}
+	
 }
 
 

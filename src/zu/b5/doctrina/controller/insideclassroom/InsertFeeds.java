@@ -46,6 +46,8 @@ public class InsertFeeds extends HttpServlet {
 		    else {
 		        writer.write("400");
 		    }
+		    
+		    
 		}
 		else if(request.getParameter("type").equals("comments")) {
 		    
@@ -58,7 +60,7 @@ public class InsertFeeds extends HttpServlet {
         		    ResultSet rs = stmt.executeQuery(Query);
         		    ArrayList<String> ids = get.resultSetToUserID(rs);
         		    insert.sendNotification((session.getAttribute("class_id")+""), (session.getAttribute("name")+""), "commented", (session.getAttribute("class_name")+""), (session.getAttribute("user_id")+"") );
-        		    HashMap<String,String> comments = value.getValue(ids.get(ids.size() - 1), "comments");
+        		    HashMap<String,Object> comments = value.getValue(ids.get(ids.size() - 1), "comments");
     		        String json = new Gson().toJson(comments);
                     writer.write(json);
                     
@@ -80,7 +82,7 @@ public class InsertFeeds extends HttpServlet {
         		    ResultSet rs = stmt.executeQuery(Query);
         		    insert.sendNotification((session.getAttribute("class_id")+""), (session.getAttribute("name")+""), "replied", (session.getAttribute("class_name")+""), (session.getAttribute("user_id")+"") );
         		    ArrayList<String> ids = get.resultSetToUserID(rs);
-        		    HashMap<String,String> comments = value.getValue(ids.get(ids.size() - 1), "replies");
+        		    HashMap<String,Object> comments = value.getValue(ids.get(ids.size() - 1), "replies");
     		        String json = new Gson().toJson(comments);
                     writer.write(json);
                     

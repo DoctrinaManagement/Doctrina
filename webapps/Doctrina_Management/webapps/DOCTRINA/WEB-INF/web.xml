@@ -588,7 +588,53 @@
     </filter-mapping>
   
 <!-- insert feeds -->  
+
+<!-- insertlike -->
+    <servlet>
+        <servlet-name>Like</servlet-name>
+        <servlet-class>zu.b5.doctrina.controller.insideclassroom.InsertLike</servlet-class>
+    </servlet>
     
+    <servlet-mapping>
+        <servlet-name>Like</servlet-name>
+        <url-pattern>/insertlike</url-pattern>
+    </servlet-mapping>
+    
+    <filter>
+        <filter-name>insertLike</filter-name>
+        <filter-class>zu.b5.doctrina.controller.authorization.InverseLikeAuth</filter-class>
+    </filter>
+    
+    <filter-mapping>
+        <filter-name>insertLike</filter-name>
+        <url-pattern>/insertlike</url-pattern>
+    </filter-mapping>
+
+<!-- insertlike --> 
+
+<!-- deletelike -->
+    <servlet>
+        <servlet-name>deleteLike</servlet-name>
+        <servlet-class>zu.b5.doctrina.controller.insideclassroom.DeleteLike</servlet-class>
+    </servlet>
+    
+    <servlet-mapping>
+        <servlet-name>deleteLike</servlet-name>
+        <url-pattern>/removelike</url-pattern>
+    </servlet-mapping>
+    
+    <filter>
+        <filter-name>deleteLike</filter-name>
+        <filter-class>zu.b5.doctrina.controller.authorization.InverseLikeAuth</filter-class>
+    </filter>
+    
+    <filter-mapping>
+        <filter-name>deleteLike</filter-name>
+        <url-pattern>/removelike</url-pattern>
+    </filter-mapping>
+
+<!-- deletelike --> 
+
 <!-- Reports -->
     
     <servlet>

@@ -66,27 +66,27 @@ public class GetFeedsDetailsProcess{
         
     }
     
-    public HashMap<String,String> getValue(String id, String tableName) {
+    public HashMap<String,Object> getValue(String id, String tableName) {
         String Query = "select * from "+tableName+" where id = ?";
-        HashMap<String,String> details = new HashMap<String,String>();
+        HashMap<String,Object> details = new HashMap<String,Object>();
         try{
             stmt = conn.prepareStatement(Query);
             stmt.setInt(1, Integer.parseInt(id));
             ResultSet rs = stmt.executeQuery();
-            details = get.resultSetToHashMap(rs);
+            details =(HashMap) get.resultSetToHashMap(rs);
             stmt = conn.prepareStatement("select name,image from userdetails where user_id = ?;");
             String use = "";
             if(tableName.equals("posts")) {
                 tableName = "postlike";
-                use = details.get("user_id");
+                use = (String) details.get("user_id");
             } 
             else if(tableName.equals("comments")) {
                 tableName = "commentlike";
-                use = details.get("commenter");
+                use = (String) details.get("commenter");
             } 
             else if(tableName.equals("replies")) {
                 tableName = "replylike";
-                use = details.get("replyer");
+                use = (String) details.get("replyer");
             }
             stmt.setString(1, use);
             rs = stmt.executeQuery();
@@ -94,9 +94,7 @@ public class GetFeedsDetailsProcess{
             details.put("name", temp.get("name"));
             details.put("image", temp.get("image"));
             
-            
-            
-            details.put("likers", getLikersName(details.get("id"), tableName));
+            details.put("likers", getLikersName((String) details.get("id"), tableName));
             
         } catch (SQLException e) {
             System.out.println("GetFeedsDetailsProcess - getValue"+ e.getMessage());
@@ -106,7 +104,7 @@ public class GetFeedsDetailsProcess{
     }
     
     
-    public String getLikersName(String ID, String tableName) {
+    public ArrayList<String> getLikersName(String ID, String tableName) {
         ArrayList<String> name = new ArrayList<String>();
         try {
             String Query = "select user_id from "+tableName+" where id = ? ;";
@@ -121,7 +119,7 @@ public class GetFeedsDetailsProcess{
         } catch (Exception e) {
             System.out.println("GetFeedsDetailsProcess - getLikersName "+ e.getMessage());
         }
-        return (name+"");
+        return name;
     }
     
     

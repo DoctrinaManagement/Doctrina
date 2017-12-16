@@ -20,6 +20,10 @@
     
     <script>
     var webSocket;
+    var postId;
+    var commentId;
+    var liketype;
+    var likeId;
          function signOut() {
             var auth2 = gapi.auth2.getAuthInstance();
             auth2.signOut().then(function () {
@@ -379,10 +383,12 @@
             quiz_answers.push(quiz_obj);
     	}    
         console.log(quiz_answers);
-        $.post("SendAnswers", {"answers":JSON.stringify(quiz_answers), "type":"quizanswer"}, function(data, status) {
-            if (data == "200") {
-                alert("Success");
-            }
+        $.post("/SendAnswers", {"answers":JSON.stringify(quiz_answers), "type":"quizanswer"}, function(data, status) {
+            //if (data == "200") {
+            //console.log(data);
+            var values = JSON.parse(data);
+            alert(values.mark);
+            //}
         });
     }
     
@@ -425,19 +431,42 @@
     function rearrange(postObj) {
         for(i = 0; i < postObj.posts.length; i++) {
             
-            postObj.posts[i].likers = JSON.parse(postObj.posts[i].likers);
+            //postObj.posts[i].likers = JSON.parse(postObj.posts[i].likers);
             postObj.posts[i]["likelength"] = postObj.posts[i].likers.length;
             postObj.posts[i]["commentlength"] = postObj.posts[i].comments.length;
-            
+            if (postObj.posts[i].name == "<%=session.getAttribute("name")%>") {
+                postObj.posts[i].name = "You";
+            }
+            postObj.posts[i]["html"] = "<i class='fa fa-heart-o' onclick=\"addLike(\'posts\',\'"+postObj.posts[i].id+"\')\" aria-hidden='true'></i><span onclick=\"addLike(\'posts\',\'"+postObj.posts[i].id+"\')\">Like</span>"
+            if(postObj.posts[i].likers.indexOf("<%=session.getAttribute("name")%>") != -1) {
+                postObj.posts[i]["html"] = "<i class='fa fa-heart' onclick=\"removeLike(\'posts\',\'"+postObj.posts[i].id+"\')\" aria-hidden='true'></i><span onclick=\"removeLike(\'posts\',\'"+postObj.posts[i].id+"\')\" >Like</span>";
+            }
             for(j = 0; j < postObj.posts[i].comments.length; j++) {
                 
-                postObj.posts[i].comments[j].likers = JSON.parse(postObj.posts[i].comments[j].likers);
+                //postObj.posts[i].comments[j].likers = JSON.parse(postObj.posts[i].comments[j].likers);
                 postObj.posts[i].comments[j]["likelength"] = postObj.posts[i].comments[j].likers.length;
                 postObj.posts[i].comments[j]["commentlength"] = postObj.posts[i].comments[j].replies.length;
+                if (postObj.posts[i].comments[j].name == "<%=session.getAttribute("name")%>") {
+                    postObj.posts[i].comments[j].name = "You";
+                }
+                postObj.posts[i].comments[j]["html"] = "<i class='fa fa-heart-o' onclick=\"addLike(\'comments\',\'"+postObj.posts[i].comments[j].id+"\')\" aria-hidden='true'></i><span onclick=\"addLike(\'comments\',\'"+postObj.posts[i].comments[j].id+"\')\">Like</span>"
+                if(postObj.posts[i].comments[j].likers.indexOf("<%=session.getAttribute("name")%>") != -1) {
+                    postObj.posts[i].comments[j]["html"] = "<i class='fa fa-heart' onclick=\"removeLike(\'comments\',\'"+postObj.posts[i].comments[j].id+"\')\" aria-hidden='true'></i><span onclick=\"removeLike(\'comments\',\'"+postObj.posts[i].comments[j].id+"\')\">Like</span>";
+                }
                 
                 for(k = 0; k < postObj.posts[i].comments[j].replies.length;  k++) {
-                    postObj.posts[i].comments[j].replies[k].likers = JSON.parse(postObj.posts[i].comments[j].replies[k].likers);
+                    
                     postObj.posts[i].comments[j].replies[k]["likelength"] = postObj.posts[i].comments[j].replies[k].likers.length;
+                    
+                    if (postObj.posts[i].comments[j].replies[k].name == "<%=session.getAttribute("name")%>") {
+                        postObj.posts[i].comments[j].replies[k].name = "You";
+                    }
+                    
+                    postObj.posts[i].comments[j].replies[k]["html"] = "<i class='fa fa-heart-o' onclick=\"addLike(\'replies\',\'"+postObj.posts[i].comments[j].replies[k].id+"\')\" aria-hidden='true'></i><span onclick=\"addLike(\'replies\',\'"+postObj.posts[i].comments[j].replies[k].id+"\')\" >Like</span>"
+                    if(postObj.posts[i].comments[j].replies[k].likers.indexOf("<%=session.getAttribute("name")%>") != -1) {
+                        postObj.posts[i].comments[j].replies[k]["html"] = "<i class='fa fa-heart' onclick=\"removeLike(\'replies\',\'"+postObj.posts[i].comments[j].replies[k].id+"\')\" aria-hidden='true'></i><span onclick=\"removeLike(\'replies\',\'"+postObj.posts[i].comments[j].replies[k].id+"\')\">Like</span>";
+                    }
+                    
                 }
                 
             }
@@ -454,7 +483,7 @@
                 var postObj = JSON.parse(data);
                 postObj = rearrange(postObj);
                 $("#posts").prepend(html(postObj));
-                $(".post_btn").attr("disabled","false");
+                $("#post_btn").html("<button class='post_btn' onclick='postbtnClick()'>POST</button>");
                 webSocket.send("all");
             });
         }
@@ -469,8 +498,9 @@
         postId = post_id
         post_id = post_id.substring(3);
         var message = document.getElementById("commentMsg").value;
-        $(".post_btn").attr("disabled","true");
-        $.get("/addfeeds",{"id":post_id,"user_id":"<%=session.getAttribute("user_id")%>","class_id": "<%=session.getAttribute("class_id")%>","message":message,"type" : "comments" },  function(data, status) {
+        if(message !="") {
+            $(".post_btn").attr("disabled","true");
+            $.get("/addfeeds",{"id":post_id,"user_id":"<%=session.getAttribute("user_id")%>","class_id": "<%=session.getAttribute("class_id")%>","message":message,"type" : "comments" },  function(data, status) {
                 var commentObj = JSON.parse(data);
                 var tempTemplete = document.getElementById("comment-templete").innerHTML;
                 var templete  = Handlebars.compile(tempTemplete);
@@ -478,9 +508,10 @@
                 var com = "post_comment"+postId.substring(3);
                 $("#"+postId).parent().parent().parent().append(templete(commentObj));
                 document.getElementById(com).innerText = (Number(document.getElementById(com).innerText)) + 1;
-                $(".post_btn").attr("disabled","false");
+                $("#post_btn").html("<button class='post_btn' onclick='postbtnClick()'>POST</button>");
                 webSocket.send("all");
             });
+        }
     }
     
     
@@ -494,8 +525,10 @@
         commentId = com_id
         com_id = com_id.substring(3);
         var message = document.getElementById("replyMsg").value;
-        $(".post_btn").attr("disabled","true");
-        $.get("/addfeeds",{"id":com_id,"user_id":"<%=session.getAttribute("user_id")%>","class_id": "<%=session.getAttribute("class_id")%>","message":message,"type" : "replies" },  function(data, status) {
+        if(message !="") {
+            $(".post_btn").attr("disabled","true");
+            $.get("/addfeeds",{"id":com_id,"user_id":"<%=session.getAttribute("user_id")%>","class_id": "<%=session.getAttribute("class_id")%>","message":message,"type" : "replies" },  function(data, status) {
+                $("#post_btn").html("<button class='post_btn' onclick='postbtnClick()'>POST</button>");
                 var replyObj = JSON.parse(data);
                 var tempTemplete = document.getElementById("reply-templete").innerHTML;
                 var templete  = Handlebars.compile(tempTemplete);
@@ -503,9 +536,10 @@
                 var com = "comment_comment"+commentId.substring(3);
                 $("#"+commentId).parent().parent().parent().append(templete(replyObj));
                 document.getElementById(com).innerText = (Number(document.getElementById(com).innerText)) + 1;
-                $(".post_btn").attr("disabled","false");
+                
                 webSocket.send("all");
             });
+        }
     }
     //ReportDetails
     function getReportDetails(user_id) {
@@ -515,7 +549,38 @@
             }
         })
     }   
+    function addLike(table, id) {
+        liketype = table;
+        likeId = id;
+        $.get("/insertlike", {"type":table, "user_id":"<%=session.getAttribute("user_id")%>", "class_id":"<%=session.getAttribute("class_id")%>","id":id}, function(data, status) {
+            if(data == "ok") {
+                document.getElementById(liketype+likeId).innerHTML = "<i class='fa fa-heart' onclick=\"removeLike(\'"+liketype+"\',\'"+likeId+"\')\" aria-hidden='true'></i><span onclick=\"removeLike(\'"+liketype+"\',\'"+likeId+"\')\">Like</span>";
+                document.getElementById(liketype+"_like"+likeId).innerText = (Number(document.getElementById(liketype+"_like"+likeId).innerText) + 1);
+                var title = $("#"+liketype+"_"+likeId).attr("title");
+                if(title == "") {
+                    $("#"+liketype+"_"+likeId).attr("title","<%=session.getAttribute("name")%>");
+                } else {
+                    $("#"+liketype+"_"+likeId).attr("title",title+",<%=session.getAttribute("name")%>");
+                }
+                
+            }
+        })
+    }
     
+    function removeLike(table, id) {
+        liketype = table;
+        likeId = id;
+        $.get("/removelike", {"type":table, "user_id":"<%=session.getAttribute("user_id")%>", "class_id":"<%=session.getAttribute("class_id")%>","id":id}, function(data, status) {
+            if(data == "ok") {
+                document.getElementById(liketype+likeId).innerHTML = "<i class='fa fa-heart-o' onclick=\"addLike(\'"+liketype+"\',\'"+likeId+"\')\" aria-hidden='true'></i><span onclick=\"addLike(\'"+liketype+"\',\'"+likeId+"\')\">Like</span>";
+                document.getElementById(liketype+"_like"+likeId).innerText = (Number(document.getElementById(liketype+"_like"+likeId).innerText) - 1);
+                var title = $("#"+liketype+"_"+likeId).attr("title");
+                var titleArray = title.split(",");
+                titleArray.pop("<%=session.getAttribute("name")%>");
+                $("#"+liketype+"_"+likeId).attr("title",titleArray);
+            }
+        })
+    }
     </script>
 </head>
 
@@ -854,7 +919,7 @@
                 <div class="feed" onscroll="bottomReached()">
                   <div class="feeds">
                      <textarea id="post_msg" class="msg" placeholder="Ask Your Doubts"></textarea>
-                     <button class="post_btn" onclick="postbtnClick()">POST</button>   
+                     <span id="post_btn"><button class="post_btn" onclick="postbtnClick()">POST</button></span>  
                      <div style="clear:both"></div>
                   </div>  
                   <div class="psts" id = "posts">
@@ -1026,13 +1091,14 @@
                 <p>{{message}}</p>
                 <div>
                     <div class='like_div'>
-                        <i class='fa fa-heart-o' onclick='inverseLike("post",{{id}})' aria-hidden='true'></i>
-                        <span onclick='inverseLike("post",{{id}})'>Like</span>
+                        <span id='posts{{id}}'>
+                            {{{html}}}
+                        </span>
                         <i class='fa fa-comment-o' aria-hidden='true' onclick='comment(pos{{id}})'></i>
                         <span onclick='comment("pos{{id}}")' id="pos{{id}}">Comment</span>
                     </div>
                     <div class='cmnt'>
-                        <i class='fa fa-heart' aria-hidden='true'></i><span id="post_like{{id}}">{{likelength}}</span>
+                        <i class='fa fa-heart' aria-hidden='true' id="posts_{{id}}" title='{{likers}}'></i><span id="posts_like{{id}}">{{likelength}}</span>
                         <i class='fa fa-comments-o' aria-hidden='true'></i><span id="post_comment{{id}}">{{commentlength}}</span>
                     </div>
                     <div style="clear:both"></div>
@@ -1045,13 +1111,14 @@
                         <p>{{message}}</p>
                         <div>
                             <div class="like_div">
-                                <i class='fa fa-heart-o' onclick = 'inverseLike("comment",{{id}})' aria-hidden='true'></i>
-                                <span onclick = 'inverseLike("comment",{{id}})'>Like</span>
+                                <span id='comments{{id}}'>
+                                    {{{html}}}
+                                </span>
                                 <i class='fa fa-comment-o' aria-hidden='true' onclick='reply("com{{id}}")' id="com{{id}}"></i>
                                 <span onclick='reply("com{{id}}")'>Reply</span>
                             </div>
                             <div class='cmnt'>
-                                <i class='fa fa-heart' aria-hidden='true'></i><span id="comment_like{{id}}">{{likelength}}</span>
+                                <i class='fa fa-heart' aria-hidden='true' id="comments_{{id}}" title='{{likers}}'></i><span id="comments_like{{id}}">{{likelength}}</span>
                                 <i class='fa fa-comments-o' aria-hidden='true'></i><span id="comment_comment{{id}}">{{commentlength}}</span>
                             </div>
                             <div style="clear:both"></div>
@@ -1064,12 +1131,13 @@
                                 <p>{{message}} </p>
                                 <div >
                                     <div class='like_div'>
-                                        <i class='fa fa-heart-o' onclick = 'inverseLike("reply",{{id}})' aria-hidden='true'></i>
-                                        <span onclick = 'inverseLike("reply",{{id}})'>Like</span>
+                                        <span id='replies{{id}}'>
+                                            {{{html}}}
+                                        </span>
                                     </div>
                                     <div class='cmnt'>
                                         <span>
-                                            <i class='fa fa-heart' aria-hidden='true'></i><span id="reply_like{{id}}">{{likelength}}</span>
+                                            <i class='fa fa-heart' aria-hidden='true' id="replies_{{id}}" title='{{likers}}'></i><span id="replies_like{{id}}">{{likelength}}</span>
                                         </span>
                                     </div>
                                     <div style="clear:both"></div>
@@ -1088,13 +1156,15 @@
                 <p>{{message}} </p>
                 <div>
                     <div class='like_div'>
-                        <i class='fa fa-heart-o' onclick = 'inverseLike("comment",{{id}})' aria-hidden='true'></i>
-                        <span onclick = 'inverseLike("comment",{{id}})'>Like</span>
+                        <span id='comments{{id}}'>
+                            <i class='fa fa-heart-o' onclick = 'addLike("comments",{{id}})' aria-hidden='true'></i>
+                            <span onclick = 'addLike("comments",{{id}})'>Like</span>
+                        </span>
                         <i class='fa fa-comment-o' aria-hidden='true' onclick='reply("com{{id}}")' id="com{{id}}"></i>
                         <span onclick='reply("com{{id}}")'>Reply</span>
                     </div>
                     <div class='cmnt'>
-                        <i class='fa fa-heart' aria-hidden='true'></i><span id="comment_like{{id}}">{{likelength}}</span>
+                        <i class='fa fa-heart' id="comments_{{id}}" aria-hidden='true'></i><span id="comments_like{{id}}">{{likelength}}</span>
                         <i class='fa fa-comments-o' aria-hidden='true'></i><span id="comment_comment{{id}}">{{commentlength}}</span>
                     </div>
                     <div style="clear:both"></div>
@@ -1108,13 +1178,15 @@
                     <h2 ><b class='name'>{{name}}</b>  has replied in your comment.</h2>
                     <p>{{message}}</p>
                     <div >
-                        <div class='like_div'>
-                            <i class='fa fa-heart-o' onclick = 'inverseLike("reply",{{id}})' aria-hidden='true'></i>
-                            <span onclick = 'inverseLike("reply",{{id}})'>Like</span>
+                        <div class='like_div' >
+                            <span id='replies{{id}}'>
+                                <i class='fa fa-heart-o' onclick = 'addLike("replies",{{id}})' aria-hidden='true'></i>
+                                <span onclick = 'addLike("replies",{{id}})'>Like</span>
+                            </span>
                         </div>
                         <div class='cmnt'>
                             <span>
-                                <i class='fa fa-heart' aria-hidden='true'></i><span id="reply_like{{id}}">0</span>
+                                <i class='fa fa-heart' id="replies_{{id}}" aria-hidden='true'></i><span id="replies_like{{id}}">0</span>
                             </span>
                         </div>
                         <div style="clear:both"></div>

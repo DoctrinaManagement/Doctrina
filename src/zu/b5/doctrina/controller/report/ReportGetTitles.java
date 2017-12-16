@@ -30,7 +30,7 @@ public class ReportGetTitles extends HttpServlet {
 		System.out.println(user +" - "+ class_id +" - "+ type);
 		try {
     		stmt = conn.createStatement();
-    		HashMap<String,ArrayList<HashMap<String, String>>> titlesObj = new HashMap<String,ArrayList<HashMap<String, String>>>();
+    		HashMap<String,Object> titlesObj = new HashMap<String,Object>();
     		
     		ResultSet rs = stmt.executeQuery("select title,id from "+type+" where class_id = "+class_id+";");
     		
@@ -48,13 +48,35 @@ public class ReportGetTitles extends HttpServlet {
     	    ArrayList<HashMap<String, String>> values = new ArrayList<HashMap<String, String>>();
     		values.add(count);
     	    
+    	    rs = stmt.executeQuery("select title_id from "+typesubstring+" where class_id ="+class_id+"group by title_id;");
+    	    ArrayList<String> finished = get.resultSetToUserID(rs);
+    	    
+    	    ArrayList<String> finishClassId = new ArrayList<String>();
+    	    
+    	    for (HashMap<String, String> obj : titles) {
+    	       if ( finished.indexOf(obj.get("id")) != -1){
+    	           finishClassId.add(obj.get("id"));
+    	       }
+    	    }
+    	    if (type.equals("quiztitles")){
+    	       // ArrayList<HashMap<String,String>> marks = new ArrayList<HashMap<String,String>> ();
+    	        HashMap<String,HashMap<String,String>> marks = new  HashMap<String,HashMap<String,String>>();
+    	        for (String title_id : finished) { 
+    	            rs = stmt.executeQuery("select marks,total from quizmark where title_id ="+title_id+" and user_id = '"+user+"';");
+    	            HashMap<String, String> getMarks = get.resultSetToHashMap(rs);
+    	            marks.put(title_id, getMarks);
+    	        }
+            	titlesObj.put("mark", marks);
+    	    }
+    	    
     	    titlesObj.put("titles", titles);
     	    titlesObj.put("values", values);
+    	    titlesObj.put("finished", finishClassId);
     		String json = new Gson().toJson(titlesObj);
 	        writer.write(json);
 		}
 		catch (SQLException e) {
-		    System.out.println(e.getMessage());
+		    System.out.println("ReportGetTitles - "+e.getMessage());
 		}
 	}
 }
