@@ -18,40 +18,58 @@ public class GetQuestionsAuth implements Filter {
 
 		PrintWriter writer = response.getWriter();
 		HttpServletRequest req = (HttpServletRequest) request;
+		HttpServletResponse res = (HttpServletResponse) response;
 		HttpSession session = req.getSession();
-		CheckValidDetails checkDetails = new CheckValidDetails(
-				session.getAttribute("connection"));
-
-		String user = request.getParameter("user_id");
-		String class_id = request.getParameter("class_id");
-		String type = request.getParameter("type");
-		String id = request.getParameter("id");
-
-		if (checkDetails.userIdCheck(user)
-				&& checkDetails.classIdCheck(class_id)) {
-
-			if (type.equals("assignments") || type.equals("tests")
-					|| type.equals("quizs")) {
-
-				if (checkDetails.checkClassroomPermission(user, class_id)) {
-
-					if (checkDetails.checkID(id, type)) {
-						chain.doFilter(request, response);
-					} else {
-						writer.write("401");
-					}
-
-				} else {
-					writer.write("permission 400");
-				}
-
-			} else {
-				writer.write("400");
-			}
-		} else {
-			writer.write("404");
+		try {
+    		CheckValidDetails checkDetails = new CheckValidDetails(
+    				session.getAttribute("connection"));
+    
+    		String user = request.getParameter("user_id");
+    		String class_id = request.getParameter("class_id");
+    		String type = request.getParameter("type");
+    		String id = request.getParameter("id");
+            Cookie[] cookies = req.getCookies();
+    		String cookieValue = "";
+    		for(Cookie cookie : cookies) {
+    		   if ( cookie.getName().equals("Name") ) {
+    		       cookieValue = cookie.getValue();
+    		   }
+    		}
+    		ReUsable get = new ReUsable(session.getAttribute("connection")); 
+    		String cookieUser_id = get.getUserId(cookieValue);
+    		
+    		if(session.getAttribute("user_id") != null && cookieValue != "" &&  cookieUser_id != "") {
+        		if (checkDetails.userIdCheck(user)
+        				&& checkDetails.classIdCheck(class_id)) {
+        
+        			if (type.equals("assignments") || type.equals("tests")
+        					|| type.equals("quizs")) {
+        
+        				if (checkDetails.checkClassroomPermission(user, class_id)) {
+        
+        					if (checkDetails.checkID(id, type)) {
+        						chain.doFilter(request, response);
+        					} else {
+        						writer.write("401");
+        					}
+        
+        				} else {
+        					writer.write("permission 400");
+        				}
+        
+        			} else {
+        				writer.write("400");
+        			}
+        		} else {
+        			writer.write("404");
+        		}
+    		} else {
+    		    res.sendRedirect("/landingpage");
+    		}
 		}
-
+		catch(Exception e) {
+		    System.out.println("GetQuestionAuth - "+e.getMessage());
+		}
 	}
 
 	public void destroy() {

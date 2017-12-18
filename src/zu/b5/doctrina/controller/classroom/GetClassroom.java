@@ -16,7 +16,7 @@ public class GetClassroom extends HttpServlet {
 			HttpServletResponse response) throws ServletException, IOException {
 		PrintWriter writer = response.getWriter();
 		HttpSession session = request.getSession();
-		session.setAttribute("function", "null");
+		session.setAttribute("load", "null");
 		GetClassroomProcess process = new GetClassroomProcess(session.getAttribute("connection"));
 		int course_id = Integer.parseInt(request.getParameter("course_id"));
 		

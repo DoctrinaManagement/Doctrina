@@ -19,29 +19,48 @@ public class NotificationClickAuth implements Filter {
 
 		PrintWriter writer = response.getWriter();
 		HttpServletRequest req = (HttpServletRequest) request;
+		HttpServletResponse res = (HttpServletResponse) response;
 		HttpSession session = req.getSession();
 		Statement stmt = null;
+		String cookieValue = "";
+		Cookie[] cookies = req.getCookies();
+		for(Cookie cookie : cookies) {
+		   if ( cookie.getName().equals("Name") ) {
+		       cookieValue = cookie.getValue();
+		   }
+		}
 		try {
-		    if ((request.getParameter("user_id")+"") != "" && (request.getParameter("user_id")+"") != null) {
-    			stmt = ((Connection) session.getAttribute("connection")).createStatement();
-    			String msg = "'" + request.getParameter("message") + "'";
-    			String user = "'" + request.getParameter("user_id") + "'";
-    			String Query = "select * from notification where message = "
-    							+ msg+"AND user_id="+user+";";
-    			ResultSet rs = stmt
-    					.executeQuery(Query);
-    
-    			ReUsable get = new ReUsable(session.getAttribute("connection"));
-    			HashMap<String, String> details = get.resultSetToHashMap(rs);
-    
-    			if (details.size() != 0 && details.get("user_id").equals((request.getParameter("user_id")+"")) && details.get("message").equals((request.getParameter("message")+""))) {
-    				chain.doFilter(request, response);
-    			} else {
-    				throw new Exception();
-    			}
-		    }
-		} catch (Exception e) {
-			writer.write("404");
+    		ReUsable get = new ReUsable(session.getAttribute("connection")); 
+    		String cookieUser_id = get.getUserId(cookieValue);
+    		
+    		if(session.getAttribute("user_id") != null && cookieValue != "" &&  cookieUser_id != "") {
+        		try {
+        		    if ((request.getParameter("user_id")+"") != "" && (request.getParameter("user_id")+"") != null) {
+            			stmt = ((Connection) session.getAttribute("connection")).createStatement();
+            			String msg = "'" + request.getParameter("message") + "'";
+            			String user = "'" + request.getParameter("user_id") + "'";
+            			String Query = "select * from notification where message = "
+            							+ msg+"AND user_id="+user+";";
+            			ResultSet rs = stmt
+            					.executeQuery(Query);
+            
+            			HashMap<String, String> details = get.resultSetToHashMap(rs);
+            
+            			if (details.size() != 0 && details.get("user_id").equals((request.getParameter("user_id")+"")) && details.get("message").equals((request.getParameter("message")+""))) {
+            				chain.doFilter(request, response);
+            			} else {
+            				throw new Exception();
+            			}
+        		    }
+        		} catch (Exception e) {
+        			writer.write("404");
+        		}
+    		} else {
+    		    res.sendRedirect("/landingpage");
+    		}
+		}
+		catch(Exception e) {
+		    System.out.println("NotificationClickAuth - "+e.getMessage());
 		}
 	}
 

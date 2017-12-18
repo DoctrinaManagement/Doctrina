@@ -7,12 +7,12 @@
     <link rel="shortcut icon" href="../IMAGES/D-logo.png" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-    <link rel="stylesheet" href="../CSS/upload_video.css">
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
     <script src="//apis.google.com/js/client:plusone.js"></script>
     <script src="../JS/cors_upload.js"></script>
     <script src="../JS/upload_video.js"></script>
-
+    <script src="./JS/player.js"></script>
+    
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="../JS/classroom.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/2.0.0/handlebars.js"></script>
@@ -24,8 +24,17 @@
     var commentId;
     var liketype;
     var likeId;
+    var current_id;
+    document.addEventListener("visibilitychange", function() {
+      location.reload();
+    });
+    var class_id = "<%=session.getAttribute("class_id")%>";
+
          function signOut() {
             var auth2 = gapi.auth2.getAuthInstance();
+            $.get("http://basheerahameds-1508.zcodeusers.com/logout", function(data, status) {
+                
+            });
             auth2.signOut().then(function () {
               location.href = "/landingpage";
             });
@@ -46,7 +55,9 @@
     function logout() {
         FB.getLoginStatus(function(ret) {
             if(ret.authResponse) {
-
+                $.get("http://basheerahameds-1508.zcodeusers.com/logout", function(data, status) {
+                
+                 });
                 FB.logout(function(response) {
                    location.href = "/landingpage";
                 });
@@ -135,7 +146,22 @@
     
     var onloaded = function() {
         socket();
+        setVarId("<%=session.getAttribute("user_id")%>","<%=session.getAttribute("class_id")%>");
+        getVideos();
+         if(document.cookie.indexOf("Name") == -1) {
+            location.href = "/landingpage"
+        }
         //permission();
+    }
+    
+    function getVideos () {
+        $.get("/getVideos", {"user_id":"<%=session.getAttribute("user_id")%>", "class_id":"<%=session.getAttribute("class_id")%>"}, function(data, status){
+            var videoObj = JSON.parse(data);
+            var tempTemplete = document.getElementById("video-templete").innerHTML;
+            var templete  = Handlebars.compile(tempTemplete);
+            document.getElementById("video-render").innerHTML= templete(videoObj);
+            finished(videoObj.finished);
+        })    
     }
     
     var GO = function() {
@@ -155,6 +181,9 @@
             }
         });
     }
+    
+    var titleReg = /^[a-zA-Z0-9]{3,15}$/;
+    var quesReg = /^\w[\w ]{5,100}$/;
     // Add Assignment Questions
     function AddAssignmentQuestions() {
         var title = document.getElementById("ass_title").value;
@@ -162,16 +191,22 @@
         var questionsList = [];
         
         for (i = 0; question[i]; i++) {
-            console.log(question[i].innerText);
-            questionsList.push(question[i].innerText);
+            if (quesReg.test(question[i].innerText)){
+             questionsList.push(question[i].innerText);
+            }
         }
+        if (titleReg.test(title)) {
             $.get("/AddAssignment", {"class_id":"<%=session.getAttribute("class_id")%>", "title":title, "questions":JSON.stringify(questionsList)}, function(data, status) {
                 if (data == "200") {
                     $(".blur").trigger("click");
-                    $("#ass-add-templete").html("<p>Add Asssignments</p><input type='text' class='srch_title' id='ass_title' placeholder='Enter the Assignment title' /><ol class='asmnts'><li><div contenteditable='true' class='ass_question' placeholder='Enter your question here...'></div><i class='fa fa-times' onclick='del_input(this)' aria-hidden='true'></i><p style='clear: both'></p></li></ol><button type='text'>+ Add new</button><div onclick='AddAssignmentQuestions()'>Submit</div>");
+                    $("#ass-add-templete").html("<p>Add Asssignments</p><input type='text' class='srch_title' id='ass_title' placeholder='Enter the Assignment title' /><ol class='asmnts'><li><div contenteditable='true' class='ass_question' placeholder='Enter your question here...'></div><i class='fa fa-times' onclick='del_input(this)' aria-hidden='true'></i><p style='clear: both'></p></li></ol><button type='text' onclick='addnewAssignment()'>+ Add new</button><div onclick='AddAssignmentQuestions()'>Submit</div>");
                     alert('Success');
                 }
             })
+        }
+        else {
+            alert("Something Wrong in assignment!");
+        }
     }
     //Test Questions Add
     function AddTestQuestions() {
@@ -180,42 +215,60 @@
         var questionsList = [];
         
         for (i = 0; question[i]; i++) {
-            console.log(question[i].innerText);
-            questionsList.push(question[i].innerText);
+            if (quesReg.test(question[i].innerText)){
+                questionsList.push(question[i].innerText);
+            }
         }
+        
+        if (titleReg.test(title)) {
             $.get("/AddTest", {"class_id":"<%=session.getAttribute("class_id")%>", "title":title, "questions":JSON.stringify(questionsList)}, function(data, status) {
                 if (data == "200") {
                     $(".blur").trigger("click");
-                    $("#test-add-templete").html("<p>Add Test Questions</p><input type='text' class='srch_title' id='test_title' placeholder='Enter the Test title' /><ol class='tests'><li><div contenteditable='true' class='test_question' placeholder='Enter your question here...'></div><i class='fa fa-times' onclick='del_input(this)' aria-hidden='true'></i><p style='clear: both'></p></li></ol><button type='text'>+ Add new</button><div onclick='AddTestQuestions()'>Submit</div>");
+                    $("#test-add-templete").html("<p>Add Test Questions</p><input type='text' class='srch_title' id='test_title' placeholder='Enter the Test title' /><ol class='tests'><li><div contenteditable='true' class='test_question' placeholder='Enter your question here...'></div><i class='fa fa-times' onclick='del_input(this)' aria-hidden='true'></i><p style='clear: both'></p></li></ol><button type='text' onclick='addnewtest()'>+ Add new</button><div onclick='AddTestQuestions()'>Submit</div>");
                     alert('Success');
                 }
             })
+        }
+        else {
+            alert("Something wrong in test!");
+        }
     }
+    
+    var quizanswerReg = /^[a-d]{1}$/;
     //QuizQuestionAdd
     function AddQuizQuestions() {
     var title = document.getElementById("quiz_title").value;
         var output = [];
-    
+        
         var a = document.getElementsByClassName("quiz_question");
         var answer = document.getElementsByClassName("ans-slct");
         for (i=0; a[i]; i++) {
         	var obj = {};
-            obj["question"] = a[i].innerText;
-        	obj["answer"] = answer[i].value;
+        	if (quesReg.test(a[i].innerText) && quizanswerRegt .test(answer[i].value)) {
+                obj["question"] = a[i].innerText;
+        	    obj["answer"] = answer[i].value;
+        	}
+        	else {
+        	    alert("Something Wrong in quiz!");
+        	}
             for(j = 1; j < 5 ; j++) {
             	var b = document.getElementsByClassName("option"+j);
         		obj["option"+j] = b[i].value;
         	}
             output.push(obj);
-        }console.log(output);
-        
-        sentAddQuizQuestions(output,title);
+        }
+        if (titleReg.test(title)){
+            sentAddQuizQuestions(output,title);
+        }
+        else{
+            alert("Something wrong!");
+        }
     }
     function sentAddQuizQuestions(array, title) {
         $.get("/AddQuizQuestions", {"class_id":"<%=session.getAttribute("class_id")%>","title":title, "questionAnswers":JSON.stringify(array)}, function(data, status) {
             if (data = "200") {
                 $(".blur").trigger("click");
-                $("#quiz-add-templete").html("<p>Add Quiz Questions</p><input class='srch_title' id='quiz_title' type='text' placeholder='Enter the Quiz title' /><ol class='quizzes'><li><div contenteditable='true' class='quiz_question' placeholder='Enter your question here...'></div><i class='fa fa-times' onclick='del_input(this)' aria-hidden='true'></i><p style='clear: both'></p><section class='options'><span>(a)</span><input type='text' class='option1'/><span>(b)</span><input type='text' class='option2'/><span>(c)</span><input type='text' class='option3'/><span>(d)</span><input type='text' class='option4'/></section><span>Answer : </span><select name='qus1' id='qus1' class='ans-slct'><option value='a'>a</option><option value='b'>b</option><option value='c'>c</option><option value='d'>d</option></select></li></ol><button type='text'>+ Add new</button><div onclick='AddQuizQuestions()'>Submit</div>");
+                $("#quiz-add-templete").html("<p>Add Quiz Questions</p><input class='srch_title' id='quiz_title' type='text' placeholder='Enter the Quiz title' /><ol class='quizzes'><li><div contenteditable='true' class='quiz_question' placeholder='Enter your question here...'></div><i class='fa fa-times' onclick='del_input(this)' aria-hidden='true'></i><p style='clear: both'></p><section class='options'><span>(a)</span><input type='text' class='option1'/><span>(b)</span><input type='text' class='option2'/><span>(c)</span><input type='text' class='option3'/><span>(d)</span><input type='text' class='option4'/></section><span>Answer : </span><select name='qus1' id='qus1' class='ans-slct'><option value='a'>a</option><option value='b'>b</option><option value='c'>c</option><option value='d'>d</option></select></li></ol><button type='text' onclick='addnewQuiz()'>+ Add new</button><div onclick='AddQuizQuestions()'>Submit</div>");
                 alert("Success...");
             }
         })
@@ -317,6 +370,14 @@
         });
     }
     
+    
+    var x = setInterval(function() {
+            var checking =  "<%=session.getAttribute("class_id")%>";
+            if(class_id != checking) {
+                location.reload();
+            }
+        }, 1000);
+    
     function leaveClassroom() {
         $.get("/leaveClassroom", function(data, status) {
             if(data == "ok"){
@@ -326,16 +387,19 @@
         });
     }
     
+    var ansReg = /^[a-zA-Z0-9].{10,}$/;
     // Answers Get
     function SendAnswersFromAssignments() {
     
         var ass_answers = [];
         var ass_takeValues = document.getElementsByClassName("AssignmentAnswers");
-    
+        
         for (i = 0; ass_takeValues[i]; i++) {
         var ass_obj = {};
             ass_obj["id"] = ass_takeValues[i].id;
-            ass_obj["answer"] = ass_takeValues[i].value;
+            if (ansReg.test(ass_takeValues[i].value)) {
+                ass_obj["answer"] = ass_takeValues[i].value;
+            }
             ass_answers.push(ass_obj);
         }
         $.post("/SendAnswers", {"answers":JSON.stringify(ass_answers), "type":"assignmentanswer"}, function(data, status) {
@@ -354,7 +418,9 @@
         for (i = 0; test_takeValues[i]; i++) {
         var test_obj = {};
             test_obj["id"] = test_takeValues[i].id;
-            test_obj["answer"] = test_takeValues[i].value;
+            if (ansReg.test(test_takeValues[i].value)) {
+                test_obj["answer"] = test_takeValues[i].value;
+            }
             test_answers.push(test_obj);
         }
     
@@ -377,12 +443,13 @@
     		for (i = 0;  a[i]; i++) {
         		
               if (a[i].checked) {
+                if ( quizanswerReg.test(a[i].value) ){
                   quiz_obj["answer"] = a[i].value;
+                }
               }
        	 	}
             quiz_answers.push(quiz_obj);
-    	}    
-        console.log(quiz_answers);
+    	}
         $.post("/SendAnswers", {"answers":JSON.stringify(quiz_answers), "type":"quizanswer"}, function(data, status) {
             //if (data == "200") {
             //console.log(data);
@@ -473,11 +540,13 @@
         }
         return postObj;
     }
-    
+    var postReg = /^[a-zA-Z0-9].{3,}$/;
     function postbtnClick() {
         var message = document.getElementById("post_msg").value;
+        $(".comment").remove();
         $(".post_btn").attr("disabled","true");
-        if(message != "") {
+        
+        if(postReg.test(message)) {
             $.get("/addfeeds",{"user_id":"<%=session.getAttribute("user_id")%>","class_id": "<%=session.getAttribute("class_id")%>","message":message,"type" : "posts" },  function(data, status) {
                 document.getElementById("post_msg").value = "";
                 var postObj = JSON.parse(data);
@@ -486,6 +555,9 @@
                 $("#post_btn").html("<button class='post_btn' onclick='postbtnClick()'>POST</button>");
                 webSocket.send("all");
             });
+        }
+        else {
+            alert("Something wrong in postMesage");
         }
     }
     
@@ -498,7 +570,7 @@
         postId = post_id
         post_id = post_id.substring(3);
         var message = document.getElementById("commentMsg").value;
-        if(message !="") {
+        if(postReg.test(message)) {
             $(".post_btn").attr("disabled","true");
             $.get("/addfeeds",{"id":post_id,"user_id":"<%=session.getAttribute("user_id")%>","class_id": "<%=session.getAttribute("class_id")%>","message":message,"type" : "comments" },  function(data, status) {
                 var commentObj = JSON.parse(data);
@@ -511,6 +583,9 @@
                 $("#post_btn").html("<button class='post_btn' onclick='postbtnClick()'>POST</button>");
                 webSocket.send("all");
             });
+        }
+        else {
+            alert("Something wrong in commentMesage");
         }
     }
     
@@ -525,7 +600,7 @@
         commentId = com_id
         com_id = com_id.substring(3);
         var message = document.getElementById("replyMsg").value;
-        if(message !="") {
+        if(postReg.test(message)) {
             $(".post_btn").attr("disabled","true");
             $.get("/addfeeds",{"id":com_id,"user_id":"<%=session.getAttribute("user_id")%>","class_id": "<%=session.getAttribute("class_id")%>","message":message,"type" : "replies" },  function(data, status) {
                 $("#post_btn").html("<button class='post_btn' onclick='postbtnClick()'>POST</button>");
@@ -539,6 +614,9 @@
                 
                 webSocket.send("all");
             });
+        }
+        else {
+            alert("Something wrong in replyMesage");
         }
     }
     //ReportDetails
@@ -581,6 +659,39 @@
             }
         })
     }
+    
+    function addnewQuiz() {//alert();
+         $(".quizzes").append("<li> <div contenteditable='true' class='quiz_question' placeholder='Enter your quiz question here...'></div> <i class='fa fa-times' onclick='del_input(this,1)' aria-hidden='true'></i> <p style='clear: both'></p> <section class='options' > <span>(a)</span> <input type='text' class='option1'/> <span>(b)</span> <input type='text' class='option2'/> <span>(c)</span> <input type='text' class='option3'/> <span>(d)</span> <input type='text' class='option4'/> </section> <span>Answer : </span> <select name='qus1' id='qus1' class='ans-slct'> <option value='a' >a</option> <option value='b' >b</option> <option value='c' >c</option> <option value='d' >d</option> </select> </li>");
+    };
+    
+    function addnewtest() {
+        $(".tests").append("<li> <div contenteditable='true' class='test_question' placeholder='Enter your question here...'></div> <i class='fa fa-times' onclick='del_input(this,2)' aria-hidden='true'></i> <p style='clear: both'></p> </li>");
+    }
+    
+    function addnewAssignment() {
+        $(".asmnts").append("<li> <div contenteditable='true' class='ass_question' placeholder='Enter your question here...'></div> <i class='fa fa-times' onclick='del_input(this,2)' aria-hidden='true'></i> <p style='clear: both'></p> </li>");
+    }
+    
+    function getVideoId(id) {
+        current_id = id;
+        $.get("/getvideoid", {"class_id":"<%=session.getAttribute("class_id")%>", "user_id":"<%=session.getAttribute("user_id")%>", "videoId" : id }, function(data, status) {
+           var values = JSON.parse(data);
+           console.log(values);
+            PlayerStart(values.video_id, values.time, current_id);
+            
+        })
+    }
+    function finished(values) {
+        for (i = 0; i < values.length;  i++) {
+            document.getElementById("lock_"+values[i]).innerHTML = "<img src='../IMAGES/play.png' alt='play' />";
+            document.getElementById("lock_"+values[i]).setAttribute("onclick", "getVideoId(\""+values[i]+"\")");
+        }
+    }
+    
+    function closeVideo() {
+        stopVideo();
+        location.reload();
+    }
     </script>
 </head>
 
@@ -589,7 +700,7 @@
         <!--   Header   -->
         
        <header>
-            <img src="../IMAGES/D.gif" alt="D logo" />
+            <img src="../IMAGES/D.gif" alt="D logo" onclick="location.href='/doctrina.index.do'"/>
                 <div class="header_div">
                    <div>
                         <i class="fa fa-bell-o" aria-hidden="true"></i>
@@ -667,6 +778,16 @@
                 {{/each}}
             </script>
             
+             <script id="video-templete" type="text/x-handlebars-templete">
+                {{#each videos}}
+                    <div>
+                    <p>{{title}}</p>
+                        <div class="opac" id = 'lock_{{video_id}}' >
+                            <img src="../IMAGES/locked.png" alt="lock" />
+                        </div>
+                    </div>
+                {{/each}}
+            </script>
           <span style="clear:both"></span>
        </header> 
         
@@ -698,7 +819,7 @@
                         <%}
                     %>
                 <ul class="ul1">
-                    <li>Video</li>
+                    <li onclick="getVideos()">Video</li>
                     <li onclick="getQuizTitles()">Quiz</li>
                     <li onclick="getAssignmentTitles()">Assignment</li>
                     <li onclick="getTestTitles()">Test</li>
@@ -712,7 +833,7 @@
                 </ul>
                 <div class="drop">
                     <ul class="ul2">
-                        <li onclick="location.href='/videoUpload'"> Video</li>
+                        <li> Video</li>
                         <li> Quiz Questions</li>
                         <li> Assignments</li>
                         <li> Test Questions</li>
@@ -722,105 +843,13 @@
             </nav>
             <div class="show_div">
                 <!--Show the video div-->
-                <div class="video_div">
-                    <div>
-                        <iframe width="180" height="200" src="https://www.youtube.com/embed/Cfd9DOnuF9w" frameborder="0" gesture="media" allow="encrypted-media" allowfullscreen></iframe>
-                        <p>Html and Css part-1.mp4</p>
-                        <div class="opac">
-                            <img src="../IMAGES/play.png" alt="play" />
-                        </div>
-                    </div>
-                    <div>
-                        <iframe width="180" height="200" src="https://www.youtube.com/embed/Cfd9DOnuF9w" frameborder="0" gesture="media" allow="encrypted-media" allowfullscreen></iframe>
-                        <p>Css tricks-1.mp4</p>
-                        <div class="lock">
-                            <div>
-                                <img src="../IMAGES/locked.png" alt="Locked" />
-                            </div>
-                        </div>
-                    </div>
-                    <div>
-                        <iframe width="180" height="200" src="https://www.youtube.com/embed/Cfd9DOnuF9w" frameborder="0" gesture="media" allow="encrypted-media" allowfullscreen></iframe>
-                        <p>JS.mp4</p>
-                        <div class="lock">
-                            <div>
-                                <img src="../IMAGES/locked.png" alt="Locked" />
-                            </div>
-                        </div>
-                    </div>
-                    <div>
-                        <iframe width="180" height="200" src="https://www.youtube.com/embed/Cfd9DOnuF9w" frameborder="0" gesture="media" allow="encrypted-media" allowfullscreen></iframe>
-                        <p>Jquery.mp4</p>
-                        <div class="lock">
-                            <div>
-                                <img src="../IMAGES/locked.png" alt="Locked" />
-                            </div>
-                        </div>
-                    </div>
-                    <div>
-                        <iframe width="180" height="200" src="https://www.youtube.com/embed/Cfd9DOnuF9w" frameborder="0" gesture="media" allow="encrypted-media" allowfullscreen></iframe>
-                        <p>Java.mp4</p>
-                        <div class="lock">
-                            <div>
-                                <img src="../IMAGES/locked.png" alt="Locked" />
-                            </div>
-                        </div>
-                    </div>
-                    <div>
-                        <iframe width="180" height="200" src="https://www.youtube.com/embed/Cfd9DOnuF9w" frameborder="0" gesture="media" allow="encrypted-media" allowfullscreen></iframe>
-                        <p>Python.mp4</p>
-                        <div class="lock">
-                            <div>
-                                <img src="../IMAGES/locked.png" alt="Locked" />
-                            </div>
-                        </div>
-                    </div>
-                    <div>
-                        <iframe width="180" height="200" src="https://www.youtube.com/embed/Cfd9DOnuF9w" frameborder="0" gesture="media" allow="encrypted-media" allowfullscreen></iframe>
-                        <p>Handlebar.mp4</p>
-                        <div class="lock">
-                            <div>
-                                <img src="../IMAGES/locked.png" alt="Locked" />
-                            </div>
-                        </div>
-                    </div>
-                    <div>
-                        <iframe width="180" height="200" src="https://www.youtube.com/embed/Cfd9DOnuF9w" frameborder="0" gesture="media" allow="encrypted-media" allowfullscreen></iframe>
-                        <p>Programming.mp4</p>
-                        <div class="lock">
-                            <div>
-                                <img src="../IMAGES/locked.png" alt="Locked" />
-                            </div>
-                        </div>
-                    </div>
-                    <div>
-                        <iframe width="180" height="200" src="https://www.youtube.com/embed/Cfd9DOnuF9w" frameborder="0" gesture="media" allow="encrypted-media" allowfullscreen></iframe>
-                        <p>Java Script.mp4</p>
-                        <div class="lock">
-                            <div>
-                                <img src="../IMAGES/locked.png" alt="Locked" />
-                            </div>
-                        </div>
-                    </div><div>
-                        <iframe width="180" height="200" src="https://www.youtube.com/embed/Cfd9DOnuF9w" frameborder="0" gesture="media" allow="encrypted-media" allowfullscreen></iframe>
-                        <p>Design.mp4</p>
-                        <div class="lock">
-                            <div>
-                                <img src="../IMAGES/locked.png" alt="Locked" />
-                            </div>
-                        </div>
-                    </div>
+                <div class="video_div" id = 'video-render'>
+                    
                 </div>
+                
                 <section>
-                    <i class='fa fa-times close' aria-hidden='true' title='Delete'></i>
-                    <div class="vdo">
-                        <iframe width="100%" height="100%" src="https://www.youtube.com/embed/38Y-DxTukuY" frameborder="0" gesture="media" allow="encrypted-media" allowfullscreen></iframe>
-                        <div class="links">
-                            <p>Reference Links</p>
-                            <a href="https://www.w3schools.com/charsets/ref_utf_dingbats.asp" target="_blank">https://www.w3schools.com/charsets/ref_utf_dingbats.asp</a>
-                            <a href="http://www.way2tutorial.com/" target="_blank">http://www.way2tutorial.com/</a>
-                        </div>
-                    </div>
+                    <i class='fa fa-times close' aria-hidden='true' title='Delete' onclick="closeVideo()"></i>
+                    <div id="player" style="display:none"></div>
                 </section>
 
                 <!-- Assignments titles-->
@@ -971,6 +1000,35 @@
                 <div class="blur"></div>
     
                 <!-- Assignment -->
+                
+                 <!-- Video -->
+                 
+                <div class="add-video">
+                
+                    <p>Add Videos</p>
+                    <!--<label for="upload" id="">Upload Video</label>-->
+                     <span id="signinButton" style="display:none !important" class="pre-sign-in">
+                          <span
+                            class="g-signin"
+                            data-callback="signinCallback"
+                            data-clientid="181102062803-fdebk3j2fosglc2nudniiq9ea1rab74j.apps.googleusercontent.com"
+                            data-cookiepolicy="single_host_origin"
+                            data-scope="https://www.googleapis.com/auth/youtube.upload https://www.googleapis.com/auth/youtube">
+                          </span>
+                    </span>
+                    
+                    <input type="file" id="upload" style="margin:auto" single  accept="video/*"/>
+                    <input type="text" id="title" placeholder="Title of this video" class="vdo-name" />
+                    <div id="button">Submit</div>
+                   
+                    <div style="margin: 0px;background: white;">
+                      <div class="during-upload">
+                        <p><span id="percent-transferred"></span>% done (<span id="bytes-transferred"></span>/<span id="total-bytes"></span> bytes)</p>
+                        <progress id="upload-progress" max="1" value="0"></progress>
+                      </div>
+                    </div>
+                      
+                </div>
     
                 <div class="add-asmnt" id="ass-add-templete">
                     <p>Add Asssignments</p>
@@ -982,7 +1040,7 @@
                             <p style="clear: both"></p>
                         </li>
                     </ol>
-                    <button type="text">+ Add new</button>
+                    <button type="text" onclick='addnewAssignment()'>+ Add new</button>
                     <div onclick="AddAssignmentQuestions()">Submit</div>
                 </div>
     
@@ -998,7 +1056,7 @@
                             <p style="clear: both"></p>
                         </li>
                     </ol>
-                    <button type="text">+ Add new</button>
+                    <button type="text" onclick='addnewtest()'>+ Add new</button>
                     <div onclick="AddTestQuestions()">Submit</div>
                 </div>
     
@@ -1033,7 +1091,7 @@
                         </select>
                     </li>
                 </ol>
-                <button type="text">+ Add new</button>
+                <button type="text" onclick = 'addnewQuiz()'>+ Add new</button>
                 <div onclick="AddQuizQuestions()">Submit</div>
             </div>
     
@@ -1193,6 +1251,11 @@
                     </div>
                 </main>
         </script>
+        
+    <script src="//apis.google.com/js/client:plusone.js"></script>
+    <script src="JS/cors_upload.js"></script>
+    <script src="JS/upload_video.js"></script>
+    
     <script src="https://apis.google.com/js/platform.js" async defer></script>
     <meta name="google-signin-client_id" content="176409898115-eoi5sggfanbiq08h1e6soi4vtcm30mgf.apps.googleusercontent.com">
     <div class="g-signin2" data-onsuccess="onSignIn" style="display:none"></div>

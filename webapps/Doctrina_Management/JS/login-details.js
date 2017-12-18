@@ -1,4 +1,6 @@
 var check_var;
+
+
 function check_but(str) {
     check_var = str;
 }

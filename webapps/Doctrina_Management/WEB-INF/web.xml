@@ -15,8 +15,7 @@
         <url-pattern>/landingpage</url-pattern>
     </servlet-mapping>
 <!--/1st landing page when app open is execute  -->
-  
-  
+ 
     <servlet>
         <servlet-name>resultSignup</servlet-name>
         <servlet-class>zu.b5.doctrina.controller.account.Signup</servlet-class>
@@ -36,8 +35,6 @@
       <filter-name>signup</filter-name>  
       <url-pattern>/doctrina.signup</url-pattern>  
     </filter-mapping>
-  
-  
   
   <!--signin page  -->
 
@@ -200,7 +197,7 @@
 
     <servlet-mapping>
         <servlet-name>getMyClass</servlet-name>
-        <url-pattern>/myclassroom</url-pattern>
+        <url-pattern>/getmyclassroom</url-pattern>
     </servlet-mapping>
 <!--/getMyclassroom  -->
 
@@ -279,7 +276,7 @@
 <!-- videos get  -->
     <servlet>
         <servlet-name>getVideoResult</servlet-name>
-        <servlet-class>zu.b5.doctrina.controller.classroom.getVideos</servlet-class>
+        <servlet-class>zu.b5.doctrina.controller.insideclassroom.GetVideos</servlet-class>
     </servlet>
     
     <servlet-mapping>
@@ -288,18 +285,61 @@
     </servlet-mapping>
     
     <filter>
-        <filter-name>getVideos</filter-name>
+        <filter-name>Video</filter-name>
         <filter-class>zu.b5.doctrina.controller.authorization.GetVideosAuth</filter-class>
     </filter>
     
     <filter-mapping>
-        <filter-name>getVideos</filter-name>
+        <filter-name>Video</filter-name>
         <url-pattern>/getVideos</url-pattern>
     </filter-mapping>
 <!--/videos get -->
 
-
+<!-- videos get  -->
+    <servlet>
+        <servlet-name>getVideoidResult</servlet-name>
+        <servlet-class>zu.b5.doctrina.controller.insideclassroom.GetVideoId</servlet-class>
+    </servlet>
     
+    <servlet-mapping>
+        <servlet-name>getVideoidResult</servlet-name>
+        <url-pattern>/getvideoid</url-pattern>
+    </servlet-mapping>
+    
+    <filter>
+        <filter-name>VideoId</filter-name>
+        <filter-class>zu.b5.doctrina.controller.authorization.GetVideoIdAuth</filter-class>
+    </filter>
+    
+    <filter-mapping>
+        <filter-name>VideoId</filter-name>
+        <url-pattern>/getvideoid</url-pattern>
+    </filter-mapping>
+<!--/videos get -->
+
+
+<!-- videos get  -->
+    <servlet>
+        <servlet-name>VideoStatusupdate</servlet-name>
+        <servlet-class>zu.b5.doctrina.controller.insideclassroom.SaveUpdate</servlet-class>
+    </servlet>
+    
+    <servlet-mapping>
+        <servlet-name>VideoStatusupdate</servlet-name>
+        <url-pattern>/videostatus</url-pattern>
+    </servlet-mapping>
+    
+    <filter>
+        <filter-name>VideoStatus</filter-name>
+        <filter-class>zu.b5.doctrina.controller.authorization.SaveUpdateAuth</filter-class>
+    </filter>
+    
+    <filter-mapping>
+        <filter-name>VideoStatus</filter-name>
+        <url-pattern>/videostatus</url-pattern>
+    </filter-mapping>
+    
+<!--/videos get -->
 
     <servlet>
         <servlet-name>videoupload</servlet-name>
@@ -691,6 +731,28 @@
         <url-pattern>/getreporttitles</url-pattern>
     </filter-mapping>
     
+    <!-- VideoDetails-->
+    
+    <servlet>
+        <servlet-name>getVideoReports</servlet-name>
+        <servlet-class>zu.b5.doctrina.controller.report.getVideoReports</servlet-class>
+    </servlet>
+    
+    <servlet-mapping>
+        <servlet-name>getVideoReports</servlet-name>
+        <url-pattern>/getVideoReports</url-pattern>
+    </servlet-mapping>
+    
+    <filter>
+        <filter-name>getVideoReports</filter-name>
+        <filter-class>zu.b5.doctrina.controller.authorization.GetTitlesAuth</filter-class>
+    </filter>
+    
+    <filter-mapping>
+        <filter-name>getVideoReports</filter-name>
+        <url-pattern>/getVideoReports</url-pattern>
+    </filter-mapping>
+    
     <!-- /ReportGetTitles -->
         
      <!--ReportGetAnswers -->
@@ -714,25 +776,116 @@
             <url-pattern>/getreportanswers</url-pattern>
         </filter-mapping>
      <!--/ReportGetAnaaswers-->
+     
+     <!--insert Video -->
+        <servlet>
+            <servlet-name>insertVideoresult</servlet-name>
+            <servlet-class>zu.b5.doctrina.controller.insideclassroom.InsertVideo</servlet-class>
+        </servlet>
+        
+        <servlet-mapping>
+            <servlet-name>insertVideoresult</servlet-name>
+            <url-pattern>/insertvideo</url-pattern>
+        </servlet-mapping>
+        
+        <filter>
+            <filter-name>insertVideo</filter-name>
+            <filter-class>zu.b5.doctrina.controller.authorization.InsertVideoAuth</filter-class>
+        </filter>
+        
+        <filter-mapping>
+            <filter-name>insertVideo</filter-name>
+            <url-pattern>/insertvideo</url-pattern>
+        </filter-mapping>
+     <!--/insert Video-->
     
 <!-- /Reports -->
+
+<!-- rating -->
+
+        <!-- getRating -->
+
+        <servlet>
+            <servlet-name>ratingsubmit</servlet-name>
+            <servlet-class>zu.b5.doctrina.controller.report.setRating</servlet-class>
+        </servlet>
+        
+        <servlet-mapping>
+            <servlet-name>ratingsubmit</servlet-name>
+            <url-pattern>/ratingsubmit</url-pattern>
+        </servlet-mapping>
+        
+        <filter>
+            <filter-name>ratingsubmitAuth</filter-name>
+            <filter-class>zu.b5.doctrina.controller.authorization.setRatingAuth</filter-class>
+        </filter>
+        
+        <filter-mapping>
+            <filter-name>ratingsubmitAuth</filter-name>
+            <url-pattern>/ratingsubmit</url-pattern>
+        </filter-mapping>
+        
+        <!-- getRating -->
+        
+        <servlet>
+            <servlet-name>getrating</servlet-name>
+            <servlet-class>zu.b5.doctrina.controller.report.getRating</servlet-class>
+        </servlet>
+        
+        <servlet-mapping>
+            <servlet-name>getrating</servlet-name>
+            <url-pattern>/getrating</url-pattern>
+        </servlet-mapping>
+        
+        <filter>
+            <filter-name>getratingAuth</filter-name>
+            <filter-class>zu.b5.doctrina.controller.authorization.getRatingAuth</filter-class>
+        </filter>
+        
+        <filter-mapping>
+            <filter-name>getratingAuth</filter-name>
+            <url-pattern>/getrating</url-pattern>
+        </filter-mapping>
+<!-- /rating -->
+
+<!--Logout -->
     <servlet>
-        <servlet-name>urlLoader</servlet-name>
-        <servlet-class>zu.b5.doctrina.controller.url.CourseLoad</servlet-class>
+        <servlet-name>logout</servlet-name>
+        <servlet-class>zu.b5.doctrina.controller.account.Logout</servlet-class>
     </servlet>
-    
+
     <servlet-mapping>
-        <servlet-name>urlLoader</servlet-name>
-        <url-pattern>/course/*</url-pattern>
+        <servlet-name>logout</servlet-name>
+        <url-pattern>/logout</url-pattern>
     </servlet-mapping>
+
+<!--/Logout -->
+
+<!-- history.pushState() -->
+    <!-- course-->
+        <servlet>
+            <servlet-name>coursesResult</servlet-name>
+            <servlet-class>zu.b5.doctrina.controller.url.CourseLoad</servlet-class>
+        </servlet>
+        
+        <servlet-mapping>
+            <servlet-name>coursesResult</servlet-name>
+            <url-pattern>/course/*</url-pattern>
+        </servlet-mapping>
+        
+    <!--/course -->
     
-    <!--<servlet>-->
-    <!--    <servlet-name>Reload</servlet-name>-->
-    <!--    <servlet-class>zu.b5.doctrina.controller.url.Reload</servlet-class>-->
-    <!--</servlet>-->
-    
-    <!--<servlet-mapping>-->
-    <!--    <servlet-name>Reload</servlet-name>-->
-    <!--    <url-pattern>/*</url-pattern>-->
-    <!--</servlet-mapping>-->
+    <!-- myclassroom -->
+        <servlet>
+            <servlet-name>myclassroomload</servlet-name>
+            <servlet-class>zu.b5.doctrina.controller.url.Myclassroom</servlet-class>
+        </servlet>
+        
+        <servlet-mapping>
+            <servlet-name>myclassroomload</servlet-name>
+            <url-pattern>/myclassroom</url-pattern>
+        </servlet-mapping>
+    <!-- /myclassroom -->
+
+<!--/ histroy.pushState() -->
 </web-app>

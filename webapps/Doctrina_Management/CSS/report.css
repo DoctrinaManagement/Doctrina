@@ -6,6 +6,9 @@ body, html, .whole{
     width: 100%;
     margin: 0;
 }
+body {
+    overflow: hidden;
+}
 .main {
     width: calc(100% - 240px);
     overflow: auto
@@ -17,10 +20,7 @@ ul {
 li {
     list-style-type: none;
 }
-button,.asmnts_div>li,.close,.test_div,.close1{
-    cursor:pointer;
-}
-button{
+button, .rtng-pp>input:nth-child(2) {
     border:none;
     outline:none;
 }
@@ -30,6 +30,19 @@ button{
 .check, .whole_3>div, .videos-div>li {
     box-sizing:border-box;
 }
+.nav-main, .tabs>div, .heading, .video-name, .rtng-pp, .rtng-pp>input  {
+    text-align: center;
+}
+button,.asmnts_div>li,.close,.test_div,.close1, .rats>li {
+    cursor:pointer;
+}
+section>i, .check, .p_cont, .h1_hding, .close, .close1 {
+    display: inline-block;
+}
+.videos-div>li>img, .quiz_div>li>img, .rtng-des, .sbmt {
+    display: block;
+}
+
 
 /* ----- Nav Bar ----- */
 
@@ -42,7 +55,6 @@ button{
 .nav-main {
     margin: auto;
     padding: 10px;
-    text-align: center;
 }
 .nav-main>img {
     width: 100px;
@@ -59,31 +71,17 @@ button{
 .nav-main > p:first-child {
     font: 30px/50px 'Raleway',sans-serif;
 }
-.nav-main > span > input {
-    width: 26px;
-    padding: 6px 5px;
-    border: none;
-    border-radius: 3px;
-    margin: 0 5px 0 7px;
-    box-shadow: 0 0 7px #333 inset;
-    outline-color: #999;
-    text-align: center;
-}
-input[type=number]::-webkit-inner-spin-button, 
-input[type=number]::-webkit-outer-spin-button { 
-    -webkit-appearance: none; 
-    margin: 0; 
-}
-.submit {
+
+.rtng {
     border-radius: 3px;
     padding: 6px 18px;
     margin: 18px 0;
     font-weight: 600;
     color: #333;
-    background:white;
+    background:#fafafa;
     transition: 0.4s;
 }
-.submit:hover {
+.rtng:hover {
     background: #fff;
 }
 
@@ -101,7 +99,6 @@ input[type=number]::-webkit-outer-spin-button {
     font: 18px/40px 'Lato',sans-serif;
     flex: 1;
     letter-spacing: 1px;
-    text-align: center;
     cursor: pointer;
     transition: 0.4s;
 }
@@ -111,6 +108,15 @@ input[type=number]::-webkit-outer-spin-button {
     font-weight: bold !important;
 }
 
+section>i {
+    float: right;
+    margin: 10px;
+    color: #00000077;
+    cursor:pointer;
+}
+section>i:hover {
+    color:#000000c4;
+}
 /* ----- Main Place ----- */
 
 .whole_3 {
@@ -128,7 +134,6 @@ input[type=number]::-webkit-outer-spin-button {
 
 .heading {
     font: 30px/50px 'Raleway',sans-serif;
-    text-align: center;
     letter-spacing: 2px;
     margin: 16px 0;
     border: 1px solid;
@@ -158,7 +163,6 @@ input[type=number]::-webkit-outer-spin-button {
 .videos-div>li>img, .quiz_div>li>img {
     height: 60px;
     border-radius: 50%;
-    display: block;
     margin: 10px auto;
 }
 
@@ -166,21 +170,19 @@ input[type=number]::-webkit-outer-spin-button {
     margin:15px;
 }
 .video-name {
-    text-align: center;
     white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
 }
-.time{
+.time {
     font-size: 13px;
     color: #aaa;
 }
-.check{
+.check {
     height: 18px;
     width: 18px;
     border: 1px solid #aaa;
     border-radius: 3px;
-    display: inline-block;
     float:right;
     padding: 0px 2px 0;
     font-size: 17px;
@@ -191,7 +193,7 @@ input[type=number]::-webkit-outer-spin-button {
 
     /* --------------- asmnts and tests ------------------ */
 
-.asmnts,.tests,.quizs{
+.asmnts,.tests,.quizs {
     display:none;
 }
 
@@ -233,7 +235,6 @@ input[type=number]::-webkit-outer-spin-button {
     font: 600 17px/25px 'Lato',sans-serif;
 }
 .p_cont{
-    display: inline-block;
     font-size: 18px;
     color: rgba(0, 0, 0, 0.52);
     padding: 0 0 0 18px;
@@ -253,14 +254,12 @@ input[type=number]::-webkit-outer-spin-button {
     text-overflow: ellipsis;
 }
 .h1_hding{
-    display: inline-block;
     vertical-align: middle;
     margin: 0 0 20px 0;
     color: rgb(34, 34, 34);
     letter-spacing: 1.5px;
 }
 .close, .close1{
-    display: inline-block;
     float: right;
 }
 
@@ -280,7 +279,7 @@ input[type=number]::-webkit-outer-spin-button {
 }
 .all_test>li,.all_asigns>li,.rats>li{
     box-shadow: 0 0 8px 0 rgba(0,0,0,0.2);
-    padding: 20px;
+    padding: 14px 20px;
     margin: 30px 0;
 }
 
@@ -292,9 +291,6 @@ input[type=number]::-webkit-outer-spin-button {
     float: right;
     font-size: 23px;
     display: inline;
-    background: linear-gradient(to right , gold 50%, lightgrey 0);
-    background-clip: text;
-    -webkit-background-clip: text;
     color: transparent;
     font-size: 35px;
     line-height: 30px;
@@ -304,13 +300,85 @@ input[type=number]::-webkit-outer-spin-button {
     width:600px;
     margin:30px auto;
 }
-section>i {
-    display: inline-block;
-    float: right;
-    margin: 10px;
-    color: #00000077;
-    cursor:pointer;
+.rats>li:focus {
+    outline: none;
 }
-section>i:hover {
-    color:#000000c4;
+.rats>li:focus .des {
+    display: block;
 }
+.des {
+    width: 85%;
+    margin: 1em auto 12px;
+    padding: 8px 1em 12px;
+    display: none; 
+    font-size: 14px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+.des>p {
+    margin: 7px 0;
+    font-size: 16px;
+}
+.des>span {
+    text-indent: 20px;
+}
+.rtng-pp {
+    position: absolute;
+    background: white;
+    top: -300px;
+    left: 50%;
+    padding: 20px 40px;
+    margin-left: -285px;
+    transition: 0.5s;
+    border-radius: 5px;
+    box-shadow: 0 0 1em rgba(0,0,0,0.45);
+}
+.rtng-pp>p {
+    padding: 0 0 10px;
+    margin: 0 0 20px;
+    font-size: 25px;
+    letter-spacing: 1px;
+    border-bottom: 1px solid #ccc;
+}
+.rtng-pp>input:nth-child(2) {
+    margin-bottom: 20px;
+    border-bottom: 1px solid #ccc;
+}
+.rtng-pp> input[type=number] {
+    width: 26px;
+    padding: 6px 5px;
+    border: none;
+    border-radius: 3px;
+    margin: 0 5px 0 7px;
+    box-shadow: 0 0 7px #333 inset;
+    outline-color: #999;
+}
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button { 
+    -webkit-appearance: none; 
+    margin: 0; 
+}
+.rtng-des {
+    width: 450px;
+    resize: none;
+    max-height: 100px;
+    overflow: auto;
+    margin-bottom: 16px;
+    padding: 10px;
+    box-sizing: border-box;
+    outline-color: #ccc;
+    border-radius: 3px;
+}
+.sbmt {
+    margin: 16px auto 0;
+    padding: 6px 18px;
+    border-radius: 3px;
+    background: #555;
+    color: white;
+    font-weight: 600;
+    letter-spacing: 1px;
+}
+.sbmt:hover {
+    background: #3a3a3a
+}
+

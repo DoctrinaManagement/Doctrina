@@ -22,7 +22,8 @@ public class Signup extends HttpServlet {
 		HttpSession session = request.getSession();
 		SignupProcess process = new SignupProcess(session.getAttribute("connection"));
 		HashMap<String,String> user_details = new  HashMap<String,String>();
-		session.setAttribute("course", "Maths");
+		ReUsable get = new ReUsable(session.getAttribute("connection"));
+		session.setAttribute("load", "null");
 		String[] keys = {"user_id", "name", "email_id", "image", "role"};
 		for (String key : keys) {
 		    user_details.put(key, request.getParameter(key) );
@@ -41,10 +42,10 @@ public class Signup extends HttpServlet {
         notification_details.put("user_id", request.getParameter("user_id"));
         String noti_status = process.notificationAdd(notification_details);
         
-//         String cookie = get.CookieCreate();
-// 		Cookie cookies=new Cookie("Name", cookie);//creating cookie object  
-//         response.addCookie(cookies);//adding cookie in the response  
-//         String cookie_status = process.cookieAdd(cookie, request.getParameter("user_id"));
+        String cookie = get.CookieCreate();
+		Cookie cookies=new Cookie("Name", cookie);//creating cookie object  
+        response.addCookie(cookies);//adding cookie in the response  
+        String cookie_status = process.cookieAdd(cookie, request.getParameter("user_id"));
         writer.write("200");
 	}
 }

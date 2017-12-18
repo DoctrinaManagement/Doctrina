@@ -19,28 +19,47 @@ public class InviteStudentAuth implements Filter {
 
 		PrintWriter writer = response.getWriter();
 		HttpServletRequest req = (HttpServletRequest) request;
+		HttpServletResponse res = (HttpServletResponse) response;
 		HttpSession session = req.getSession();
-		CheckValidDetails checkDetails = new CheckValidDetails(
-				session.getAttribute("connection"));
-
-		String teacher = request.getParameter("user_id");
-		String class_id = request.getParameter("class_id");
-		String student_id = request.getParameter("student_id");
-
-		if (checkDetails.userIdCheck(teacher)
-				&& checkDetails.userIdCheck(student_id)
-				&& checkDetails.classIdCheck(class_id)) {
-
-			if (checkDetails.checkClassCreater(teacher, class_id)) {
-				    chain.doFilter(request, response);
-			} else {
-				writer.write("401");
-			}
-
-		} else {
-			writer.write("404");
+		try {
+    		CheckValidDetails checkDetails = new CheckValidDetails(
+    				session.getAttribute("connection"));
+    
+    		String teacher = request.getParameter("user_id");
+    		String class_id = request.getParameter("class_id");
+    		String student_id = request.getParameter("student_id");
+            String cookieValue = "";
+    		Cookie[] cookies = req.getCookies();
+    		for(Cookie cookie : cookies) {
+    		   if ( cookie.getName().equals("Name") ) {
+    		       cookieValue = cookie.getValue();
+    		   }
+    		}
+    		ReUsable get = new ReUsable(session.getAttribute("connection")); 
+    		String cookieUser_id = get.getUserId(cookieValue);
+    		
+    		if(session.getAttribute("user_id") != null && cookieValue != "" &&  cookieUser_id != "") {
+        		if (checkDetails.userIdCheck(teacher)
+        				&& checkDetails.userIdCheck(student_id)
+        				&& checkDetails.classIdCheck(class_id)) {
+        
+        			if (checkDetails.checkClassCreater(teacher, class_id)) {
+        				    chain.doFilter(request, response);
+        			} else {
+        				writer.write("401");
+        			}
+        
+        		} else {
+        			writer.write("404");
+        		}
+    		} else {
+    		    res.sendRedirect("/landingpae");
+    		}
 		}
-	}
+		catch (Exception e) {
+		    System.out.println("InviteStudentsAuth - "+e.getMessage());
+		}
+    }
 
 	public void destroy() {
 	}

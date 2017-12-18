@@ -13,13 +13,25 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+
+var userId;
+var classId;
 var signinCallback = function (result){
-    console.log(result);
+    // console.log(result);
     console.log("acces_token - " +result.access_token);
-  if(result.access_token) {
-    var uploadVideo = new UploadVideo();
-    uploadVideo.ready(result.access_token);
-  }
+    if (result.access_token == undefined){
+        $("#signinButton").css("display","block");
+        $("#button").css("display","none");
+        $("#title").css("display","none");
+        $("#upload").css("display","none");
+    }
+      if(result.access_token) {
+        var uploadVideo = new UploadVideo();
+        $("#button").css("display","block");
+        $("#title").css("display","block");
+        $("#upload").css("display","block");
+        uploadVideo.ready(result.access_token);
+      }
 };
 
 var STATUS_POLLING_INTERVAL_MILLIS = 60 * 1000; // One minute.
@@ -98,7 +110,7 @@ UploadVideo.prototype.uploadFile = function(file) {
   var metadata = {
     snippet: {
       title: $('#title').val(),
-      description:"Sample",
+      description:"Learning Purpose",
       tags: this.tags,
       categoryId: this.categoryId
     },
@@ -116,9 +128,6 @@ UploadVideo.prototype.uploadFile = function(file) {
     },
     onError: function(data) {
       var message = data;
-      // Assuming the error is raised by the YouTube API, data will be
-      // a JSON string with error.message set. That may not be the
-      // only time onError will be raised, though.
       try {
         var errorResponse = JSON.parse(data);
         message = errorResponse.error.message;
@@ -152,6 +161,7 @@ UploadVideo.prototype.uploadFile = function(file) {
       $('#video-id').text(this.videoId);
       $('.post-upload').show();
       this.pollForVideoStatus();
+      insertVideo(this.videoId);
     }.bind(this)
   });
   // This won't correspond to the *exact* start of the upload, but it should be close enough.
@@ -161,7 +171,7 @@ UploadVideo.prototype.uploadFile = function(file) {
 
 UploadVideo.prototype.handleUploadClicked = function() {
   $('#button').attr('disabled', true);
-  this.uploadFile($('#file').get(0).files[0]);
+  this.uploadFile($('#upload').get(0).files[0]);
 };
 
 UploadVideo.prototype.pollForVideoStatus = function() {
@@ -198,3 +208,24 @@ UploadVideo.prototype.pollForVideoStatus = function() {
     }.bind(this)
   });
 };
+
+function insertVideo (id) {
+    
+    $.get("/insertvideo", {"user_id":userId, "class_id":classId, "video_id":id, "title":$('#title').val()}, function(data, status){
+        if(data == "200"){
+            location.reload();
+        }
+    })
+    
+}
+
+function setVarId(user_id,class_id) {
+    userId = user_id;
+    classId = class_id;
+}
+
+
+
+
+
+

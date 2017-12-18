@@ -250,6 +250,50 @@ public class CheckValidDetails {
 	    return false;
 	}
 	
+	public boolean checkVideoPrimaryId (String class_id, String videoId) {
+	    
+	    try{
+	        System.out.println(class_id +"    "+videoId);
+	        String Query = "select id from videos where class_id = '"+class_id+"' and id = '"+videoId+"';";
+	        ResultSet rs = stmt.executeQuery(Query);
+	        ReUsable get = new ReUsable(conn);
+	        ArrayList<String> result = get.resultSetToUserID(rs);
+	        
+	        if(result.get(0).equals(videoId)) {
+	            return true;
+	        }
+	        
+	    } catch(Exception e) {
+	        System.out.println("CheckvalidDetails - checkVideoPrimaryId" + e);
+	    }
+	    
+	    return false;
+	}
+	
+	
+	public boolean CheckSeeVideo(String id, String classId, String user_id) {
+	    
+	    String Query = "select id from videos where id < "+id+" and class_id = "+ classId +";";
+	    try{
+	        ResultSet rs = stmt.executeQuery(Query);
+	        ReUsable get = new ReUsable(conn);
+	        ArrayList<String> ids = get.resultSetToUserID(rs);
+	        for(String Videoid : ids) {
+	            Query = "select status from videostatus where id = '"+Videoid+"' and user_id = '"+user_id+"';";
+	            rs = stmt.executeQuery(Query);
+	            ArrayList<String> temp = get.resultSetToUserID(rs);
+	            if(temp.size() == 0 || temp.get(0).equals("false")) {
+	                return false;
+	            }
+	            
+	        }
+	    } catch(Exception e) {
+	        System.out.println("CheckVaidDetails - CheckSeeVideo"+e);
+	    }
+	    
+	    return true;
+	}
+	
 }
 
 

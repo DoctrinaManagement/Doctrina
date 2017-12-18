@@ -20,8 +20,7 @@ public class Signin extends HttpServlet {
 		
 		SignupProcess process1 = new SignupProcess(session.getAttribute("connection"));
 		SigninProcess process = new SigninProcess(session.getAttribute("connection"));
-		
-		session.setAttribute("course", "Maths");
+		session.setAttribute("load", "null");
 		
 		String[] keys = {"user_id", "name", "email_id", "image", "role"};
 	    HashMap<String,String> user_details = new HashMap<String,String>();
@@ -38,10 +37,10 @@ public class Signin extends HttpServlet {
 			session.setAttribute(values, details.get(values));
 			
 		}
-//     	String cookie = get.CookieCreate();
-// 		Cookie cookies=new Cookie("Name", cookie);//creating cookie object  
-//         response.addCookie(cookies);//adding cookie in the response  
-//         process1.cookieAdd(cookie, request.getParameter("user_id"));
+    	String cookie = get.CookieCreate();
+		Cookie cookies=new Cookie("Name", cookie);//creating cookie object  
+        response.addCookie(cookies);//adding cookie in the response  
+        process1.cookieAdd(cookie, request.getParameter("user_id"));
 	    writer.write("200");
 		
 	}

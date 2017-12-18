@@ -11,7 +11,13 @@
     <title>DOCTRINA | Settings</title>
     
     <script>
+        document.addEventListener("visibilitychange", function() {
+          location.reload();
+        });
         function pageLoading() {
+             if(document.cookie.indexOf("Name") == -1) {
+                location.href = "/landingpage"
+            }
            $.get("settings_valuesGet",{"user_id":"<%=session.getAttribute("user_id")%>"},function(data,status){
                 
                 var UsedCourses = JSON.parse(data);

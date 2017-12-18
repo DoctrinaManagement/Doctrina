@@ -20,50 +20,70 @@ public class AddAnswersAuth implements Filter {
 
 		PrintWriter writer = response.getWriter();
 		HttpServletRequest req = (HttpServletRequest) request;
+		HttpServletResponse res = (HttpServletResponse) response;
 		HttpSession session = req.getSession();
-		CheckValidDetails checkDetails = new CheckValidDetails(
-				session.getAttribute("connection"));
-
-		String type = request.getParameter("type");
-		int count = 0;
-		if (checkDetails.classIdCheck(session.getAttribute("class_id") + "")) {
-			// Check user permission for his classroom
-			if (checkDetails.checkClassroomPermission(session.getAttribute("user_id")
-					+ "", session.getAttribute("class_id") + "")) {
-				if (type.equals("assignmentanswer")
-						|| type.equals("testanswer")
-						|| type.equals("quizanswer")) {
-
-					JsonArray answersArray = (JsonArray) new JsonParser()
-							.parse(request.getParameter("answers"));
-							
-					for (JsonElement answers : answersArray) {
-					    
-						JsonObject obj = (JsonObject) answers;
-						if (checkDetails.questionIdCheck(obj.get("id").getAsString(), type)) {
-						    
-							count++;
-						} 
-						else {
-							break;
-						}
-					}
-					
-					if (count == answersArray.size()) {
-						chain.doFilter(request, response);
-					} else {
-						writer.write("400");
-					}
-				} else {
-					writer.write("400");
-				}
-			} 
-			else {
-			    writer.write("400");
-			}
-		} else {
-			writer.write("404");
-		}
+		try {
+    		CheckValidDetails checkDetails = new CheckValidDetails(
+    				session.getAttribute("connection"));
+            
+    		String type = request.getParameter("type");
+    		int count = 0;
+    		Cookie[] cookies = req.getCookies();
+    		String cookieValue = "";
+    		for(Cookie cookie : cookies) {
+    		   if ( cookie.getName().equals("Name") ) {
+    		       cookieValue = cookie.getValue();
+    		   }
+    		}
+    		ReUsable get = new ReUsable(session.getAttribute("connection")); 
+    		String cookieUser_id = get.getUserId(cookieValue);
+    		
+    		if(session.getAttribute("user_id") != null && cookieValue != "" &&  cookieUser_id != "") {
+        		if (checkDetails.classIdCheck(session.getAttribute("class_id") + "")) {
+        			// Check user permission for his classroom
+        			if (checkDetails.checkClassroomPermission(session.getAttribute("user_id")
+        					+ "", session.getAttribute("class_id") + "")) {
+        				if (type.equals("assignmentanswer")
+        						|| type.equals("testanswer")
+        						|| type.equals("quizanswer")) {
+        
+        					JsonArray answersArray = (JsonArray) new JsonParser()
+        							.parse(request.getParameter("answers"));
+        							
+        					for (JsonElement answers : answersArray) {
+        					    
+        						JsonObject obj = (JsonObject) answers;
+        						if (checkDetails.questionIdCheck(obj.get("id").getAsString(), type)) {
+        						    
+        							count++;
+        						} 
+        						else {
+        							break;
+        						}
+        					}
+        					
+        					if (count == answersArray.size()) {
+        						chain.doFilter(request, response);
+        					} else {
+        						writer.write("400");
+        					}
+        				} else {
+        					writer.write("400");
+        				}
+        			} 
+        			else {
+        			    writer.write("400");
+        			}
+        		} else {
+        			writer.write("404");
+        		}
+    		} else {
+    		    res.sendRedirect("/landingpage");
+    		}
+    	}
+    	catch(Exception e){
+    	    System.out.println("AddAnswersAuth - "+ e.getMessage());
+    	}
 	}
 
 	public void destroy() {

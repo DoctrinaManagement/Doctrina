@@ -5,9 +5,9 @@ import javax.servlet.*;
 import zu.b5.doctrina.model.export.*;
 import javax.servlet.http.*;
 /** 
- * @author Basheer
+ * @author pandi
  */
-public class GetTitlesAuth implements Filter {
+public class InsertVideoAuth implements Filter {
 
 	public void init(FilterConfig arg0) throws ServletException {}
 
@@ -20,12 +20,8 @@ public class GetTitlesAuth implements Filter {
 		HttpSession session = req.getSession();
 		try {
         	CheckValidDetails checkDetails = new CheckValidDetails(session.getAttribute("connection"));
-        	
-        	String user = request.getParameter("user_id");
-        	String class_id = request.getParameter("class_id");
-        	String type = request.getParameter("type");
-        	Cookie[] cookies = req.getCookies();
         	String cookieValue = "";
+        	Cookie[] cookies = req.getCookies();
         	for(Cookie cookie : cookies) {
         	   if ( cookie.getName().equals("Name") ) {
         	       cookieValue = cookie.getValue();
@@ -35,32 +31,31 @@ public class GetTitlesAuth implements Filter {
         	String cookieUser_id = get.getUserId(cookieValue);
         	
         	if(session.getAttribute("user_id") != null && cookieValue != "" &&  cookieUser_id != "") {
-        		if(checkDetails.userIdCheck(user) && checkDetails.classIdCheck(class_id)) {
-            		   
-        	        if (type.equals("assignmenttitles") || type.equals("quiztitles") || type.equals("testtitles") || type.equals("videos")) {
+        		if(checkDetails.classIdCheck(request.getParameter("class_id"))) {
+        		    
+        		    if(checkDetails.checkClassCreater(request.getParameter("user_id"), request.getParameter("class_id"))) {
         		        
-        		        if (checkDetails.checkClassroomPermission(user, class_id)) {
-        		            
-        		            chain.doFilter(request, response);
-        		            
-        		        } else {
-            			   writer.write("permission 401");
-            		   }
-            		   
-        	        } else {
-        	            writer.write("400");
-        	        }
-        	   } else {
-        	       writer.write("404");
-        	   }
+        		        chain.doFilter(request, response);
+        		    
+        		        
+        		    } else {
+        		        
+        		        writer.write("404");
+        		        
+        		    }
+        		    
+        		} else {
+        		    writer.write("404");
+        		}
         	} else {
         	    res.sendRedirect("/landingpage");
         	}
 		}
 		catch(Exception e) {
-		    System.out.println("GetTitles - "+e.getMessage());
+		    System.out.println("InsertVideoAuth - "+e.getMessage());
 		}
 	}
-	
+
 	public void destroy() {}
+	
 }

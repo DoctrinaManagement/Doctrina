@@ -16,23 +16,43 @@ public class GetClassroomAuth implements Filter {
 
 		PrintWriter writer = response.getWriter();
 		HttpServletRequest req = (HttpServletRequest) request;
+		HttpServletResponse res = (HttpServletResponse) response;
 		HttpSession session = req.getSession();
-		CheckValidDetails checkDetails = new CheckValidDetails(session.getAttribute("connection"));
-		
-		if(checkDetails.userIdCheck(request.getParameter("user_id"))) {
-    		   
-		   if(checkDetails.courseIdCheck(request.getParameter("course_id"))) {
-
-			   chain.doFilter(request, response);
-		   }
-		   else {
-			   writer.write("course 404");
-		   }
-	   }
-	   else {
-	       writer.write(" user 404");
-	   }
-
+		try {
+    		CheckValidDetails checkDetails = new CheckValidDetails(session.getAttribute("connection"));
+    		
+    		Cookie[] cookies = req.getCookies();
+    		String cookieValue = "";
+    		for(Cookie cookie : cookies) {
+    		   if ( cookie.getName().equals("Name") ) {
+    		       cookieValue = cookie.getValue();
+    		   }
+    		}
+    		ReUsable get = new ReUsable(session.getAttribute("connection")); 
+    		String cookieUser_id = get.getUserId(cookieValue);
+    		
+    		if(session.getAttribute("user_id") != null && cookieValue != "" &&  cookieUser_id != "") {
+    		
+        		if(checkDetails.userIdCheck(request.getParameter("user_id"))) {
+            		   
+        		   if(checkDetails.courseIdCheck(request.getParameter("course_id"))) {
+        
+        			   chain.doFilter(request, response);
+        		   }
+        		   else {
+        			   writer.write("course 404");
+        		   }
+        	   }
+        	   else {
+        	       writer.write(" user 404");
+        	   }
+    		} else {
+    		    res.sendRedirect("/landingpage");
+    		}
+		}
+        catch (Exception e) {
+            System.out.println("GetClassroomAuth");
+        }
 	}
 
 	public void destroy() {}

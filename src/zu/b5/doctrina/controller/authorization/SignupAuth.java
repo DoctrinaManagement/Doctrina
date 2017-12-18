@@ -22,27 +22,32 @@ public class SignupAuth implements Filter {
 		Connection connection = data.connect();
 		HttpServletRequest req = (HttpServletRequest) request;
 		HttpSession session = req.getSession();
-		session.setAttribute("connection", connection);
-		CheckValidDetails checkDetails = new CheckValidDetails(
-				session.getAttribute("connection"));
-
-		if (request.getParameter("user_id").matches("^[0-9]{5,50}$")) {
-
-			if (!(checkDetails.userIdCheck(request.getParameter("user_id")))) {
-				if ((request.getParameter("role").equals("Teacher") || request
-						.getParameter("role").equals("Student"))
-						&& (request.getParameter("login").equals("google"))
-						|| request.getParameter("login").equals("fb")) {
-
-					chain.doFilter(request, response);
-				} else {
-					writer.write("400");
-				}
-			} else {
-				writer.write("Your Account is already exists in Doctrina");
-			}
-		} else {
-			writer.write("400");
+		try {
+    		session.setAttribute("connection", connection);
+    		CheckValidDetails checkDetails = new CheckValidDetails(
+    				session.getAttribute("connection"));
+    
+    		if (request.getParameter("user_id").matches("^[0-9]{5,50}$")) {
+    
+    			if (!(checkDetails.userIdCheck(request.getParameter("user_id")))) {
+    				if ((request.getParameter("role").equals("Teacher") || request
+    						.getParameter("role").equals("Student"))
+    						&& (request.getParameter("login").equals("google"))
+    						|| request.getParameter("login").equals("fb")) {
+    
+    					chain.doFilter(request, response);
+    				} else {
+    					writer.write("400");
+    				}
+    			} else {
+    				writer.write("Your Account is already exists in Doctrina");
+    			}
+    		} else {
+    			writer.write("400");
+    		}
+		}
+		catch(Exception e){
+		    System.out.println("SignupAuth - "+e.getMessage());
 		}
 	}
 

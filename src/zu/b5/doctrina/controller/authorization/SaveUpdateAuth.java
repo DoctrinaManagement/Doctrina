@@ -1,27 +1,35 @@
 package zu.b5.doctrina.controller.authorization;
 
+
 import java.io.*;
 import javax.servlet.*;
 import zu.b5.doctrina.model.export.*;
 import javax.servlet.http.*;
-/** 
- * @author pandi
+import java.util.*;
+import java.sql.*;
+/**
+ * @author Pandi
  */
-public class GetVideosAuth implements Filter {
+ 
+public class SaveUpdateAuth implements Filter {
 
-	public void init(FilterConfig arg0) throws ServletException {}
+	public void init(FilterConfig arg0) throws ServletException {
+	}
 
 	public void doFilter(ServletRequest request, ServletResponse response,
 			FilterChain chain) throws IOException, ServletException {
-
-		PrintWriter writer = response.getWriter();
+        
+        PrintWriter writer = response.getWriter();
 		HttpServletRequest req = (HttpServletRequest) request;
 		HttpServletResponse res = (HttpServletResponse) response;
 		HttpSession session = req.getSession();
+		
 		try {
     		CheckValidDetails checkDetails = new CheckValidDetails(session.getAttribute("connection"));
-    		Cookie[] cookies = req.getCookies();
+    		int total_duration = 0;
+    		int current_duration = 0;
     		String cookieValue = "";
+    		Cookie[] cookies = req.getCookies();
     		for(Cookie cookie : cookies) {
     		   if ( cookie.getName().equals("Name") ) {
     		       cookieValue = cookie.getValue();
@@ -31,30 +39,36 @@ public class GetVideosAuth implements Filter {
     		String cookieUser_id = get.getUserId(cookieValue);
     		
     		if(session.getAttribute("user_id") != null && cookieValue != "" &&  cookieUser_id != "") {
-        		if(checkDetails.classIdCheck(request.getParameter("class_id"))) {
+        		try {
+            		total_duration = Integer.parseInt(request.getParameter("total_duration"));
+            		current_duration = Integer.parseInt(request.getParameter("current_duration"));
+        		} catch(Exception e) {
+        		    writer.write("something went wrong");
+        		}
+        		
+        		if(total_duration > current_duration) {
         		    
-        		    if(checkDetails.checkClassroomPermission(request.getParameter("user_id"), request.getParameter("class_id")) ) {
+        		    if(checkDetails.checkVideoPrimaryId((session.getAttribute("class_id")+""), request.getParameter("id"))) {
         		        
         		        chain.doFilter(request, response);
         		        
-        		    } else {
+        		    } else{
         		        writer.write("401");
         		    }
         		    
-        		    
         		} else {
-        		    writer.write("404");
-        		}
+        		    writer.write("401");
+    		    }
     		} else {
     		    res.sendRedirect("/landingpage");
     		}
 		}
-		catch (Exception e) {
-		    System.out.println("getVideoAuth -"+e.getMessage());
+		catch(Exception e){
+		    System.out.println("SaveUpdateAuth - "+e.getMessage());
 		}
-
 	}
 
-	public void destroy() {}
-	
+	public void destroy() {
+	}
+
 }

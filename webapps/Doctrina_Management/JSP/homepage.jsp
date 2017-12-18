@@ -21,6 +21,11 @@
         var webSocket;
         var course
         var course_name;
+        var course_id;
+        var course_name;
+        document.addEventListener("visibilitychange", function() {
+          location.reload();
+        });
         function notification_function(a){
             $.get("http://basheerahameds-1508.zcodeusers.com/notification_click",{"user_id":"<%=session.getAttribute("user_id")%>","message":a},function(data, status){
                 if(data == "ok"){
@@ -48,6 +53,9 @@
         }
          function signOut() {
             var auth2 = gapi.auth2.getAuthInstance();
+            $.get("http://basheerahameds-1508.zcodeusers.com/logout", function(data, status) {
+                
+            });
             auth2.signOut().then(function () {
               location.href = "/landingpage";
             });
@@ -68,7 +76,9 @@
     function logout() {
         FB.getLoginStatus(function(ret) {
             if(ret.authResponse) {
-
+                $.get("http://basheerahameds-1508.zcodeusers.com/logout", function(data, status) {
+                
+                });
                 FB.logout(function(response) {
                    location.href = "/landingpage";
                 });
@@ -77,10 +87,13 @@
     }
     
     var getMyclassroom = function(userId) {
+        
         document.getElementById("myclassroom").innerHTML="";
         document.getElementById("classroom").innerHTML="";
-        $.get("http://basheerahameds-1508.zcodeusers.com/myclassroom",{"user_id":userId},function(data, status){
+        $.get("http://basheerahameds-1508.zcodeusers.com/getmyclassroom",{"user_id":userId},function(data, status){
                 history.pushState(null,null,"/myclassroom");
+                document.getElementById("myclassroom").innerHTML="";
+                document.getElementById("classroom").innerHTML="";
                 classroomRender(data,"myclass");
             });
     }
@@ -121,8 +134,20 @@
         }
     } 
     var onloaded = function() {
-        <%=session.getAttribute("course")%> = "<%=session.getAttribute("course")%>"
-        <%=session.getAttribute("function")%>
+        
+        if("<%=session.getAttribute("load")%>" != "null") {
+            if("<%=session.getAttribute("load")%>" == "course") {
+                getClassroom("<%=session.getAttribute("course_id")%>" , "<%=session.getAttribute("courseName")%>");
+            }
+            else if("<%=session.getAttribute("load")%>" == "myclassroom") {
+                $(".la2").trigger("click");
+                
+                getMyclassroom("<%=session.getAttribute("user_id")%>");
+            }
+        }
+        if(document.cookie.indexOf("Name") == -1) {
+            location.href = "/landingpage"
+        }
     	socket();
     	//myclassroom();
     }
@@ -199,7 +224,6 @@
     
         var class_name = $("#cls_name").val();
         var des = $("#cls_des").val();
-    console.log(class_name + des);
         if(class_name.match(classname_reg) && des.match(des_reg)) {
             $.get("http://basheerahameds-1508.zcodeusers.com/createclassroom",{"user_id":"<%=session.getAttribute("user_id")%>","classroom_name":class_name,"classroom_description":des,"course_id":course},function(data, status){
                 if(data == "200") {

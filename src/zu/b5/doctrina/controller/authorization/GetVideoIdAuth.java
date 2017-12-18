@@ -2,14 +2,14 @@ package zu.b5.doctrina.controller.authorization;
 
 import java.io.*;
 import javax.servlet.*;
-
 import zu.b5.doctrina.model.export.*;
 import javax.servlet.http.*;
 
 /**
- * @author Basheer
+ * @author pandi
  */
-public class CreateClassroomAuth implements Filter {
+
+public class GetVideoIdAuth implements Filter {
 
 	public void init(FilterConfig arg0) throws ServletException {
 	}
@@ -21,10 +21,11 @@ public class CreateClassroomAuth implements Filter {
 		HttpServletRequest req = (HttpServletRequest) request;
 		HttpServletResponse res = (HttpServletResponse) response;
 		HttpSession session = req.getSession();
+		
 		try {
     		CheckValidDetails checkDetails = new CheckValidDetails(
     				session.getAttribute("connection"));
-    		Cookie[] cookies = req.getCookies();
+            Cookie[] cookies = req.getCookies();
     		String cookieValue = "";
     		for(Cookie cookie : cookies) {
     		   if ( cookie.getName().equals("Name") ) {
@@ -35,21 +36,23 @@ public class CreateClassroomAuth implements Filter {
     		String cookieUser_id = get.getUserId(cookieValue);
     		
     		if(session.getAttribute("user_id") != null && cookieValue != "" &&  cookieUser_id != "") {
-    
-        		if (checkDetails.courseIdCheck(request.getParameter("course_id"))
-        				&& checkDetails.userIdCheck(request.getParameter("user_id"))) {
+        		if (checkDetails.classIdCheck(request.getParameter("class_id"))) {
         
-        			if (request.getParameter("classroom_name").matches("^[a-zA-Z0-9]{3,25}$")
-        					&& request.getParameter("classroom_description").matches(
-        							"^.{5,50}$")) {
-        				if (checkDetails.isTeacher(request.getParameter("user_id"))) {
-                				chain.doFilter(request, response);
+        			if (checkDetails.checkClassroomPermission(
+        					request.getParameter("user_id"),
+        					request.getParameter("class_id"))
+        					&& checkDetails.checkVideoPrimaryId(
+        							request.getParameter("class_id"),
+        							request.getParameter("videoId"))) {
+        				if (checkDetails.CheckSeeVideo(request.getParameter("videoId"), request.getParameter("class_id"), request.getParameter("user_id"))) {
+        					    chain.doFilter(request, response);
+        
         				}
         				else {
-        				    writer.write("403");
+        				    writer.write("You see the previous video");
         				}
         			} else {
-        				writer.write("400");
+        				writer.write("401");
         			}
         
         		} else {
@@ -60,7 +63,7 @@ public class CreateClassroomAuth implements Filter {
     		}
 		}
 		catch (Exception e) {
-		    System.out.println("CreateClassroomAuth - "+e.getMessage());
+		    System.out.println("GetVideoId - "+e.getMessage());
 		}
 	}
 

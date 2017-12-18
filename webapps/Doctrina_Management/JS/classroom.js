@@ -69,23 +69,15 @@ $(document).ready(function() {
 
     // ------------------------- video -----------------------------
 
-    $(".opac").click(function() {
-        $(".video_div").css({
-            "padding": "0"
-        });
-        // $(".box_div").css("background","rgba(0, 0, 0, 0.5)");
-        $(".video_div+section").css({
-            "display": "block"
-        });
-    });
-    $(".close,nav,header").click(function() {
-        $(".video_div+section").css({
-            "display": "none"
-        });
-        $(".video_div").css({
-            "padding": "20px 61px"
-        });
-    });
+    
+    // $(".close,nav,header").click(function() {
+    //     $(".video_div+section").css({
+    //         "display": "none"
+    //     });
+    //     $(".video_div").css({
+    //         "padding": "20px 61px"
+    //     });
+    // });
     $(".adds").click(function() {
         $(".drop").toggleClass("dd-show")
     });
@@ -164,9 +156,7 @@ $(document).ready(function() {
             $(".add-quiz, .blur").css("transform", "scale(1)");
         }, 50);
     });
-    $(".add-quiz>button").click(function() {
-         $(".quizzes").append("<li> <div contenteditable='true' class='quiz_question' placeholder='Enter your quiz question here...'></div> <i class='fa fa-times' onclick='del_input(this,1)' aria-hidden='true'></i> <p style='clear: both'></p> <section class='options' > <span>(a)</span> <input type='text' class='option1'/> <span>(b)</span> <input type='text' class='option2'/> <span>(c)</span> <input type='text' class='option3'/> <span>(d)</span> <input type='text' class='option4'/> </section> <span>Answer : </span> <select name='qus1' id='qus1' class='ans-slct'> <option value='a' >a</option> <option value='b' >b</option> <option value='c' >c</option> <option value='d' >d</option> </select> </li>");
-    });
+
 
     // ------------------------------Add Assignments -----------------------------------
 
@@ -175,9 +165,6 @@ $(document).ready(function() {
         setTimeout(function() {
             $(".add-asmnt, .blur").css("transform", "scale(1)");
         }, 50);
-    });
-    $(".add-asmnt>button").click(function() {
-        $(".asmnts").append("<li> <div contenteditable='true' class='ass_question' placeholder='Enter your question here...'></div> <i class='fa fa-times' onclick='del_input(this,2)' aria-hidden='true'></i> <p style='clear: both'></p> </li>");
     });
 
     // ------------------------------Add Tests -----------------------------------
@@ -188,9 +175,7 @@ $(document).ready(function() {
             $(".add-test, .blur").css("transform", "scale(1)");
         }, 50);
     });
-    $(".add-test>button").click(function() {
-        $(".tests").append("<li> <div contenteditable='true' class='test_question' placeholder='Enter your question here...'></div> <i class='fa fa-times' onclick='del_input(this,2)' aria-hidden='true'></i> <p style='clear: both'></p> </li>");
-    });
+    
 
     // ------------------------------Add Tests -----------------------------------
 
@@ -248,9 +233,6 @@ $(document).ready(function() {
     
 
 });
-
-
-
 
 function del_input(elmnt,n) {
     $(elmnt).parent().css("display", "none");

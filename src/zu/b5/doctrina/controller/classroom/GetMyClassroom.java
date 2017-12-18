@@ -20,7 +20,7 @@ public class GetMyClassroom extends HttpServlet {
 		//System.out.println(session.getAttribute("connection"));
 		GetMyclassroomProcess process = new GetMyclassroomProcess(session.getAttribute("connection"));
         CheckValidDetails temp = new CheckValidDetails(session.getAttribute("connection"));
-        
+        session.setAttribute("load", "null");
         if(temp.userIdCheck(request.getParameter("user_id"))) { 
             HashMap<String,ArrayList<HashMap<String,String>>> result= new HashMap<String,ArrayList<HashMap<String,String>>>();
             result.put("classrooms", process.getMyClassroom(session.getAttribute("user_id")+""));

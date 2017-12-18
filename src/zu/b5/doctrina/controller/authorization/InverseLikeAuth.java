@@ -16,76 +16,95 @@ public class InverseLikeAuth implements Filter {
 			FilterChain chain) throws IOException, ServletException {
         
     	HttpServletRequest req = (HttpServletRequest) request;
+		HttpServletResponse res = (HttpServletResponse) response;
         PrintWriter writer = response.getWriter();
 		HttpSession session = req.getSession();
-		CheckValidDetails checkDetails = new CheckValidDetails(
-				session.getAttribute("connection"));
-		
-		if (request.getParameter("type").equals("posts")) {
-
-			if (checkDetails.userIdCheck(request.getParameter("user_id"))) {
-
-				if (checkDetails.classIdCheck(request.getParameter("class_id"))
-						&& checkDetails.checkClassroomPermission(
-								request.getParameter("user_id"),
-								request.getParameter("class_id"))
-						&& checkDetails.PostIdCheck(request.getParameter("id"),
-								request.getParameter("class_id")) ) {
-					chain.doFilter(request, response);
-				} else {
-					writer.write("400");
-				}
-
-			} else {
-				writer.write("404");
-			}
-
-		
-
-		} else if (request.getParameter("type").equals("comments")) {
-
-			
-			if (checkDetails.userIdCheck(request.getParameter("user_id"))) {
-
-				if (checkDetails.classIdCheck(request.getParameter("class_id"))
-						&& checkDetails.checkClassroomPermission(
-								request.getParameter("user_id"),
-								request.getParameter("class_id"))
-						&& checkDetails.CommentIdCheck(
-								request.getParameter("class_id"),
-								request.getParameter("id")) ) {
-					chain.doFilter(request, response);
-				} else {
-					writer.write("401");
-				}
-
-			} else {
-				writer.write("404");
-			}	
-
-			
-
-		} else if (request.getParameter("type").equals("replies")) {
-
-			if (checkDetails.userIdCheck(request.getParameter("user_id"))) {
-
-				if (checkDetails.classIdCheck(request.getParameter("class_id"))
-						&& checkDetails.checkClassroomPermission(
-								request.getParameter("user_id"),
-								request.getParameter("class_id"))
-						&& checkDetails.ReplyIdCheck(
-								request.getParameter("class_id"),
-								request.getParameter("id")) ) {
-					chain.doFilter(request, response);
-				} else {
-					writer.write("401");
-				}
-
-			} else {
-				writer.write("404");
-			}
-		}
+		try {
+    		CheckValidDetails checkDetails = new CheckValidDetails(
+    				session.getAttribute("connection"));
+    		String cookieValue = "";
+    		Cookie[] cookies = req.getCookies();
+    		for(Cookie cookie : cookies) {
+    		   if ( cookie.getName().equals("Name") ) {
+    		       cookieValue = cookie.getValue();
+    		   }
+    		}
+    		ReUsable get = new ReUsable(session.getAttribute("connection")); 
+    		String cookieUser_id = get.getUserId(cookieValue);
+    		
+    		if(session.getAttribute("user_id") != null && cookieValue != "" &&  cookieUser_id != "") {
+        		if (request.getParameter("type").equals("posts")) {
         
+        			if (checkDetails.userIdCheck(request.getParameter("user_id"))) {
+        
+        				if (checkDetails.classIdCheck(request.getParameter("class_id"))
+        						&& checkDetails.checkClassroomPermission(
+        								request.getParameter("user_id"),
+        								request.getParameter("class_id"))
+        						&& checkDetails.PostIdCheck(request.getParameter("id"),
+        								request.getParameter("class_id")) ) {
+        					chain.doFilter(request, response);
+        				} else {
+        					writer.write("400");
+        				}
+        
+        			} else {
+        				writer.write("404");
+        			}
+        
+        		
+        
+        		} else if (request.getParameter("type").equals("comments")) {
+        
+        			
+        			if (checkDetails.userIdCheck(request.getParameter("user_id"))) {
+        
+        				if (checkDetails.classIdCheck(request.getParameter("class_id"))
+        						&& checkDetails.checkClassroomPermission(
+        								request.getParameter("user_id"),
+        								request.getParameter("class_id"))
+        						&& checkDetails.CommentIdCheck(
+        								request.getParameter("class_id"),
+        								request.getParameter("id")) ) {
+        					chain.doFilter(request, response);
+        				} else {
+        					writer.write("401");
+        				}
+        
+        			} else {
+        				writer.write("404");
+        			}	
+        
+        			
+        
+        		} else if (request.getParameter("type").equals("replies")) {
+        
+        			if (checkDetails.userIdCheck(request.getParameter("user_id"))) {
+        
+        				if (checkDetails.classIdCheck(request.getParameter("class_id"))
+        						&& checkDetails.checkClassroomPermission(
+        								request.getParameter("user_id"),
+        								request.getParameter("class_id"))
+        						&& checkDetails.ReplyIdCheck(
+        								request.getParameter("class_id"),
+        								request.getParameter("id")) ) {
+        					chain.doFilter(request, response);
+        				} else {
+        					writer.write("401");
+        				}
+        
+        			} else {
+        				writer.write("404");
+        			}
+        		}
+    		} else {
+    		    res.sendRedirect("/landingpage");
+    		    
+    		}
+		}
+		catch(Exception e) {
+		    System.out.println("InverseLikeAuth - "+e.getMessage());
+		}
 	}
 
 	public void destroy() {

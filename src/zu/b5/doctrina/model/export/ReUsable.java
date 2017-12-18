@@ -163,4 +163,23 @@ public class ReUsable {
 	    return result;
 	}
 	
+	
+	public String getUserId(String cookie) {
+	    
+	    String Query = "select user_id from cookie where cookie = '"+cookie+"';";
+	    
+	    try {
+	        Statement stmt = conn.createStatement();
+	        ResultSet rs = stmt.executeQuery(Query);
+	        ArrayList<String> user_id = resultSetToUserID(rs);
+	        if(user_id.size() != 0) {
+	            return user_id.get(0);
+	        }
+	        
+	        
+	    } catch (Exception e) {
+	        System.out.println("ReUsable getUserId -" + e);
+	    }
+	    return "";
+	}
 }

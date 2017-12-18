@@ -6,6 +6,13 @@ $(document).ready(function(){
         $(this).addClass('select').siblings().removeClass('select');
     });
     
+    // $(".rtng").click(function(){
+    //     $(".rtng-pp").css("top","0");
+    // });
+    $(".sbmt,.main").click(function(){
+        $(".rtng-pp").css("top","-300px")
+    });
+    
     //  ----------------- assignment click -----------------
     
     // $(".asmnts_div>li").click(function(){

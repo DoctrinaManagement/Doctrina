@@ -22,21 +22,26 @@ public class SigninAuth implements Filter {
 		Connection connection = data.connect();
 		HttpServletRequest req = (HttpServletRequest) request;
 		HttpSession session = req.getSession();
-		session.setAttribute("connection", connection);
-		CheckValidDetails checkDetails = new CheckValidDetails(
-				session.getAttribute("connection"));
-
-		if (request.getParameter("user_id").matches("^[0-9]{5,50}$")
-				&& ( request.getParameter("login").equals("google"))
-				|| request.getParameter("login").equals("fb") ) {
-
-			if (checkDetails.userIdCheck(request.getParameter("user_id"))) {
-				chain.doFilter(request, response);
-			} else {
-				writer.write("Please Sign-up into DOCTRINA");
-			}
-		} else {
-			writer.write("400");
+		try {
+    		session.setAttribute("connection", connection);
+    		CheckValidDetails checkDetails = new CheckValidDetails(
+    				session.getAttribute("connection"));
+    
+    		if (request.getParameter("user_id").matches("^[0-9]{5,50}$")
+    				&& ( request.getParameter("login").equals("google"))
+    				|| request.getParameter("login").equals("fb") ) {
+    
+    			if (checkDetails.userIdCheck(request.getParameter("user_id"))) {
+    				chain.doFilter(request, response);
+    			} else {
+    				writer.write("Please Sign-up into DOCTRINA");
+    			}
+    		} else {
+    			writer.write("400");
+    		}
+		}
+		catch(Exception e) {
+		    System.out.println("SigninAuth - "+e.getMessage());
 		}
 	}
 

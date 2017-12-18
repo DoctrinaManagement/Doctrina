@@ -32,15 +32,15 @@ body, html, .whole, .add, .blur, .feed {
 .blur {
     background: rgba(0,0,0,0.8);
 }
-.add>div>div:last-child {
+.add>div>div:last-child, #button {
     padding: 6px 15px;
     color: white;
     background: #333;
     border-radius: 3px;
     margin: 20px 0 0 80%;
 }
-.add>div>div:last-child:hover {background: #111}
-.add>div>div:last-child:active {transform: scale(0.8)}
+.add>div>div:last-child:hover, #button:hover {background: #111}
+.add>div>div:last-child:active, #button:active {transform: scale(0.8)}
 
 /* ----- */
 
@@ -444,17 +444,24 @@ nav ul:nth-child(3) li i{
 .video_div>div {
     height: 200px;
     width: 180px;
-    border: 1px solid;
     margin: 20px;
-    border-radius: 4px;
+    border-radius: 25%;
     position: relative;
     overflow: hidden;
     float:left;
+    background-image:url("https://assets.materialup.com/uploads/b3caad32-4a44-4649-aa74-bdd705e1f4fe/ez78SuMsdOp5Un-7Kz1WrYvzCmHL_gYrtuq66SFcj2hRoEH-0IJy9TSjaZczM2M3UFDf=w300");
+    background-size:50% 50%;
+    background-repeat:no-repeat;
+    background-position:center;
+    background-color: #00000008;
+    box-shadow: 1px 1px 1px lightgrey;
 }  
 .video_div>div>p {
     position: absolute;
     bottom: 4px;
-    color: white;
+    letter-spacing:1px;
+    font-size:20px;
+    color: black;
     width: 100%;
     box-sizing: border-box;
     text-align: center;
@@ -721,6 +728,7 @@ ol li>div:first-child>span,.asign_hding>ul>li>span,.quiz_hd>li>span, .test_hdng>
     border: none;
     border-bottom: 1px solid #ddd;
     outline: none;
+    text-align:center;
 }
 .add-video>p + label {
     padding: 7px 1em 9px;
@@ -1198,4 +1206,11 @@ body,html{
 
 .name{
     color:rgba(38,141,128,0.8);
+}
+
+
+/* Youtube api*/
+
+.during-upload{
+    display:none;
 }
