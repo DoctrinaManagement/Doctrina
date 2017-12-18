@@ -182,8 +182,6 @@
         });
     }
     
-    var titleReg = /^[a-zA-Z0-9]{3,15}$/;
-    var quesReg = /^\w[\w ]{5,100}$/;
     // Add Assignment Questions
     function AddAssignmentQuestions() {
         var title = document.getElementById("ass_title").value;
@@ -191,11 +189,8 @@
         var questionsList = [];
         
         for (i = 0; question[i]; i++) {
-            if (quesReg.test(question[i].innerText)){
              questionsList.push(question[i].innerText);
-            }
         }
-        if (titleReg.test(title)) {
             $.get("/AddAssignment", {"class_id":"<%=session.getAttribute("class_id")%>", "title":title, "questions":JSON.stringify(questionsList)}, function(data, status) {
                 if (data == "200") {
                     $(".blur").trigger("click");
@@ -203,10 +198,6 @@
                     alert('Success');
                 }
             })
-        }
-        else {
-            alert("Something Wrong in assignment!");
-        }
     }
     //Test Questions Add
     function AddTestQuestions() {
@@ -215,26 +206,18 @@
         var questionsList = [];
         
         for (i = 0; question[i]; i++) {
-            if (quesReg.test(question[i].innerText)){
                 questionsList.push(question[i].innerText);
-            }
         }
         
-        if (titleReg.test(title)) {
-            $.get("/AddTest", {"class_id":"<%=session.getAttribute("class_id")%>", "title":title, "questions":JSON.stringify(questionsList)}, function(data, status) {
-                if (data == "200") {
-                    $(".blur").trigger("click");
-                    $("#test-add-templete").html("<p>Add Test Questions</p><input type='text' class='srch_title' id='test_title' placeholder='Enter the Test title' /><ol class='tests'><li><div contenteditable='true' class='test_question' placeholder='Enter your question here...'></div><i class='fa fa-times' onclick='del_input(this)' aria-hidden='true'></i><p style='clear: both'></p></li></ol><button type='text' onclick='addnewtest()'>+ Add new</button><div onclick='AddTestQuestions()'>Submit</div>");
-                    alert('Success');
-                }
-            })
-        }
-        else {
-            alert("Something wrong in test!");
-        }
+        $.get("/AddTest", {"class_id":"<%=session.getAttribute("class_id")%>", "title":title, "questions":JSON.stringify(questionsList)}, function(data, status) {
+            if (data == "200") {
+                $(".blur").trigger("click");
+                $("#test-add-templete").html("<p>Add Test Questions</p><input type='text' class='srch_title' id='test_title' placeholder='Enter the Test title' /><ol class='tests'><li><div contenteditable='true' class='test_question' placeholder='Enter your question here...'></div><i class='fa fa-times' onclick='del_input(this)' aria-hidden='true'></i><p style='clear: both'></p></li></ol><button type='text' onclick='addnewtest()'>+ Add new</button><div onclick='AddTestQuestions()'>Submit</div>");
+                alert('Success');
+            }
+        })
     }
     
-    var quizanswerReg = /^[a-d]{1}$/;
     //QuizQuestionAdd
     function AddQuizQuestions() {
     var title = document.getElementById("quiz_title").value;
@@ -244,27 +227,19 @@
         var answer = document.getElementsByClassName("ans-slct");
         for (i=0; a[i]; i++) {
         	var obj = {};
-        	if (quesReg.test(a[i].innerText) && quizanswerRegt .test(answer[i].value)) {
                 obj["question"] = a[i].innerText;
         	    obj["answer"] = answer[i].value;
-        	}
-        	else {
-        	    alert("Something Wrong in quiz!");
-        	}
+        
             for(j = 1; j < 5 ; j++) {
             	var b = document.getElementsByClassName("option"+j);
         		obj["option"+j] = b[i].value;
         	}
             output.push(obj);
         }
-        if (titleReg.test(title)){
-            sentAddQuizQuestions(output,title);
-        }
-        else{
-            alert("Something wrong!");
-        }
+        sentAddQuizQuestions(output,title);
     }
     function sentAddQuizQuestions(array, title) {
+    
         $.get("/AddQuizQuestions", {"class_id":"<%=session.getAttribute("class_id")%>","title":title, "questionAnswers":JSON.stringify(array)}, function(data, status) {
             if (data = "200") {
                 $(".blur").trigger("click");
@@ -386,8 +361,6 @@
             }
         });
     }
-    
-    var ansReg = /^[a-zA-Z0-9].{10,}$/;
     // Answers Get
     function SendAnswersFromAssignments() {
     
@@ -397,9 +370,7 @@
         for (i = 0; ass_takeValues[i]; i++) {
         var ass_obj = {};
             ass_obj["id"] = ass_takeValues[i].id;
-            if (ansReg.test(ass_takeValues[i].value)) {
-                ass_obj["answer"] = ass_takeValues[i].value;
-            }
+            ass_obj["answer"] = ass_takeValues[i].value;
             ass_answers.push(ass_obj);
         }
         $.post("/SendAnswers", {"answers":JSON.stringify(ass_answers), "type":"assignmentanswer"}, function(data, status) {
@@ -418,9 +389,7 @@
         for (i = 0; test_takeValues[i]; i++) {
         var test_obj = {};
             test_obj["id"] = test_takeValues[i].id;
-            if (ansReg.test(test_takeValues[i].value)) {
                 test_obj["answer"] = test_takeValues[i].value;
-            }
             test_answers.push(test_obj);
         }
     
@@ -443,16 +412,13 @@
     		for (i = 0;  a[i]; i++) {
         		
               if (a[i].checked) {
-                if ( quizanswerReg.test(a[i].value) ){
                   quiz_obj["answer"] = a[i].value;
-                }
               }
-       	 	}
+       	 	}console.log(quiz_answers);
             quiz_answers.push(quiz_obj);
     	}
         $.post("/SendAnswers", {"answers":JSON.stringify(quiz_answers), "type":"quizanswer"}, function(data, status) {
             //if (data == "200") {
-            //console.log(data);
             var values = JSON.parse(data);
             alert(values.mark);
             //}
@@ -540,13 +506,11 @@
         }
         return postObj;
     }
-    var postReg = /^[a-zA-Z0-9].{3,}$/;
     function postbtnClick() {
         var message = document.getElementById("post_msg").value;
         $(".comment").remove();
         $(".post_btn").attr("disabled","true");
         
-        if(postReg.test(message)) {
             $.get("/addfeeds",{"user_id":"<%=session.getAttribute("user_id")%>","class_id": "<%=session.getAttribute("class_id")%>","message":message,"type" : "posts" },  function(data, status) {
                 document.getElementById("post_msg").value = "";
                 var postObj = JSON.parse(data);
@@ -555,10 +519,6 @@
                 $("#post_btn").html("<button class='post_btn' onclick='postbtnClick()'>POST</button>");
                 webSocket.send("all");
             });
-        }
-        else {
-            alert("Something wrong in postMesage");
-        }
     }
     
     function comment(id) {
@@ -570,7 +530,7 @@
         postId = post_id
         post_id = post_id.substring(3);
         var message = document.getElementById("commentMsg").value;
-        if(postReg.test(message)) {
+        
             $(".post_btn").attr("disabled","true");
             $.get("/addfeeds",{"id":post_id,"user_id":"<%=session.getAttribute("user_id")%>","class_id": "<%=session.getAttribute("class_id")%>","message":message,"type" : "comments" },  function(data, status) {
                 var commentObj = JSON.parse(data);
@@ -583,10 +543,7 @@
                 $("#post_btn").html("<button class='post_btn' onclick='postbtnClick()'>POST</button>");
                 webSocket.send("all");
             });
-        }
-        else {
-            alert("Something wrong in commentMesage");
-        }
+        
     }
     
     
@@ -600,7 +557,6 @@
         commentId = com_id
         com_id = com_id.substring(3);
         var message = document.getElementById("replyMsg").value;
-        if(postReg.test(message)) {
             $(".post_btn").attr("disabled","true");
             $.get("/addfeeds",{"id":com_id,"user_id":"<%=session.getAttribute("user_id")%>","class_id": "<%=session.getAttribute("class_id")%>","message":message,"type" : "replies" },  function(data, status) {
                 $("#post_btn").html("<button class='post_btn' onclick='postbtnClick()'>POST</button>");
@@ -614,10 +570,6 @@
                 
                 webSocket.send("all");
             });
-        }
-        else {
-            alert("Something wrong in replyMesage");
-        }
     }
     //ReportDetails
     function getReportDetails(user_id) {
@@ -676,7 +628,6 @@
         current_id = id;
         $.get("/getvideoid", {"class_id":"<%=session.getAttribute("class_id")%>", "user_id":"<%=session.getAttribute("user_id")%>", "videoId" : id }, function(data, status) {
            var values = JSON.parse(data);
-           console.log(values);
             PlayerStart(values.video_id, values.time, current_id);
             
         })
@@ -804,7 +755,6 @@
                     <div class="more">
                         <ul>
                             <li class="invt">Invite</li>
-                            <li>Details</li>
                             <li class="cls_dlt">Delete Classroom</li>
                         </ul>
                     </div>
@@ -812,7 +762,7 @@
                         else {%>
                              <div class="more">
                                 <ul>
-                                    <li>Details</li>
+                                    <li onclick="getReportDetails('<%=session.getAttribute("user_id")%>')">Details</li>
                                     <li onclick="leaveClassroom()">Leave Classroom</li>
                                 </ul>
                             </div>

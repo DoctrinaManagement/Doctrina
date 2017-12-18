@@ -6,7 +6,7 @@ import zu.b5.doctrina.model.export.*;
 import java.util.*; // import javax.servlet.http.HttpServletRequest;
 import javax.servlet.*;
 import zu.b5.doctrina.model.account.*;
-
+import java.sql.*;
 /** 
  * @author Pandi
  */
@@ -17,7 +17,7 @@ public class Signin extends HttpServlet {
 		PrintWriter writer = response.getWriter();
 		HttpSession session = request.getSession();
 		ReUsable get = new ReUsable(session.getAttribute("connection"));
-		
+		Connection conn = (Connection) session.getAttribute("connection");
 		SignupProcess process1 = new SignupProcess(session.getAttribute("connection"));
 		SigninProcess process = new SigninProcess(session.getAttribute("connection"));
 		session.setAttribute("load", "null");
@@ -36,6 +36,13 @@ public class Signin extends HttpServlet {
 		for (String values : details.keySet()) {
 			session.setAttribute(values, details.get(values));
 			
+		}
+		try{
+		    String Query = "delete from cookie where user_id = '"+request.getParameter("user_id")+"'";
+		    Statement stmt = conn.createStatement();
+		    stmt.executeUpdate(Query);
+		} catch(Exception e) {
+		    System.out.println("signin "+ e);
 		}
     	String cookie = get.CookieCreate();
 		Cookie cookies=new Cookie("Name", cookie);//creating cookie object  

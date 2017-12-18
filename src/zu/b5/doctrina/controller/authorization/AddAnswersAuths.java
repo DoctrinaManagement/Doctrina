@@ -10,7 +10,7 @@ import com.google.gson.*;
  * @author Basheer
  */
 
-public class AddAnswersAuth implements Filter {
+public class AddAnswersAuths implements Filter {
 
 	public void init(FilterConfig arg0) throws ServletException {
 	}
@@ -28,22 +28,21 @@ public class AddAnswersAuth implements Filter {
             
     		String type = request.getParameter("type");
     		int count = 0;
-    // 		Cookie[] cookies = req.getCookies();
-    // 		String cookieValue = "";
-    // 		for(Cookie cookie : cookies) {
-    // 		   if ( cookie.getName().equals("Name") ) {
-    // 		       cookieValue = cookie.getValue();
-    // 		   }
-    // 		}
-    // 		ReUsable get = new ReUsable(session.getAttribute("connection")); 
-    // 		String cookieUser_id = get.getUserId(cookieValue);
+    		Cookie[] cookies = req.getCookies();
+    		String cookieValue = "";
+    		for(Cookie cookie : cookies) {
+    		   if ( cookie.getName().equals("Name") ) {
+    		       cookieValue = cookie.getValue();
+    		   }
+    		}
+    		ReUsable get = new ReUsable(session.getAttribute("connection")); 
+    		String cookieUser_id = get.getUserId(cookieValue);
     		
-    // 		if(session.getAttribute("user_id") != null && cookieValue != "" &&  cookieUser_id != "") {
+    		if(session.getAttribute("user_id") != null && cookieValue != "" &&  cookieUser_id != "") {
         		if (checkDetails.classIdCheck(session.getAttribute("class_id") + "")) {
-        		    
+        			// Check user permission for his classroom
         			if (checkDetails.checkClassroomPermission(session.getAttribute("user_id")
         					+ "", session.getAttribute("class_id") + "")) {
-        					    
         				if (type.equals("assignmentanswer")
         						|| type.equals("testanswer")
         						|| type.equals("quizanswer")) {
@@ -51,7 +50,7 @@ public class AddAnswersAuth implements Filter {
         							.parse(request.getParameter("answers"));
 
         					for (JsonElement answers : answersArray) {
-        					    System.out.println(answers);
+        					    
         						JsonObject obj = (JsonObject) answers;
         						if (checkDetails.questionIdCheck(obj.get("id").getAsString(), type)) {
         						    
@@ -77,12 +76,12 @@ public class AddAnswersAuth implements Filter {
         		} else {
         			writer.write("404");
         		}
-    // 		} else {
-    // 		    res.sendRedirect("/landingpage");
-    // 		}
+    		} else {
+    		    res.sendRedirect("/landingpage");
+    		}
     	}
     	catch(Exception e){
-    	    System.out.println("AddAnswers - "+ e.getMessage());
+    	    System.out.println("AddAnswersasdfg - "+ e.getMessage());
     	}
 	}
 

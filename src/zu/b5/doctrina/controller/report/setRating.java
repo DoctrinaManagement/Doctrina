@@ -42,9 +42,10 @@ public class setRating extends HttpServlet {
                 LocalDate Dblast  = LocalDate.of(year, month, day);
                 Period diff = Period.between(current, Dblast);
                 days = diff.getDays();
+                System.out.println(days);
             }
             
-            if ( days > 7 || days == 0) {
+            if ( days > 7 || date.size()  == 0) {
                 stmt = conn.prepareStatement("insert into ratings (user_id, class_id, rating, title, description) values (?, ?, ?, ?, ?);");
                 stmt.setString(1, student_id);
                 stmt.setInt(2, class_id);

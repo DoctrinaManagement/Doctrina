@@ -547,7 +547,7 @@
     
     <filter>
         <filter-name>SendAnswersFromAssignmentsTestsAuth</filter-name>
-        <filter-class>zu.b5.doctrina.controller.authorization.AddAnswersAuth</filter-class>
+        <filter-class>zu.b5.doctrina.controller.authorization.AddAnswersAuths</filter-class>
     </filter>
     
     <filter-mapping>

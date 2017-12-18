@@ -23,7 +23,7 @@ var currentId;
     }
   
   var player;
-  function onYouTubeIframeAPIReady() {alert(id);
+  function onYouTubeIframeAPIReady() {
     player = new YT.Player('player', {
       height: '390',
       width: '640',

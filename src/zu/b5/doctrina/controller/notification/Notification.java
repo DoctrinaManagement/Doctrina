@@ -21,10 +21,9 @@ public class Notification {
     	@OnOpen
     	public void onOpen(@PathParam("id") String id, Session session) {
     	   // System.out.println(ses.getAttribute("user_id") + "notification");
-    	     System.out.println("ClientId _ socket");
-    	   
+    	     
     		clientId.put(id, session);
-    		 System.out.println(clientId);
+    		 
     	}
     
     	@OnMessage

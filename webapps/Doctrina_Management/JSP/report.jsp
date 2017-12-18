@@ -35,7 +35,7 @@
                 var tempTemplete = document.getElementById("videoReports").innerHTML;
                 var templete  = Handlebars.compile(tempTemplete);
                 document.getElementById("reportVideos").innerHTML= templete(titleObj);
-                
+                console.log(titleObj);
                 finishCheck(titleObj.finished , "video");
                 VideoTime(titleObj.timeStatus);
                 show(1);
@@ -190,6 +190,9 @@
                $.get("/ratingsubmit", {"user_id":"<%=session.getAttribute("user_id")%>", "student_id":"<%=session.getAttribute("student_id")%>", "class_id":"<%=session.getAttribute("class_id")%>", "title":title, "description":description, "rating":rating}, function(data, status) {
                     if(data == "200") {
                         alert("success");
+                    }
+                    else if (data == "400"){
+                        alert("You have already rated this student. So come here at next week...");
                     }
                 }); 
             }
