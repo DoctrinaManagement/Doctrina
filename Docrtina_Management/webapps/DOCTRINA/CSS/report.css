@@ -381,4 +381,24 @@ input[type=number]::-webkit-outer-spin-button {
 .sbmt:hover {
     background: #3a3a3a
 }
-
+/* Alert  */
+.alert{
+    position: absolute;
+    text-align: center;
+    top: -75px;
+    left: 50%;
+    margin-left: -265px;
+    padding: 15px 25px;
+    background: white;
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.36);
+    border-radius: 0 0 4px 4px;
+    transition: 1s;
+    color: rgb(255, 0, 0);
+}
+.alert>i{
+    padding: 9px 14px;
+    border-radius: 50%;
+    background: #ff0000bd;
+    color: white;
+    margin: 0 9px 0 0;
+}

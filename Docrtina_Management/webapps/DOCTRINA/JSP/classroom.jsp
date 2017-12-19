@@ -181,70 +181,153 @@
             }
         });
     }
-    
+    var titleReg = /^[a-zA-Z0-9]{2,50}\w$/;
+    var questionReg = /^[a-zA-Z0-9][\w\W]{4,255}$/;
     // Add Assignment Questions
     function AddAssignmentQuestions() {
         var title = document.getElementById("ass_title").value;
-        var question = document.getElementsByClassName("ass_question");
-        var questionsList = [];
         
-        for (i = 0; question[i]; i++) {
-             questionsList.push(question[i].innerText);
-        }
-            $.get("/AddAssignment", {"class_id":"<%=session.getAttribute("class_id")%>", "title":title, "questions":JSON.stringify(questionsList)}, function(data, status) {
-                if (data == "200") {
-                    $(".blur").trigger("click");
-                    $("#ass-add-templete").html("<p>Add Asssignments</p><input type='text' class='srch_title' id='ass_title' placeholder='Enter the Assignment title' /><ol class='asmnts'><li><div contenteditable='true' class='ass_question' placeholder='Enter your question here...'></div><i class='fa fa-times' onclick='del_input(this)' aria-hidden='true'></i><p style='clear: both'></p></li></ol><button type='text' onclick='addnewAssignment()'>+ Add new</button><div onclick='AddAssignmentQuestions()'>Submit</div>");
-                    alert('Success');
+        if (titleReg.test(title)){
+            var question = document.getElementsByClassName("ass_question");
+            var questionsList = [];
+            var checkTest = false;
+            
+            for (i = 0; question[i]; i++) {
+                if (questionReg.test(question[i].innerText)) {
+                    questionsList.push(question[i].innerText);
+                    $("#ADDASSIGNMENT").html("<div>Submit</div>");
+                    checkTest = true;
                 }
-            })
+                else {
+                    checkTest = false;
+                    break;
+                }
+            }
+            if (checkTest == true){
+                $.get("/AddAssignment", {"class_id":"<%=session.getAttribute("class_id")%>", "title":title, "questions":JSON.stringify(questionsList)}, function(data, status) {
+                
+                    if (data == "200") {
+                        $(".blur").trigger("click");
+                        $("#ADDASSIGNMENT").html("<div onclick='AddAssignmentQuestions()'>Submit</div>")
+                        $("#ass-add-templete").html("<p>Add Asssignments</p><input type='text' class='srch_title' id='ass_title' placeholder='Enter the Assignment title' /><ol class='asmnts'><li><div contenteditable='true' class='ass_question' placeholder='Enter your question here...'></div><i class='fa fa-times' onclick='del_input(this)' aria-hidden='true'></i><p style='clear: both'></p></li></ol><button type='text' onclick='addnewAssignment()'>+ Add new</button><span id = 'ADDASSIGNMENT'><div onclick='AddAssignmentQuestions()'>Submit</div></span>");
+                        error("success");
+                    }
+                    else if (data == "400"){
+                        error("danger");
+                    }
+                }) 
+            }
+            else {
+                error("danger");
+            }
+        }
+        else {
+            error("danger");
+        }
     }
     //Test Questions Add
     function AddTestQuestions() {
         var title = document.getElementById("test_title").value;
-        var question = document.getElementsByClassName("test_question");
-        var questionsList = [];
+        var chckAss = false;
         
-        for (i = 0; question[i]; i++) {
-                questionsList.push(question[i].innerText);
-        }
-        
-        $.get("/AddTest", {"class_id":"<%=session.getAttribute("class_id")%>", "title":title, "questions":JSON.stringify(questionsList)}, function(data, status) {
-            if (data == "200") {
-                $(".blur").trigger("click");
-                $("#test-add-templete").html("<p>Add Test Questions</p><input type='text' class='srch_title' id='test_title' placeholder='Enter the Test title' /><ol class='tests'><li><div contenteditable='true' class='test_question' placeholder='Enter your question here...'></div><i class='fa fa-times' onclick='del_input(this)' aria-hidden='true'></i><p style='clear: both'></p></li></ol><button type='text' onclick='addnewtest()'>+ Add new</button><div onclick='AddTestQuestions()'>Submit</div>");
-                alert('Success');
+        if (titleReg.test(title)) {
+            var question = document.getElementsByClassName("test_question");
+            var questionsList = [];
+            for (i = 0; question[i]; i++) {
+                if (questionReg.test(question[i].innerText)) {
+                    questionsList.push(question[i].innerText);
+                    $("#ADDTEST").html("<div>Submit</div>");
+                    checkAss = true;
+                }
+                else {
+                    checkAss = false;
+                    break;
+                }
             }
-        })
+            if (checkAss == true) {
+                $.get("/AddTest", {"class_id":"<%=session.getAttribute("class_id")%>", "title":title, "questions":JSON.stringify(questionsList)}, function(data, status) {
+                if (data == "200") {
+                        $(".blur").trigger("click");
+                        $("#ADDTEST").html("<div onclick=AddTestQuestions()>Submit</div>");
+                        $("#test-add-templete").html("<p>Add Test Questions</p><input type='text' class='srch_title' id='test_title' placeholder='Enter the Test title' /><ol class='tests'><li><div contenteditable='true' class='test_question' placeholder='Enter your question here...'></div><i class='fa fa-times' onclick='del_input(this)' aria-hidden='true'></i><p style='clear: both'></p></li></ol><button type='text' onclick='addnewtest()'>+ Add new</button><span id='ADDTEST'><div onclick='AddTestQuestions()'>Submit</div></span>");
+                        error("success");
+                    }
+                    else if (data == "400"){
+                        error("danger");
+                    }
+                })
+            }
+            else {
+            error("danger");
+            }
+        }
+        else {
+            error("danger");
+        }
     }
     
     //QuizQuestionAdd
     function AddQuizQuestions() {
     var title = document.getElementById("quiz_title").value;
-        var output = [];
-        
-        var a = document.getElementsByClassName("quiz_question");
-        var answer = document.getElementsByClassName("ans-slct");
-        for (i=0; a[i]; i++) {
-        	var obj = {};
-                obj["question"] = a[i].innerText;
-        	    obj["answer"] = answer[i].value;
-        
-            for(j = 1; j < 5 ; j++) {
-            	var b = document.getElementsByClassName("option"+j);
-        		obj["option"+j] = b[i].value;
-        	}
-            output.push(obj);
+    var check = false;
+    
+        if(titleReg.test(title)) {
+            var output = [];
+            
+            var a = document.getElementsByClassName("quiz_question");
+            var answer = document.getElementsByClassName("ans-slct");
+            for (i=0; a[i]; i++) {
+            	var obj = {};
+            	    obj["question"] = a[i].innerText;
+            	    obj["answer"] = answer[i].value;
+            	    
+            	    for(j = 1; j < 5 ; j++) {
+                    	var b = document.getElementsByClassName("option"+j);
+                		obj["option"+j] = b[i].value;
+                	}
+                    output.push(obj);
+            }
+            // Regex Checking
+            for (i = 0; i < output.length; i++ ){
+                if (questionReg.test(output[i].question)) {
+                    for (j = 1; j <= 5; j ++) {
+                        if (/^[a-zA-Z0-9][\w\W]{0,25}[a-zA-Z0-9]$/.test(output[i]["option"+j]) && /^[a-d]{1}$/.test(output[i].answer)){
+                            check = true;
+                        }
+                        else {
+                            check = false;
+                            break;
+                        }
+                    }
+                } else {
+                        check = false;
+                        break;
+                }
+            }
+            
+            if (check == true) {
+                $("#ADDQUIZ").html("<div>Submit</div>");
+                sentAddQuizQuestions(output,title);
+            }
+            else {
+                error("info");
+            }
         }
-        sentAddQuizQuestions(output,title);
+        else {
+            error("danger");
+        }
     }
     function sentAddQuizQuestions(array, title) {
     
         $.get("/AddQuizQuestions", {"class_id":"<%=session.getAttribute("class_id")%>","title":title, "questionAnswers":JSON.stringify(array)}, function(data, status) {
             if (data = "200") {
                 $(".blur").trigger("click");
-                $("#quiz-add-templete").html("<p>Add Quiz Questions</p><input class='srch_title' id='quiz_title' type='text' placeholder='Enter the Quiz title' /><ol class='quizzes'><li><div contenteditable='true' class='quiz_question' placeholder='Enter your question here...'></div><i class='fa fa-times' onclick='del_input(this)' aria-hidden='true'></i><p style='clear: both'></p><section class='options'><span>(a)</span><input type='text' class='option1'/><span>(b)</span><input type='text' class='option2'/><span>(c)</span><input type='text' class='option3'/><span>(d)</span><input type='text' class='option4'/></section><span>Answer : </span><select name='qus1' id='qus1' class='ans-slct'><option value='a'>a</option><option value='b'>b</option><option value='c'>c</option><option value='d'>d</option></select></li></ol><button type='text' onclick='addnewQuiz()'>+ Add new</button><div onclick='AddQuizQuestions()'>Submit</div>");
-                alert("Success...");
+                $("#ADDQUIZ").html("<div onclick='AddQuizQuestions()'>Submit</div>");
+                $("#quiz-add-templete").html("<p>Add Quiz Questions</p><input class='srch_title' id='quiz_title' type='text' placeholder='Enter the Quiz title' /><ol class='quizzes'><li><div contenteditable='true' class='quiz_question' placeholder='Enter your question here...'></div><i class='fa fa-times' onclick='del_input(this)' aria-hidden='true'></i><p style='clear: both'></p><section class='options'><span>(a)</span><input type='text' class='option1'/><span>(b)</span><input type='text' class='option2'/><span>(c)</span><input type='text' class='option3'/><span>(d)</span><input type='text' class='option4'/></section><span>Answer : </span><select name='qus1' id='qus1' class='ans-slct'><option value='a'>a</option><option value='b'>b</option><option value='c'>c</option><option value='d'>d</option></select></li></ol><button type='text' onclick='addnewQuiz()'>+ Add new</button><span id = 'ADDQUIZ'><div onclick='AddQuizQuestions()'>Submit</div></span>");
+                error("success");
+            }
+            else if (data == "400"){
+                error("danger");
             }
         })
     }
@@ -323,7 +406,7 @@
             $(".quiz_ol").css("display", "none");
         }
         else {
-            alert("Something Wrong In close icon");
+            error("danger");
         }
     }
     
@@ -340,7 +423,7 @@
         $.get("/inviteStudents",{"requester":user_id},  function(data, status) {
             if(data == "ok"){
                 webSocket.send("all");
-                alert("add successful");
+                error("success");
             }
         });
     }
@@ -361,50 +444,80 @@
             }
         });
     }
+    var answerReg = /^[a-zA-Z0-9][\w\W]{3,255}\w$/;
     // Answers Get
     function SendAnswersFromAssignments() {
     
         var ass_answers = [];
         var ass_takeValues = document.getElementsByClassName("AssignmentAnswers");
+        var ass_check = false;
         
         for (i = 0; ass_takeValues[i]; i++) {
         var ass_obj = {};
-            ass_obj["id"] = ass_takeValues[i].id;
-            ass_obj["answer"] = ass_takeValues[i].value;
-            ass_answers.push(ass_obj);
-        }
-        $.post("/SendAnswers", {"answers":JSON.stringify(ass_answers), "type":"assignmentanswer"}, function(data, status) {
-           
-            if (data == "200") {
-                alert("Success");
+            if (answerReg.test(ass_takeValues[i].value)){
+                ass_obj["id"] = ass_takeValues[i].id;
+                ass_obj["answer"] = ass_takeValues[i].value;
+                ass_answers.push(ass_obj);
+                ass_check = true;
             }
-        });
+            else{
+                ass_check = false;
+                break;   
+            }
+        }
+        if ( ass_check == true ){
+        $("#SENDASS").html("<button class='submit' type='submit'>Submit</button>");
+            $.post("/SendAnswers", {"answers":JSON.stringify(ass_answers), "type":"assignmentanswer"}, function(data, status) {
+               
+                if (data == "200") {
+                    $("#SENDASS").html("<button class='submit' type='submit' onclick='SendAnswersFromAssignments()'>Submit</button>");
+                    cls("assignment");
+                }
+            });
+        }
+        else {
+            error("danger");
+        }
     }
     
     function SendAnswersFromTests(){
         
         var test_answers = [];
         var test_takeValues = document.getElementsByClassName("TestAnswers");
-    
+        var test_check = false;
+        
         for (i = 0; test_takeValues[i]; i++) {
         var test_obj = {};
-            test_obj["id"] = test_takeValues[i].id;
-                test_obj["answer"] = test_takeValues[i].value;
-            test_answers.push(test_obj);
-        }
-    
-        $.post("/SendAnswers", {"answers":JSON.stringify(test_answers), "type":"testanswer"}, function(data, status) {
-            if (data == "200") {
-                alert("Success");
+            if (answerReg.test(test_takeValues[i].value)) {
+                test_obj["id"] = test_takeValues[i].id;
+                    test_obj["answer"] = test_takeValues[i].value;
+                test_answers.push(test_obj);
+                test_check = true;
             }
-        });
+            else {
+                test_check = false;
+                break;
+            }
+        }
+        if (test_check == true) {
+        $("#SENDTEST").html("<button class='submit' type='submit' >Submit</button>");
+            $.post("/SendAnswers", {"answers":JSON.stringify(test_answers), "type":"testanswer"}, function(data, status) {
+                if (data == "200") {
+                    $("#SENDTEST").html("<button class='submit' type='submit' onclick='SendAnswersFromTests()'>Submit</button>");
+                    cls("test");
+                }
+            });
+        }
+        else {
+            error("danger");
+        }
     }
     
     function SendAnswersFromQuizes(){
+        
         var quiz_answers = [];
         
         var b = document.getElementsByClassName("quiz_quest"); 
-    
         for (j = 0 ;b[j] ;j++) {
         		var quiz_obj = {};
                 quiz_obj["id"] = b[j].id;
@@ -414,14 +527,16 @@
               if (a[i].checked) {
                   quiz_obj["answer"] = a[i].value;
               }
-       	 	}console.log(quiz_answers);
+       	 	}
             quiz_answers.push(quiz_obj);
     	}
-        $.post("/SendAnswers", {"answers":JSON.stringify(quiz_answers), "type":"quizanswer"}, function(data, status) {
-            //if (data == "200") {
+        $("#SENDQUIZZ").html("<button class='submit' type='submit'>Submit</button>");
+    	     $.post("/SendAnswers", {"answers":JSON.stringify(quiz_answers), "type":"quizanswer"}, function(data, status) {
+            
+            $("#SENDQUIZZ").html("<button class='submit' type='submit' onclick='SendAnswersFromQuizes()'>Submit</button>");
             var values = JSON.parse(data);
             alert(values.mark);
-            //}
+            cls("quiz");
         });
     }
     
@@ -499,26 +614,30 @@
                     if(postObj.posts[i].comments[j].replies[k].likers.indexOf("<%=session.getAttribute("name")%>") != -1) {
                         postObj.posts[i].comments[j].replies[k]["html"] = "<i class='fa fa-heart' onclick=\"removeLike(\'replies\',\'"+postObj.posts[i].comments[j].replies[k].id+"\')\" aria-hidden='true'></i><span onclick=\"removeLike(\'replies\',\'"+postObj.posts[i].comments[j].replies[k].id+"\')\">Like</span>";
                     }
-                    
                 }
-                
             }
         }
         return postObj;
     }
+    var messReg = /^\w[\w\W]{2,100}$/;
+    
     function postbtnClick() {
         var message = document.getElementById("post_msg").value;
         $(".comment").remove();
-        $(".post_btn").attr("disabled","true");
-        
-            $.get("/addfeeds",{"user_id":"<%=session.getAttribute("user_id")%>","class_id": "<%=session.getAttribute("class_id")%>","message":message,"type" : "posts" },  function(data, status) {
-                document.getElementById("post_msg").value = "";
-                var postObj = JSON.parse(data);
-                postObj = rearrange(postObj);
-                $("#posts").prepend(html(postObj));
-                $("#post_btn").html("<button class='post_btn' onclick='postbtnClick()'>POST</button>");
-                webSocket.send("all");
-            });
+            if(messReg.test(message)){
+                $(".post_btn").attr("disabled","true");
+                $.get("/addfeeds",{"user_id":"<%=session.getAttribute("user_id")%>","class_id": "<%=session.getAttribute("class_id")%>","message":message,"type" : "posts" },  function(data, status) {
+                    document.getElementById("post_msg").value = "";
+                    var postObj = JSON.parse(data);
+                    postObj = rearrange(postObj);
+                    $("#posts").prepend(html(postObj));
+                    $("#post_btn").html("<button class='post_btn' onclick='postbtnClick()'>POST</button>");
+                    webSocket.send("all");
+                });
+            }
+            else {
+                error("danger");
+            }
     }
     
     function comment(id) {
@@ -530,7 +649,7 @@
         postId = post_id
         post_id = post_id.substring(3);
         var message = document.getElementById("commentMsg").value;
-        
+        if (messReg.test(message)){
             $(".post_btn").attr("disabled","true");
             $.get("/addfeeds",{"id":post_id,"user_id":"<%=session.getAttribute("user_id")%>","class_id": "<%=session.getAttribute("class_id")%>","message":message,"type" : "comments" },  function(data, status) {
                 var commentObj = JSON.parse(data);
@@ -543,7 +662,10 @@
                 $("#post_btn").html("<button class='post_btn' onclick='postbtnClick()'>POST</button>");
                 webSocket.send("all");
             });
-        
+        }
+        else {
+            error("danger");
+        }
     }
     
     
@@ -557,6 +679,7 @@
         commentId = com_id
         com_id = com_id.substring(3);
         var message = document.getElementById("replyMsg").value;
+        if (messReg.test(message)) {
             $(".post_btn").attr("disabled","true");
             $.get("/addfeeds",{"id":com_id,"user_id":"<%=session.getAttribute("user_id")%>","class_id": "<%=session.getAttribute("class_id")%>","message":message,"type" : "replies" },  function(data, status) {
                 $("#post_btn").html("<button class='post_btn' onclick='postbtnClick()'>POST</button>");
@@ -570,6 +693,10 @@
                 
                 webSocket.send("all");
             });
+        }
+        else {
+            error("danger");
+        }
     }
     //ReportDetails
     function getReportDetails(user_id) {
@@ -582,6 +709,7 @@
     function addLike(table, id) {
         liketype = table;
         likeId = id;
+        document.getElementById(liketype+likeId).innerHTML = "<i class='fa fa-heart-o'  aria-hidden='true'></i><span>Like</span>";
         $.get("/insertlike", {"type":table, "user_id":"<%=session.getAttribute("user_id")%>", "class_id":"<%=session.getAttribute("class_id")%>","id":id}, function(data, status) {
             if(data == "ok") {
                 document.getElementById(liketype+likeId).innerHTML = "<i class='fa fa-heart' onclick=\"removeLike(\'"+liketype+"\',\'"+likeId+"\')\" aria-hidden='true'></i><span onclick=\"removeLike(\'"+liketype+"\',\'"+likeId+"\')\">Like</span>";
@@ -600,6 +728,7 @@
     function removeLike(table, id) {
         liketype = table;
         likeId = id;
+        document.getElementById(liketype+likeId).innerHTML = "<i class='fa fa-heart' aria-hidden='true'></i><span>Like</span>";
         $.get("/removelike", {"type":table, "user_id":"<%=session.getAttribute("user_id")%>", "class_id":"<%=session.getAttribute("class_id")%>","id":id}, function(data, status) {
             if(data == "ok") {
                 document.getElementById(liketype+likeId).innerHTML = "<i class='fa fa-heart-o' onclick=\"addLike(\'"+liketype+"\',\'"+likeId+"\')\" aria-hidden='true'></i><span onclick=\"addLike(\'"+liketype+"\',\'"+likeId+"\')\">Like</span>";
@@ -643,12 +772,39 @@
         stopVideo();
         location.reload();
     }
+    
+    function error (type) {
+        if (type == "info") {
+            $(".alert").html('<i class="fa fa-exclamation" aria-hidden="true"></i>Please Check the values !');
+            $(".alert").css("color", "rgb(36, 146, 255)"); 
+            $(".alert>i").css("background", "rgb(36, 146, 255)");
+        }
+        else if (type == "danger"){
+            $(".alert").html('<i class="fa fa-exclamation" aria-hidden="true"></i>Some unexpected error has been occured !');
+            $(".alert").css({"color":"rgb(243, 69, 65)", "width":"530px","margin:left":"-205px"}); 
+            $(".alert>i").css("background", "rgb(243, 69, 65);");
+        }
+         else if (type == "success"){
+            $(".alert").html('<i class="fa fa-check" aria-hidden="true"></i> Added Successfully !');
+            $(".alert").css({"color":"rgb(56, 184, 124)", "width":"300px", "margin-left":"-185px"}); 
+            $(".alert>i").css({"background":"rgb(56, 184, 124)","padding":"9px 10px"});
+        }
+        $(".alert").css("top","0");
+        setTimeout (function(){
+        $(".alert").css("top","-75px");
+        },2000);
+    }
     </script>
 </head>
 
 <body onload="onloaded()">
     <div class="whole">
         <!--   Header   -->
+        
+        <!-- Alert -->
+            <div class="alert"></div>
+        <!-- /Alert -->
+        
         
        <header>
             <img src="../IMAGES/D.gif" alt="D logo" onclick="location.href='/doctrina.index.do'"/>
@@ -831,7 +987,7 @@
                                     <input type="text" id="{{question_id}}" class="AssignmentAnswers"/>
                              </li> 
                            {{/each}}
-                            <button class="submit" type="submit" onclick="SendAnswersFromAssignments()">Submit</button>
+                            <span id = 'SENDASS'><button class="submit" type="submit" onclick="SendAnswersFromAssignments()">Submit</button></span>
                         </ol>
                      </script>   
                     <div class="asign_ol" id="Assign_Questions"></div>
@@ -882,7 +1038,7 @@
                                     </div>
                              </li> 
                            {{/each}}
-                            <button class="submit" type="submit" onclick="SendAnswersFromQuizes()">Submit</button>
+                            <span id = 'SENDQUIZZ'><button class="submit" type="submit" onclick="SendAnswersFromQuizes()">Submit</button></span>
                         </ol>
                      </script>
                 
@@ -930,7 +1086,7 @@
                                     <input type="text" id="{{question_id}}" class="TestAnswers"/>
                              </li> 
                            {{/each}}
-                            <button class="submit" type="submit" onclick="SendAnswersFromTests()">Submit</button>
+                            <span id="SENDTEST"><button class="submit" type="submit" onclick="SendAnswersFromTests()">Submit</button></span>
                         </ol>
                      </script>   
                 <div class="test_div">
@@ -991,7 +1147,7 @@
                         </li>
                     </ol>
                     <button type="text" onclick='addnewAssignment()'>+ Add new</button>
-                    <div onclick="AddAssignmentQuestions()">Submit</div>
+                    <span id='ADDASSIGNMENT'><div onclick="AddAssignmentQuestions()">Submit</div></span>
                 </div>
     
                 <!-- Tests -->
@@ -1007,7 +1163,7 @@
                         </li>
                     </ol>
                     <button type="text" onclick='addnewtest()'>+ Add new</button>
-                    <div onclick="AddTestQuestions()">Submit</div>
+                    <span id = 'ADDTEST'><div onclick="AddTestQuestions()">Submit</div>
                 </div>
     
                 <!-- Quiz -->
@@ -1042,7 +1198,7 @@
                     </li>
                 </ol>
                 <button type="text" onclick = 'addnewQuiz()'>+ Add new</button>
-                <div onclick="AddQuizQuestions()">Submit</div>
+                <span id = 'ADDQUIZ'><div onclick="AddQuizQuestions()">Submit</div></span>
             </div>
     
                 <!-- Reports -->

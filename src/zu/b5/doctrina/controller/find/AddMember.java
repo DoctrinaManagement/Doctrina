@@ -18,7 +18,7 @@ public class AddMember extends HttpServlet {
 		HttpSession session = request.getSession();
 		CheckValidDetails check = new CheckValidDetails(session.getAttribute("connection"));
 		if(check.userIdCheck(request.getParameter("requester"))) {
-		    if( !(check.checkAddPermission(request.getParameter("requester"), (session.getAttribute("class_id")+""))) ) {
+		    if( !(check.checkClassroomPermission(request.getParameter("requester"), (session.getAttribute("class_id")+""))) ) {
 		        String Query = "insert into members values(?,?,?::\"member\");";
 		        Connection conn = (Connection) session.getAttribute("connection");
 		        

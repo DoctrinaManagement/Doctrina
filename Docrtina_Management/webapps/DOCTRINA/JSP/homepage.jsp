@@ -242,16 +242,22 @@
             error('danger');
         }
     }
-    function error (type) {
+     function error (type) {
         if (type == "info") {
-           $(".alert").css("color", "rgb(0, 146, 255)"); 
-           $(".alert>i").css("background", "rgba(0, 146, 255,0.8)");
+            $(".alert").html('<i class="fa fa-exclamation" aria-hidden="true"></i>Please Check the values !');
+            $(".alert").css("color", "rgb(36, 146, 255)"); 
+            $(".alert>i").css("background", "rgb(36, 146, 255)");
         }
         else if (type == "danger"){
-           $(".alert").css("color", "rgb(255, 0, 0)"); 
-           $(".alert>i").css("background", "#rgba(255, 0, 0, 0.7)");
+            $(".alert").html('<i class="fa fa-exclamation" aria-hidden="true"></i>Some unexpected error has been occured !');
+            $(".alert").css({"color":"rgb(243, 69, 65)", "width":"530px","margin:left":"-205px"}); 
+            $(".alert>i").css("background", "rgb(243, 69, 65);");
         }
-        
+         else if (type == "success"){
+            $(".alert").html('<i class="fa fa-check" aria-hidden="true"></i> Added Successfully !');
+            $(".alert").css({"color":"rgb(56, 184, 124)", "width":"300px", "margin-left":"-185px"}); 
+            $(".alert>i").css({"background":"rgb(56, 184, 124)","padding":"9px 10px"});
+        }
         $(".alert").css("top","0");
         setTimeout (function(){
         $(".alert").css("top","-75px");
@@ -272,6 +278,9 @@
             if(data == "ok"){
                 webSocket.send("all");
             }
+            else {
+                error("danger");
+            }
         });
     }
     
@@ -279,6 +288,9 @@
         $.get("http://basheerahameds-1508.zcodeusers.com/ReplyRequest",{"requester":requester,"class_id":class_id,"status":status}, function(data, status) {
             if(data == "ok"){
                 webSocket.send("all");
+            }
+            else {
+                error("danger");
             }
         });
     }
@@ -288,16 +300,21 @@
             if(data == "200" ) {
                 location.href = "http://basheerahameds-1508.zcodeusers.com/classroom";
             }
+            else {
+                error("danger");
+            }
         });
     }
     
     </script>
 <body onload="onloaded()">
     <div class="whole">
+        <!-- Alert -->
+            <div class="alert"></div>
+        <!-- /Alert -->
         
         <!-- Header -->
-        
-       <header>
+        <header>
             <img src="../IMAGES/D.gif" alt="D logo" />
             <div class="hdr">
                 <div class="cls">

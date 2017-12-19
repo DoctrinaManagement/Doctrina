@@ -28,17 +28,17 @@ public class AddAnswersAuth implements Filter {
             
     		String type = request.getParameter("type");
     		int count = 0;
-    // 		Cookie[] cookies = req.getCookies();
-    // 		String cookieValue = "";
-    // 		for(Cookie cookie : cookies) {
-    // 		   if ( cookie.getName().equals("Name") ) {
-    // 		       cookieValue = cookie.getValue();
-    // 		   }
-    // 		}
-    // 		ReUsable get = new ReUsable(session.getAttribute("connection")); 
-    // 		String cookieUser_id = get.getUserId(cookieValue);
+    		Cookie[] cookies = req.getCookies();
+    		String cookieValue = "";
+    		for(Cookie cookie : cookies) {
+    		   if ( cookie.getName().equals("Name") ) {
+    		       cookieValue = cookie.getValue();
+    		   }
+    		}
+    		ReUsable get = new ReUsable(session.getAttribute("connection")); 
+    		String cookieUser_id = get.getUserId(cookieValue);
     		
-    // 		if(session.getAttribute("user_id") != null && cookieValue != "" &&  cookieUser_id != "") {
+    		if(session.getAttribute("user_id") != null && cookieValue != "" &&  cookieUser_id != "") {
         		if (checkDetails.classIdCheck(session.getAttribute("class_id") + "")) {
         		    
         			if (checkDetails.checkClassroomPermission(session.getAttribute("user_id")
@@ -77,10 +77,10 @@ public class AddAnswersAuth implements Filter {
         		} else {
         			writer.write("404");
         		}
-    // 		} else {
-    // 		    res.sendRedirect("/landingpage");
-    // 		}
-    	}
+    		} else {
+    		    res.sendRedirect("/landingpage");
+    		}
+		}
     	catch(Exception e){
     	    System.out.println("AddAnswers - "+ e.getMessage());
     	}

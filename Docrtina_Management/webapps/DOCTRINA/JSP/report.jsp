@@ -189,15 +189,21 @@
             if (rating <= 5 && rating >= 0 && titleReg.test(title) && desReg.test(description)) {console.log(description);
                $.get("/ratingsubmit", {"user_id":"<%=session.getAttribute("user_id")%>", "student_id":"<%=session.getAttribute("student_id")%>", "class_id":"<%=session.getAttribute("class_id")%>", "title":title, "description":description, "rating":rating}, function(data, status) {
                     if(data == "200") {
-                        alert("success");
+                        error("success");
                     }
                     else if (data == "400"){
-                        alert("You have already rated this student. So come here at next week...");
+                        $(".alert").html('<i class="fa fa-exclamation" aria-hidden="true"></i>You have already rated this Student!!');
+                        $(".alert").css("color", "rgb(36, 146, 255)"); 
+                        $(".alert>i").css("background", "rgb(36, 146, 255)");
+                        $(".alert").css("top","0");
+                        setTimeout (function(){
+                        $(".alert").css("top","-75px");
+                        },2000);
                     }
                 }); 
             }
             else {
-                alert("Something Wrong!");
+                error("info");
             }
         }
         
@@ -218,9 +224,35 @@
                 document.getElementById("rating"+rating[i].tabIndex).style = "background:linear-gradient(to right , gold "+percent+"%, lightgrey 0); background-clip: text; -webkit-background-clip: text;";
             }
         }
+        
+         function error (type) {
+            if (type == "info") {
+                $(".alert").html('<i class="fa fa-exclamation" aria-hidden="true"></i>Please Check the values !');
+                $(".alert").css("color", "rgb(36, 146, 255)"); 
+                $(".alert>i").css("background", "rgb(36, 146, 255)");
+            }
+            else if (type == "danger"){
+                $(".alert").html('<i class="fa fa-exclamation" aria-hidden="true"></i>Some unexpected error has been occured !');
+                $(".alert").css({"color":"rgb(243, 69, 65)", "width":"530px","margin:left":"-205px"}); 
+                $(".alert>i").css("background", "rgb(243, 69, 65);");
+            }
+             else if (type == "success"){
+                $(".alert").html('<i class="fa fa-check" aria-hidden="true"></i> Added Successfully !');
+                $(".alert").css({"color":"rgb(56, 184, 124)", "width":"300px", "margin-left":"-185px"}); 
+                $(".alert>i").css({"background":"rgb(56, 184, 124)","padding":"9px 10px"});
+            }
+            $(".alert").css("top","0");
+            setTimeout (function(){
+            $(".alert").css("top","-75px");
+            },2000);
+        }
     </script>
 </head>
 <body onload="ReportPageLoad()">
+    <!-- Alert -->
+            <div class="alert"></div>
+    <!-- /Alert -->
+    
     <main class="whole" style="display: flex">
         <nav class="left-nav">
             <div class="nav-main" id="nav"></div>

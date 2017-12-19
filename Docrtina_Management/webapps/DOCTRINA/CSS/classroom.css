@@ -32,7 +32,7 @@ body, html, .whole, .add, .blur, .feed {
 .blur {
     background: rgba(0,0,0,0.8);
 }
-.add>div>div:last-child, #button {
+.add>div>span>div:last-child, #button {
     padding: 6px 15px;
     color: white;
     background: #333;
@@ -1213,4 +1213,26 @@ body,html{
 
 .during-upload{
     display:none;
+}
+
+/* Alert  */
+.alert, .alert1{
+    position: absolute;
+    text-align: center;
+    top: -75px;
+    left: 50%;
+    margin-left: -265px;
+    padding: 15px 25px;
+    background: white;
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.36);
+    border-radius: 0 0 4px 4px;
+    transition: 1s;
+    color: rgb(255, 0, 0);
+}
+.alert>i, .alert1{
+    padding: 9px 14px;
+    border-radius: 50%;
+    background: #ff0000bd;
+    color: white;
+    margin: 0 9px 0 0;
 }
