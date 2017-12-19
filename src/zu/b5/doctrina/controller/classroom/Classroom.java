@@ -37,7 +37,6 @@ public class Classroom extends HttpServlet {
 		            if(details.get("class_creater").equals(user_id)) {
 		                session.setAttribute("class_role", "Teacher");
 		            }
-		            System.out.println(session.getAttribute("class_role"));
 		            writer.write("200");
 		        } catch (Exception e) {
 		            System.out.println("classroom.java");

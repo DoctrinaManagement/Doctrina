@@ -51,7 +51,6 @@ public class AddAnswersAuth implements Filter {
         							.parse(request.getParameter("answers"));
 
         					for (JsonElement answers : answersArray) {
-        					    System.out.println(answers);
         						JsonObject obj = (JsonObject) answers;
         						if (checkDetails.questionIdCheck(obj.get("id").getAsString(), type)) {
         						    

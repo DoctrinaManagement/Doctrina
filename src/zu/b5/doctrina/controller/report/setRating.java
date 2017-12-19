@@ -37,12 +37,12 @@ public class setRating extends HttpServlet {
                 int year = Integer.parseInt(dateTime.substring(0, 4));
                 int month = Integer.parseInt(dateTime.substring(5, 7));
                 int day = Integer.parseInt(dateTime.substring(8, 10));
-                System.out.println(year + " " + month + " " + day);
+
                 LocalDate current = LocalDate.now();
                 LocalDate Dblast  = LocalDate.of(year, month, day);
                 Period diff = Period.between(current, Dblast);
                 days = diff.getDays();
-                System.out.println(days);
+
             }
             
             if ( days > 7 || date.size()  == 0) {

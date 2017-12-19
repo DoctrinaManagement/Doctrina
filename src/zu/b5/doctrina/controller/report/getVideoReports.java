@@ -46,7 +46,6 @@ public class getVideoReports extends HttpServlet {
     	
     		ArrayList<HashMap<String, String>> status = get.resultSetToArrayList(rs);
             videoReport.put("timeStatus", status);
-            System.out.println(videoReport);
     		String json = new Gson().toJson(videoReport);
 			writer.write(json);
 		}

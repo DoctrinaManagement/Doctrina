@@ -16,8 +16,6 @@ public class ReplyJoinrequestAuth implements Filter {
 	public void doFilter(ServletRequest request, ServletResponse response,
 			FilterChain chain) throws IOException, ServletException {
 
-		System.out.println(request.getParameter("requester") + " "
-				+ request.getParameter("class_id"));
 		PrintWriter writer = response.getWriter();
 		HttpServletRequest req = (HttpServletRequest) request;
 		HttpServletResponse res = (HttpServletResponse) response;

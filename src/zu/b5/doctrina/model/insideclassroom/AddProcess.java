@@ -60,7 +60,6 @@ public class AddProcess {
 		try {
 			String Query = "select id from " + tableName
 					+ " where class_id = ? and title = ?;";
-			System.out.println("get_id    " + Query);
 			stmt = conn.prepareStatement(Query);
 			stmt.setInt(1, Integer.parseInt(class_id));
 			stmt.setString(2, title);
@@ -78,7 +77,6 @@ public class AddProcess {
 
 			String Query = "select * from " + tableName
 					+ " where class_id = ? and title = ?;";
-			System.out.println("isTittle    " + Query);
 			stmt = conn.prepareStatement(Query);
 			stmt.setInt(1, Integer.parseInt(class_id));
 			stmt.setString(2, title);
@@ -103,7 +101,6 @@ public class AddProcess {
 		answer.add("d");
 		String s = object.get("answer").getAsString();
 		int idx = answer.indexOf(s) + 1;
-System.out.println(idx);
 		try {
 			stmt = conn
 					.prepareStatement("insert into quizs (class_id, id, question, option1, option2, option3, option4, answer) values (?, ?, ?, ?, ?, ?, ?, ?);");

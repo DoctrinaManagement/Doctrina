@@ -16,7 +16,6 @@ import zu.b5.doctrina.model.insideclassroom.*;
 	@Override
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
-		System.out.println("jis");
 		PrintWriter writer = response.getWriter();
 		HttpSession session = request.getSession();
 		VideoProcess process = new VideoProcess(session.getAttribute("connection"));

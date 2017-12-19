@@ -40,7 +40,7 @@ public class GetTitlesAuth implements Filter {
         	        if (type.equals("assignmenttitles") || type.equals("quiztitles") || type.equals("testtitles") || type.equals("videos")) {
         		        
         		        if (checkDetails.checkClassroomPermission(user, class_id)) {
-        		            
+        		            System.out.println("student id - "+user);
         		            chain.doFilter(request, response);
         		            
         		        } else {

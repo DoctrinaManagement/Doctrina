@@ -29,7 +29,7 @@ public class GetFeedsDetailsProcess{
             stmt = conn.prepareStatement(Query);
             stmt.setInt(1, Integer.parseInt(class_id));
             ResultSet rs = stmt.executeQuery();
-            System.out.println(rs.getStatement());
+            
             ArrayList<String> post_ids = get.resultSetToUserID(rs);
             for(String post_id : post_ids) {
                 

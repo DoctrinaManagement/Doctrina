@@ -33,7 +33,7 @@ public class InsertFeedsProcess{
     
     public String setValuesComments(String commender, String post_id, String message){
         try {
-            System.out.println(post_id);
+            
             stmt = conn.prepareStatement("insert into comments (post_id, commenter, message) values(?, ?, ?) ");
             stmt.setInt(1, Integer.parseInt(post_id));
             stmt.setString(2, commender);

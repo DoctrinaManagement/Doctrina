@@ -27,7 +27,6 @@ public class ReportGetTitles extends HttpServlet {
 		String class_id = request.getParameter("class_id");
 		String type = request.getParameter("type");
 		
-		System.out.println(user +" - "+ class_id +" - "+ type);
 		try {
     		stmt = conn.createStatement();
     		HashMap<String,Object> titlesObj = new HashMap<String,Object>();
@@ -42,13 +41,13 @@ public class ReportGetTitles extends HttpServlet {
     	    
     	    // questionAnswers total
     	    String typesubstring = type.substring(0, type.length()-6)+"status";
-    	    rs = stmt.executeQuery("select count(title_id) as finish from "+typesubstring+" where class_id = "+class_id+" group by title_id;");
+    	    rs = stmt.executeQuery("select count(title_id) as finish from "+typesubstring+" where class_id = "+class_id+" and user_id = '"+user+"' group by title_id;");
     		ArrayList<String> finish = get.resultSetToUserID(rs);
     	    count.put("finish", finish.size()+"");
     	    ArrayList<HashMap<String, String>> values = new ArrayList<HashMap<String, String>>();
     		values.add(count);
     	    
-    	    rs = stmt.executeQuery("select title_id from "+typesubstring+" where class_id ="+class_id+"group by title_id;");
+    	    rs = stmt.executeQuery("select title_id from "+typesubstring+" where class_id ="+class_id+" and user_id '"+user+"' group by title_id;");
     	    ArrayList<String> finished = get.resultSetToUserID(rs);
     	    
     	    ArrayList<String> finishClassId = new ArrayList<String>();

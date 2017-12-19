@@ -26,7 +26,7 @@ public class Logout extends HttpServlet {
 // 		}
 		
 		try{
-		    String Query = "delete from cookie where user_id = '"+session.getAttribute("user_id")+"'";
+		    String Query = "delete from cookie where user_id = '"+session.getAttribute("user_id")+"';";
 		    Statement stmt = conn.createStatement();
 		    stmt.executeUpdate(Query);
 		} catch(Exception e) {

@@ -29,7 +29,6 @@ public class SignupProcess {
             stmt.setString(3, details.get("email_id"));
             stmt.setString(4, details.get("image"));
             stmt.setString(5, role);
-            System.out.println(details.get("role"));
 			stmt.executeUpdate();
             return "done";
 		} catch (SQLException e) {

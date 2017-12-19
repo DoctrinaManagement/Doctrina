@@ -48,14 +48,8 @@ public class CreateClassroomProcess {
     			stmt.setString(4, details.get("user_id"));
     			stmt.executeUpdate();
 				
-				// stmt.executeUpdate("insert into notification(user_id,message,status,sender) values("
-				// 		+ id
-				// 		+ ","
-				// 		+ message
-				// 		+ ",'true','"
-				// 		+ details.get("user_id") + "');");
 			}
-			System.out.println("hi");
+
 			stmt = conn.prepareStatement("select classroom_id from classroom");
 			rs = stmt.executeQuery();
 			ArrayList<String> classroom_ids = get.resultSetToUserID(rs);

@@ -20,7 +20,6 @@ public class Notification {
         
     	@OnOpen
     	public void onOpen(@PathParam("id") String id, Session session) {
-    	   // System.out.println(ses.getAttribute("user_id") + "notification");
     	     
     		clientId.put(id, session);
     		 

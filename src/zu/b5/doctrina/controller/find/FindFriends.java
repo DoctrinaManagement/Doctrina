@@ -47,7 +47,6 @@ public class FindFriends extends HttpServlet {
             ss = ss+" and user_id != '"+member+"' ";
         }
         Query = Query + ss+";";
-        System.out.println(Query);
         try {
             Statement stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery(Query);

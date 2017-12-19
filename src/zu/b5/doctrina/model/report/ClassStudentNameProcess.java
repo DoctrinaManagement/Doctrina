@@ -30,7 +30,7 @@ public class ClassStudentNameProcess {
         
         String Query = "select member from members where classroom_id = '"+class_id+"' and member != '"+user_id+"';";
         try {
-            System.out.println(Query);
+            
             ResultSet rs = stmt.executeQuery(Query);
             ArrayList<String> user_ids = get.resultSetToUserID(rs);
             ArrayList<HashMap<String,String>> result = new ArrayList<HashMap<String,String>>();

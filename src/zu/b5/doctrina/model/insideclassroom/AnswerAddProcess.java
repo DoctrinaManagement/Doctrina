@@ -20,7 +20,6 @@ public class AnswerAddProcess{
     public void addAnswers (JsonObject object, String class_id, String tableName, String user_id) {
         try {
             stmt = conn.prepareStatement("delete from "+tableName+" where id ="+Integer.parseInt(object.get("id").getAsString())+";");
-           System.out.println("delete from "+tableName+" where id ="+Integer.parseInt(object.get("id").getAsString())+";");
             stmt.executeUpdate();
             stmt = conn.prepareStatement("insert into "+tableName+" values(?, ?, ?, ?);");
             stmt.setInt(1, Integer.parseInt(class_id));

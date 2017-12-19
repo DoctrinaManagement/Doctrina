@@ -27,7 +27,6 @@ public class CourseLoad extends HttpServlet {
     	} else {
     	    courseName = courseName + url.substring(1).toLowerCase();
     	}
-    	System.out.println(courseName);
     	String Query = "select course_id from courses where course_name = '"+courseName+"';";
     	
     	try {

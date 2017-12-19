@@ -74,7 +74,6 @@ public class AddAnswers extends HttpServlet {
 					writer.write(json);
 				}
 				else { 
-				    System.out.println("200");
 				    writer.write("200");    
 				}
 			} catch (SQLException e) {
