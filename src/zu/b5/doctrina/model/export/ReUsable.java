@@ -166,9 +166,9 @@ public class ReUsable {
 	
 	public String getUserId(String cookie) {
 	    
-	    String Query = "select user_id from cookie where cookie = '"+cookie+"';";
-	    
 	    try {
+	        String Query = "select user_id from cookie where cookie = '"+cookie+"';";
+	    
 	        Statement stmt = conn.createStatement();
 	        ResultSet rs = stmt.executeQuery(Query);
 	        ArrayList<String> user_id = resultSetToUserID(rs);

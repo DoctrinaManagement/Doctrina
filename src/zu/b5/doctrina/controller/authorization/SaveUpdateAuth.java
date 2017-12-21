@@ -60,6 +60,10 @@ public class SaveUpdateAuth implements Filter {
         		    writer.write("401");
     		    }
     		} else {
+    		    for(Cookie cookie : cookies) {
+        		   cookie.setMaxAge(0);
+        		   res.addCookie(cookie);
+        		}
     		    res.sendRedirect("/landingpage");
     		}
 		}

@@ -15,9 +15,9 @@ public class NotificationClickProcess{
         }
     }
     
-    public void clickAction(String user_id, String msg) {
+    public void clickAction(String user_id, String date) {
         try {
-            String Query = "update notification set status='"+false+"'where user_id='"+user_id+"'AND message='"+msg+"';";
+            String Query = "update notification set status='"+false+"'where user_id='"+user_id+"'AND date ='"+date+"';";
 			stmt.executeUpdate(Query);
         } catch (SQLException e) {
             System.out.println("NotificationClickProcess - clickAction"+ e.getMessage());

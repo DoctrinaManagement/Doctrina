@@ -4,6 +4,7 @@ import java.io.*;
 import javax.servlet.*;
 import zu.b5.doctrina.model.export.*;
 import javax.servlet.http.*;
+import java.sql.*;
 /** 
  * @author Basheer
  */
@@ -17,6 +18,7 @@ public class GetClassroomAuth implements Filter {
 		PrintWriter writer = response.getWriter();
 		HttpServletRequest req = (HttpServletRequest) request;
 		HttpServletResponse res = (HttpServletResponse) response;
+		
 		HttpSession session = req.getSession();
 		try {
     		CheckValidDetails checkDetails = new CheckValidDetails(session.getAttribute("connection"));
@@ -30,7 +32,6 @@ public class GetClassroomAuth implements Filter {
     		}
     		ReUsable get = new ReUsable(session.getAttribute("connection")); 
     		String cookieUser_id = get.getUserId(cookieValue);
-    		
     		if(session.getAttribute("user_id") != null && cookieValue != "" &&  cookieUser_id != "") {
     		
         		if(checkDetails.userIdCheck(request.getParameter("user_id"))) {
@@ -47,11 +48,16 @@ public class GetClassroomAuth implements Filter {
         	       writer.write(" user 404");
         	   }
     		} else {
+    		    for(Cookie cookie : cookies) {
+        		   cookie.setMaxAge(0);
+        		   res.addCookie(cookie);
+        		}
+    		   
     		    res.sendRedirect("/landingpage");
     		}
 		}
         catch (Exception e) {
-            System.out.println("GetClassroomAuth");
+            System.out.println("GetClassroomAuth"+e);
         }
 	}
 

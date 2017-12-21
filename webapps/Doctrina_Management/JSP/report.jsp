@@ -184,11 +184,16 @@
             var rating = Number(value).toFixed(2);
             
             var titleReg = /^[a-zA-Z]{3,15}$/;
-            var desReg = /^[\w\W]{5,100}$/;
-            console.log(rating);
-            if (rating <= 5 && rating >= 0 && titleReg.test(title) && desReg.test(description)) {console.log(description);
+            var desReg = /^[\w\W]{4,100}$/;
+            console.log(rating <= 5 , rating >= 0);
+            if (rating <= 5 && rating >= 0 && titleReg.test(title) && desReg.test(description)) {
                $.get("/ratingsubmit", {"user_id":"<%=session.getAttribute("user_id")%>", "student_id":"<%=session.getAttribute("student_id")%>", "class_id":"<%=session.getAttribute("class_id")%>", "title":title, "description":description, "rating":rating}, function(data, status) {
+                    $("#ratingTitle").val("");
+                    $("#description").val("");
+                    $("#rating").val("");
+                    
                     if(data == "200") {
+                        
                         error("success");
                     }
                     else if (data == "400"){

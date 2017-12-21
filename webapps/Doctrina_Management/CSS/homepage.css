@@ -3,7 +3,7 @@
     margin:0;
     font-family: 'Lato', sans-serif;
 }
-body, html, .whole s{
+body, html, .whole {
     height:100%;
     width:100%;
 }
@@ -16,8 +16,7 @@ li{
 
     /*----------------------------------common----------------------------------*/
     
-header,.header_div,.box_div,.noti,nav,.video_div,.note-inv>div>ul>li,.width_div,.allclass,.title_div, .acpt-dnd>p:last-child span:first-child,.alert
-{
+header,.header_div,.box_div,.noti,nav,.video_div,.note-inv>div>ul>li,.width_div,.allclass,.cls,.cls div,.newclass,.title_div,.crt_div, .acpt-dnd>p:last-child span:first-child,.alert {
     box-sizing: border-box;
 }    
 button{
@@ -30,21 +29,26 @@ button,.header_div i,.profile,.title i,.all>div,.newclass i,.dlt,.newclass,nav l
 .hdr,.profile{
    float: right; 
 }
-.title_div,.newclass{
-    float:left;
-}
+
 
     /*--------------------------------header----------------------------------*/
     
 header{
     width: 100%;
     height: 70px;
-    background: rgba(0, 0, 0, 0.82);;
+    background: #333;
     padding: 6px 10px;
     box-shadow: 1px 1px 10px rgba(255, 255, 255, 0.3) inset, 1px 1px 10px rgba(0, 0, 0, 0.3);
 }
 header img{
-    height:55px;
+    height:60px;
+}
+header img + span {
+    font: 30px "Wendy One",sans-serif;
+    color: white;
+    display: inline-block;
+    margin: 20px 0 0 10px;
+    vertical-align: top;
 }
 .hdr_div{
     width:1280px;
@@ -80,7 +84,6 @@ header img{
     border: 1px solid rgba(255, 255, 255, 0.14);
     border-radius: 4px;
     margin: 9px 30px 0 0;
-    box-sizing: border-box;
     display: flex;
     overflow: hidden;
 }
@@ -89,7 +92,6 @@ header img{
     height: 47px;
     border: 1px solid white;
     border-radius: 30px;
-    box-sizing: border-box;
     margin-left: 0;
     background: white;
     transition: 0.4s;
@@ -117,15 +119,22 @@ header img{
 }    
 .width_div{
     padding:50px 0 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
 }
 .allclass{
     position:relative;
 }
+.allclass:after {
+    content:"";
+    width:100%;
+    clear: left;
+}
 .allclass>h1{
-    padding: 01em 19px;
+    padding: 1em 0;
     border-bottom: 1px solid lightgrey;
     color: #222;
-    letter-spacing: 3px;
 }
 /*.back{*/
 /*    position: absolute;*/
@@ -154,7 +163,8 @@ header img{
 .title_div{
     height: 255px;
     width: 225px;
-    margin: 20px 36.5px;
+    margin: 20px 47.5px;
+    float: left;
     border-radius: 5px;
     border: 2px solid #444;
     color: rgba(51, 51, 51, 0.92);
@@ -202,11 +212,6 @@ header img{
 .info:focus+.des , .des:focus {
     top: 0;
 }
-.a{
-    background:#ff89a9;
-    margin: 20px 47.5px;
-    float: left;
-}
 .new{
     position:relative;   
     height: 255px;
@@ -222,6 +227,9 @@ header img{
 .new:hover{
     box-shadow: 1px 1px 7px rgba(0,0,0,0.1);
     transform: scale(0.98);
+}
+.newclass {
+    padding: 40px 0 0;
 }
 .newclass>p{
     color:white;
@@ -241,7 +249,7 @@ header img{
     height: 80px;
     width: 80px;
     display: block;
-    margin: 40px auto 10px;
+    margin: 0 auto 10px;
 }
 .info{
     position: absolute;
@@ -423,14 +431,14 @@ select{
 }
 .note-inv {
     height: calc(100% - 36px);
-    width: 200%;
+    width: 100%;
     display: flex;
     justify-content: space-between;
     transition: 0.2s;
 }
 .note-inv>div {
     height: 100%;
-    flex: 1;
+    width: 100%;
 }
 .note-inv>div>ul {
     height:100%;
@@ -468,7 +476,7 @@ select{
     width: 45px;
 }
 .contents, .acpt-dnd{
-    width: 275px;
+    width: calc(100% - 50px);
 }
 .contents p, .acpt-dnd>p{
     display:block;
@@ -663,9 +671,12 @@ nav ul:nth-child(2) li i{
 /* ----- Categories ----- */
 
 .all {
-    width: 1200px;
-    margin:18px auto;
-    padding: 20px ;
+    width: 1195px;
+    margin: 18px auto;
+    padding: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
 }
 
 
@@ -673,11 +684,12 @@ nav ul:nth-child(2) li i{
     height: 290px;
     width: 300px;
     box-shadow: 3px 3px 40px rgba(0, 0, 0, 0.12);
-    float: left;
+    /* float: left; */
     position: relative;
-    margin: 50px 50px 25px;
+    /* margin: 50px 50px 25px; */
     overflow: hidden;
     border-radius: 4px;
+    margin-bottom: 70px;
     transition: 0.4s;
 }
 .all>div img {
@@ -700,9 +712,9 @@ nav ul:nth-child(2) li i{
     background: white !important;
     text-align: center;
 }
-/* Alert  */
 .alert{
     position: absolute;
+    width: 530px;
     text-align: center;
     top: -75px;
     left: 50%;
@@ -720,4 +732,89 @@ nav ul:nth-child(2) li i{
     background: #ff0000bd;
     color: white;
     margin: 0 9px 0 0;
+}
+/*---------------------------------------------------------------------------------------------------------------------------------------*/
+@media screen and (max-width:1285px){
+    .width_div, .allclass{
+        width:100%;
+        padding:0;
+    }
+    .all{
+        width:98%;
+        padding:10px 0;
+    }
+    .allclass>h1 {
+        width:90%;
+        margin:auto;
+    }
+}
+/*@media screen and (max-width:1225px){*/
+/*    .all>div{*/
+/*        margin:30px;*/
+/*    }*/
+/*}*/
+/*@media screen and (max-width:1110px){*/
+/*    .all>div{*/
+/*        margin:20px;*/
+/*    }*/
+/*}*/
+/*@media screen and (max-width:1050px){*/
+/*    .all>div{*/
+/*        width:330px;*/
+/*        margin:15px;*/
+/*    }*/
+/*}*/
+/*@media screen and (max-width:1050px){*/
+/*    .all>div{*/
+/*        width:300px;*/
+/*        margin:50px 70px;*/
+/*    }*/
+/*}*/
+/*@media screen and (max-width:900px){*/
+/*    .all>div{*/
+/*        margin: 30px 40px;*/
+/*    }*/
+/*}*/
+/*@media screen and (max-width:800px){*/
+    
+/*}*/
+@media screen and (max-width:750px){
+    header>img+span{
+        display:none;
+    }
+}
+@media screen and (max-width:540px){
+    header>img{
+        height: 35px;
+        width: 35px;
+        margin: 10px 0;
+    }
+    header>img+span{
+        display:none;
+    }
+    .cls{
+        transform: scale(0.8);
+        margin: 8px 0;
+    }
+    .profile{
+        margin:0;
+    }
+    .all>div {
+        margin-bottom: 20px;
+        transform: scale(0.8)
+    }
+}
+@media screen and (max-width:450px){
+    header>img+span{
+        display:none;
+    }
+    .hdr{
+        width:300px;
+    }
+    .header_div>div:first-child i{
+        margin:0 20px 0 0;
+    }
+    .cls>label {
+        font-size: 15px;
+    }
 }

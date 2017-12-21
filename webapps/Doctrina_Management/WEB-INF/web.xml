@@ -731,7 +731,30 @@
         <url-pattern>/getreporttitles</url-pattern>
     </filter-mapping>
     
+    
+    <servlet>
+        <servlet-name>permissionclassroom</servlet-name>
+        <servlet-class>zu.b5.doctrina.controller.account.PermissionClassroom</servlet-class>
+    </servlet>
+    
+    <servlet-mapping>
+        <servlet-name>permissionclassroom</servlet-name>
+        <url-pattern>/permissionclassroom</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
+        <servlet-name>permission</servlet-name>
+        <servlet-class>zu.b5.doctrina.controller.account.Permission</servlet-class>
+    </servlet>
+    
+    <servlet-mapping>
+        <servlet-name>permission</servlet-name>
+        <url-pattern>/permission</url-pattern>
+    </servlet-mapping>
     <!-- VideoDetails-->
+    
+    
+    
     
     <servlet>
         <servlet-name>getVideoReports</servlet-name>

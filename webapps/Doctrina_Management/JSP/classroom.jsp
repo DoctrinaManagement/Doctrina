@@ -141,17 +141,26 @@
     }
     
     function permission() {
-        
+        $.get("http://basheerahameds-1508.zcodeusers.com/permissionclassroom",function(data, status){
+            if(data =="ok") {
+                location.href = "http://basheerahameds-1508.zcodeusers.com/landingpage";
+            }
+            if(data =="done") {
+                location.href = "http://basheerahameds-1508.zcodeusers.com/doctrina.index.do";
+            }
+        });
+    
     }
     
     var onloaded = function() {
+        permission();
         socket();
         setVarId("<%=session.getAttribute("user_id")%>","<%=session.getAttribute("class_id")%>");
         getVideos();
          if(document.cookie.indexOf("Name") == -1) {
             location.href = "/landingpage"
         }
-        //permission();
+        
     }
     
     function getVideos () {
@@ -619,7 +628,7 @@
         }
         return postObj;
     }
-    var messReg = /^\w[\w\W]{2,100}$/;
+    var messReg = /^\w[\w\W]{0,500}$/;
     
     function postbtnClick() {
         var message = document.getElementById("post_msg").value;

@@ -62,6 +62,10 @@ public class setRatingAuth implements Filter {
         			System.out.println("setRating - " + e.getMessage());
         		}
     		} else {
+    		    for(Cookie cookie : cookies) {
+        		   cookie.setMaxAge(0);
+        		   res.addCookie(cookie);
+        		}
     		    res.sendRedirect("/landingpage");
     		} 
 		}

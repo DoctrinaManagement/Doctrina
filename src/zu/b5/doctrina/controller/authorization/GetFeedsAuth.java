@@ -39,6 +39,10 @@ public class GetFeedsAuth implements Filter {
                     response.getWriter().write("404");
                 }
     		} else {
+    		    for(Cookie cookie : cookies) {
+        		   cookie.setMaxAge(0);
+        		   res.addCookie(cookie);
+        		}
     		    res.sendRedirect("/landingpage");
     		}
 		}

@@ -65,7 +65,7 @@ public class InsertFeedsProcess{
     }
     
     public void sendNotification(String class_id, String Name, String type, String class_name, String sender_id ) {
-        String selectQuery = "select member from members where classroom_id = "+class_id+";";
+        String selectQuery = "select member from members where classroom_id = "+class_id+" and member != '"+sender_id+"';";
         
         String message = Name +" has "+type+" in your "+class_name+" classroom";
         

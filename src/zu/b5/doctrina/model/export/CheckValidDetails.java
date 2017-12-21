@@ -19,14 +19,16 @@ public class CheckValidDetails {
 
 	public boolean userIdCheck(String userId) {
 		try {
-			String userId_Query = "select * from userdetails where user_id = '"
-					+ userId + "';";
-			ResultSet rs = stmt.executeQuery(userId_Query);
-            ReUsable get = new ReUsable(conn);
-			HashMap<String, String> details = get.resultSetToHashMap(rs);
-			if (details.size() != 0) {
-				return true;
-			}
+		    if (userId != null) {
+        		String userId_Query = "select * from userdetails where user_id = '"
+        				+ userId + "';";
+        		ResultSet rs = stmt.executeQuery(userId_Query);
+                ReUsable get = new ReUsable(conn);
+        		HashMap<String, String> details = get.resultSetToHashMap(rs);
+        		if (details.size() != 0) {
+        			return true;
+        		}
+		    }
 
 		} catch (SQLException e) {
 			System.out.println("CheckValidDetails - userIdCheck"
@@ -37,14 +39,16 @@ public class CheckValidDetails {
 
 	public boolean classIdCheck(String classId) {
 		try {
-			ResultSet rs = stmt
-					.executeQuery("select classroom_id from classroom where classroom_id ='"
-							+ classId + "';");
-			ReUsable get = new ReUsable(conn);
-			ArrayList<String> Classdetails = get.resultSetToUserID(rs);
-			if(Classdetails.size() != 0) {
-			    return true;
-			}
+		    if (classId != null){
+    			ResultSet rs = stmt
+    					.executeQuery("select classroom_id from classroom where classroom_id ='"
+    							+ classId + "';");
+    			ReUsable get = new ReUsable(conn);
+    			ArrayList<String> Classdetails = get.resultSetToUserID(rs);
+    			if(Classdetails.size() != 0) {
+    			    return true;
+    			}
+		    }
 		} catch (SQLException e) {
 			System.out.println("CheckValidDetails - classIdCheck"
 					+ e.getMessage());
@@ -54,14 +58,17 @@ public class CheckValidDetails {
 
 	public boolean courseIdCheck(String courseId) {
 		try {
-			int course_id = Integer.parseInt(courseId);
-			ResultSet rs = stmt
-					.executeQuery("select * from courses where course_id = "
-							+ course_id + ";");
-			ReUsable get = new ReUsable(conn);
-			HashMap<String, String> details = get.resultSetToHashMap(rs);
-			if (details.size() != 0) {
-				return true;
+		    
+			if (courseId != null) {
+			    int course_id = Integer.parseInt(courseId);
+    			ResultSet rs = stmt
+    					.executeQuery("select * from courses where course_id = "
+    							+ course_id + ";");
+    			ReUsable get = new ReUsable(conn);
+    			HashMap<String, String> details = get.resultSetToHashMap(rs);
+    			if (details.size() != 0) {
+    				return true;
+    			}
 			}
 		} catch (SQLException e) {
 			System.out.println("CheckValidDetails - courseIdCheck"

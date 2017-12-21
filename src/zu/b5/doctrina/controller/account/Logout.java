@@ -15,15 +15,15 @@ public class Logout extends HttpServlet {
 		HttpSession session = request.getSession();
 		Connection conn = (Connection) session.getAttribute("connection");
 		Cookie[] cookies = request.getCookies();
-		String cookieValue = "";
+// 		String cookieValue = "";
 		for(Cookie cookie : cookies) {
 		   cookie.setMaxAge(0);
 		   response.addCookie(cookie);
 		}
-// 		String[] sessionAttributes = {"user_id","image","name","role","load","class_id","class_name","class_role","student_id"}; 
-// 		for(String Attr : sessionAttributes) {
-// 		    session.removeAttribute(Attr);
-// 		}
+		String[] sessionAttributes = {"user_id","image","name","role","load","class_id","class_name","class_role","student_id"}; 
+		for(String Attr : sessionAttributes) {
+		    session.removeAttribute(Attr);
+		}
 		
 		try{
 		    String Query = "delete from cookie where user_id = '"+session.getAttribute("user_id")+"';";

@@ -47,7 +47,7 @@ public class ReportGetTitles extends HttpServlet {
     	    ArrayList<HashMap<String, String>> values = new ArrayList<HashMap<String, String>>();
     		values.add(count);
     	    
-    	    rs = stmt.executeQuery("select title_id from "+typesubstring+" where class_id ="+class_id+" and user_id '"+user+"' group by title_id;");
+    	    rs = stmt.executeQuery("select title_id from "+typesubstring+" where class_id ="+class_id+" and user_id =  '"+user+"' group by title_id;");
     	    ArrayList<String> finished = get.resultSetToUserID(rs);
     	    
     	    ArrayList<String> finishClassId = new ArrayList<String>();

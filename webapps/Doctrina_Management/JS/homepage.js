@@ -168,10 +168,12 @@ $(document).ready(function(){
     // ------------------------- Notification & Invites ------------------------
     
     $(".noti>span").click(function(){
-        $(".note-inv").css("transform","translateX(0)")
+        $(".note-inv>div:first-child").css("display","block");
+        $(".note-inv>div:last-child").css("display","none");
     });
     $(".noti>img").click(function(){
-        $(".note-inv").css("transform","translateX(-50.5%)")
+        $(".note-inv>div:last-child").css("display","block");
+        $(".note-inv>div:first-child").css("display","none");
     });
     
     // ----------------------------- heading of the classroom--------------------------

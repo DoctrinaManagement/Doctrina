@@ -23,9 +23,7 @@
         var course_name;
         var course_id;
         var course_name;
-        document.addEventListener("visibilitychange", function() {
-          location.reload();
-        });
+        
         function notification_function(a){
             $.get("http://basheerahameds-1508.zcodeusers.com/notification_click",{"user_id":"<%=session.getAttribute("user_id")%>","message":a},function(data, status){
                 if(data == "ok"){
@@ -135,6 +133,7 @@
     } 
     var onloaded = function() {
         
+        permission();
         if("<%=session.getAttribute("load")%>" != "null") {
             if("<%=session.getAttribute("load")%>" == "course") {
                 getClassroom("<%=session.getAttribute("course_id")%>" , "<%=session.getAttribute("courseName")%>");
@@ -149,9 +148,17 @@
             location.href = "/landingpage"
         }
     	socket();
-    	//myclassroom();
+    	
     }
 
+    function permission() {
+        $.get("http://basheerahameds-1508.zcodeusers.com/permission",function(data, status){
+            if(data =="ok") {
+                location.href = "http://basheerahameds-1508.zcodeusers.com/landingpage";
+            }
+        });
+    
+    }
         var socket = function() {
     
         document.getElementById("profile_image").style.background = "url('<%=session.getAttribute("image")%>') 100%/100% 100%";
@@ -377,7 +384,7 @@
             <script id="notification-templete" type="text/x-handlebars-templete">
 
               {{#each notifications}}           
-                 <li tabindex="{{tabIndex}}" id="noti{{tabIndex}}" onclick="notification_function('{{message}}')">
+                 <li tabindex="{{tabIndex}}" id="noti{{tabIndex}}" onclick="notification_function('{{date}}')">
                     <img src="{{image}}"/>
                     <div class="contents" >
                         <p><span>{{name}}</span> comment this</p>
